@@ -150,7 +150,17 @@ end
 --------------------------------------------------
 -- Public Functions
 --------------------------------------------------
--- Toggles the main window visibility
+function M.update_content(lines)
+	if buf_id and api.nvim_buf_is_valid(buf_id) then
+		api.nvim_buf_set_option(buf_id, "modifiable", true)
+		api.nvim_buf_set_lines(buf_id, 0, -1, false, lines)
+		api.nvim_buf_set_option(buf_id, "modifiable", false)
+	end
+end
+
+function M.is_window_open()
+	return win_id ~= nil and api.nvim_win_is_valid(win_id)
+end
 function M.toggle_floating_window()
 	if is_window_open() then
 		M.close_window()
