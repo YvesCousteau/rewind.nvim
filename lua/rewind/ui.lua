@@ -1,9 +1,6 @@
 local api = vim.api
 
-local util = require("rewind.util")
-local workflow = require("rewind.workflow")
-local keymap = require("rewind.keymap")
-local help = require("rewind.help")
+local rewind = require("rewind")
 
 -- UI Module for Rewind Plugin
 ---@class RewindUI
@@ -54,7 +51,7 @@ local function create_boards_window()
 	local row = math.floor((vim.o.lines - height) / 2)
 	local col = math.floor(width * 0.44)
 
-	local boards_win = api.nvim_open_win(buf.boards, true, {
+	local win = api.nvim_open_win(buf.boards, true, {
 		relative = "editor",
 		width = width,
 		height = height,
@@ -66,15 +63,16 @@ local function create_boards_window()
 		border = "rounded",
 		zindex = 100,
 	})
-
-	return boards_win
+	api.nvim_buf_set_lines(buf.boards, 0, -1, false, rewind.util.get_boards())
+	api.nvim_buf_set_option(buf.boards, "modifiable", false)
+	return win
 end
 
 local function create_lists_window()
 	local row = math.floor((vim.o.lines - height) / 2)
 	local col = math.floor(width * 1.48)
 
-	local lists_win = api.nvim_open_win(buf.lists, false, {
+	local win = api.nvim_open_win(buf.lists, false, {
 		relative = "editor",
 		width = width,
 		height = height,
@@ -86,15 +84,15 @@ local function create_lists_window()
 		border = "rounded",
 		zindex = 100,
 	})
-
-	return lists_win
+	api.nvim_buf_set_option(buf.lists, "modifiable", false)
+	return win
 end
 
 local function create_tasks_window()
 	local row = math.floor((vim.o.lines - height) / 2)
 	local col = math.floor(width * 2.52)
 
-	local tasks_win = api.nvim_open_win(buf.tasks, false, {
+	local win = api.nvim_open_win(buf.tasks, false, {
 		relative = "editor",
 		width = width,
 		height = height,
@@ -106,15 +104,15 @@ local function create_tasks_window()
 		border = "rounded",
 		zindex = 100,
 	})
-
-	return tasks_win
+	api.nvim_buf_set_option(buf.tasks, "modifiable", false)
+	return win
 end
 
 local function create_help_window()
 	local row = math.floor((vim.o.lines - height) / 2)
 	local col = math.floor(width * 3.56)
 
-	local help_win = api.nvim_open_win(buf.help, false, {
+	local win = api.nvim_open_win(buf.help, false, {
 		relative = "editor",
 		width = width,
 		height = height,
@@ -126,8 +124,49 @@ local function create_help_window()
 		border = "rounded",
 		zindex = 100,
 	})
+	rewind.help.init(buf.help)
+	api.nvim_buf_set_option(buf.help, "modifiable", false)
+	return win
+end
 
-	return help_win
+local function create_input_window(callback)
+	local row = math.floor((vim.o.lines - height) / 4)
+	local col = math.floor((vim.o.columns - width) / 4)
+
+	api.nvim_buf_set_lines(buf.input, 0, -1, false, {})
+
+	local win = api.nvim_open_win(buf.input, true, {
+		relative = "editor",
+		width = 60,
+		height = 1,
+		col = col,
+		row = row,
+		title = "   INPUT ",
+		title_pos = "left",
+		style = "minimal",
+		border = "rounded",
+		zindex = 200,
+	})
+
+	local line_count = api.nvim_buf_line_count(buf.input)
+	local target_line = math.min(2, line_count)
+	local line_length = #api.nvim_buf_get_lines(buf.input, target_line - 1, target_line, false)[1]
+	local target_column = math.min(0, line_length)
+
+	api.nvim_win_set_cursor(win, { target_line, target_column })
+	vim.cmd("startinsert")
+
+	vim.keymap.set("i", "<CR>", function()
+		local input = api.nvim_buf_get_lines(buf.input, 0, -1, false)[1]
+		vim.cmd("stopinsert")
+		api.nvim_win_close(win, true)
+		callback(input)
+	end, { buffer = buf.input })
+
+	vim.keymap.set("i", "<Esc>", function()
+		vim.cmd("stopinsert")
+		api.nvim_win_close(win, true)
+	end)
 end
 
 local function init_window()
@@ -136,9 +175,8 @@ local function init_window()
 		lists = api.nvim_create_buf(false, true),
 		tasks = api.nvim_create_buf(false, true),
 		help = api.nvim_create_buf(false, true),
+		input = api.nvim_create_buf(false, true),
 	}
-	api.nvim_buf_set_option(buf.lists, "modifiable", false)
-	api.nvim_buf_set_option(buf.tasks, "modifiable", false)
 
 	win = {
 		boards = create_boards_window(),
@@ -147,20 +185,21 @@ local function init_window()
 		help = create_help_window(),
 	}
 
-	api.nvim_buf_set_lines(buf.boards, 0, -1, false, util.get_boards())
-	api.nvim_buf_set_option(buf.boards, "modifiable", false)
-
-	help.init(buf.help)
-	api.nvim_buf_set_option(buf.help, "modifiable", false)
-
-	workflow.init_boards_selection(win, buf)
-
+	rewind.workflow.init_boards_selection(win, buf)
 	init_close_autocmd()
 end
 
 --------------------------------------------------
 -- Public Functions
 --------------------------------------------------
+function M.open_input(line)
+	create_input_window(function(input)
+		if input then
+			-- change boards/lists/tasks name
+		end
+	end)
+end
+
 function M.is_window_open()
 	if win == nil then
 		return false
@@ -178,7 +217,7 @@ function M.toggle_ui()
 		M.close_window()
 	else
 		init_window()
-		keymap.quit(buf)
+		rewind.keymap.quit(buf)
 	end
 end
 

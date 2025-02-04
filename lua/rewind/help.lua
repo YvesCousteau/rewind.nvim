@@ -21,10 +21,10 @@ local help_content = {
 		"Commands:",
 		"  :RewindToggle - Toggle Rewind UI",
 		"",
+		"----------------------------------",
+		"",
 	},
 	boards = {
-		"--------------------------------------",
-		"",
 		"in => Boards",
 		"",
 		"Navigation:",
@@ -32,8 +32,6 @@ local help_content = {
 		"  Enter - Go to List items",
 	},
 	lists = {
-		"--------------------------------------",
-		"",
 		"in => Lists",
 		"",
 		"Navigation:",
@@ -41,8 +39,6 @@ local help_content = {
 		"  Enter - Go to Tasks items",
 	},
 	tasks = {
-		"--------------------------------------",
-		"",
 		"in => Tasks",
 		"",
 		"Navigation:",
@@ -50,9 +46,7 @@ local help_content = {
 		"  Enter - Display Task name",
 	},
 }
---------------------------------------------------
--- Helper Functions
---------------------------------------------------
+
 --------------------------------------------------
 -- Public Functions
 --------------------------------------------------
