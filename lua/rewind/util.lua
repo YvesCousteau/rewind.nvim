@@ -52,6 +52,29 @@ function M.get_lists(board_title)
 	end
 end
 
+function M.get_first_list(board_title)
+	local data = load_json_file("/home/me/perso/rewind.nvim/test/data.json")
+	if not data or type(data) ~= "table" then
+		print("Failed to load JSON file or invalid data")
+		return
+	end
+
+	for _, board in ipairs(data) do
+		if board.title and board.title == board_title then
+			if board.lists and #board.lists > 0 then
+				local first_list = board.lists[1].title
+				if first_list then
+					return first_list
+				else
+					return nil
+				end
+			else
+				return nil
+			end
+		end
+	end
+end
+
 function M.get_tasks(board_title, list_title)
 	local data = load_json_file("/home/me/perso/rewind.nvim/test/data.json")
 	if not data or type(data) ~= "table" then
@@ -74,6 +97,12 @@ function M.get_tasks(board_title, list_title)
 	end
 end
 
+function M.clear_highlights(buf, namespace)
+	for _, buffer_id in pairs(buf) do
+		api.nvim_buf_clear_namespace(buffer_id, namespace, 0, -1)
+	end
+end
+
 function M.update_highlight(buf, namespace)
 	-- Clear previous highlights
 	api.nvim_buf_clear_namespace(buf, namespace, 0, -1)
@@ -84,11 +113,15 @@ function M.update_highlight(buf, namespace)
 end
 
 function M.update_contents(buf, contents)
-	local success, result = pcall(function()
-		api.nvim_buf_set_lines(buf, 0, -1, false, contents)
-	end)
-	if not success then
-		print("Error in update_contents: " .. result)
+	if contents then
+		local success, result = pcall(function()
+			api.nvim_buf_set_option(buf, "modifiable", true)
+			api.nvim_buf_set_lines(buf, 0, -1, false, contents)
+			api.nvim_buf_set_option(buf, "modifiable", false)
+		end)
+		if not success then
+			print("Error in update_contents: " .. result)
+		end
 	end
 end
 
