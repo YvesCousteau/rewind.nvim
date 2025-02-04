@@ -2,6 +2,7 @@ local api = vim.api
 
 local util = require("rewind.util")
 local workflow = require("rewind.workflow")
+local keymap = require("rewind.keymap")
 
 -- UI Module for Rewind Plugin
 ---@class RewindUI
@@ -151,6 +152,7 @@ function M.toggle_ui()
 		M.close_window()
 	else
 		init_window()
+		keymap.init_quit_keybinding(buf)
 	end
 end
 
