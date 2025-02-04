@@ -231,7 +231,7 @@ function M.close_window()
 			end
 		end
 		win = nil
-		if api.nvim_win_is_valid(win_input) then
+		if win_input and api.nvim_win_is_valid(win_input) then
 			api.nvim_win_close(win_input, true)
 		end
 		win_input = nil

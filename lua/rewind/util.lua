@@ -1,5 +1,7 @@
 local api = vim.api
 
+local rewind = require("rewind")
+
 local M = {}
 
 --------------------------------------------------
@@ -122,6 +124,14 @@ function M.update_contents(buf, contents)
 		if not success then
 			print("Error in update_contents: " .. result)
 		end
+	end
+end
+
+function M.save()
+	local file = io.open(rewind.config.options.file_path, "w")
+	if file then
+		file:write(vim.fn.json_encode({ ugly = "sexe " }))
+		file:close()
 	end
 end
 
