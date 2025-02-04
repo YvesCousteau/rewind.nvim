@@ -20,6 +20,8 @@ local config = {
 ---@type table|nil
 local win = nil
 ---@type table|nil
+local win_input = nil
+---@type table|nil
 local buf = nil
 
 local rewind_augroup = api.nvim_create_augroup("RewindGroup", { clear = true })
@@ -36,8 +38,8 @@ local function init_close_autocmd()
 		callback = function(opts)
 			local closed_win_id = tonumber(opts.match)
 			if win then
-				for _, window_id in pairs(win) do
-					if closed_win_id == window_id then
+				for _, win_id in pairs(win) do
+					if closed_win_id == win_id then
 						M.close_window()
 						return
 					end
@@ -135,7 +137,7 @@ local function create_input_window(callback)
 
 	api.nvim_buf_set_lines(buf.input, 0, -1, false, {})
 
-	local win = api.nvim_open_win(buf.input, true, {
+	win_input = api.nvim_open_win(buf.input, true, {
 		relative = "editor",
 		width = 60,
 		height = 1,
@@ -153,19 +155,19 @@ local function create_input_window(callback)
 	local line_length = #api.nvim_buf_get_lines(buf.input, target_line - 1, target_line, false)[1]
 	local target_column = math.min(0, line_length)
 
-	api.nvim_win_set_cursor(win, { target_line, target_column })
+	api.nvim_win_set_cursor(win_input, { target_line, target_column })
 	vim.cmd("startinsert")
 
 	vim.keymap.set("i", "<CR>", function()
 		local input = api.nvim_buf_get_lines(buf.input, 0, -1, false)[1]
 		vim.cmd("stopinsert")
-		api.nvim_win_close(win, true)
+		api.nvim_win_close(win_input, true)
 		callback(input)
 	end, { buffer = buf.input })
 
 	vim.keymap.set("i", "<Esc>", function()
 		vim.cmd("stopinsert")
-		api.nvim_win_close(win, true)
+		api.nvim_win_close(win_input, true)
 	end)
 end
 
@@ -223,12 +225,16 @@ end
 
 function M.close_window()
 	if M.is_window_open() then
-		for _, w in pairs(win) do
-			if api.nvim_win_is_valid(w) then
-				api.nvim_win_close(w, true)
+		for _, win_id in pairs(win) do
+			if api.nvim_win_is_valid(win_id) then
+				api.nvim_win_close(win_id, true)
 			end
 		end
 		win = nil
+		if api.nvim_win_is_valid(win_input) then
+			api.nvim_win_close(win_input, true)
+		end
+		win_input = nil
 		api.nvim_clear_autocmds({ group = rewind_augroup })
 	end
 end
