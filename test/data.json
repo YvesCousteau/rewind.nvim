@@ -1,11 +1,85 @@
 [
   {
-    "title": "one"
+    "title": "work",
+    "list": [
+      {
+        "title": "projects",
+        "task": [
+          {
+            "title": "rewind",
+            "state": "DOING",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "1984",
+            "state": "DOING",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "email on warning",
+            "state": "TODO",
+            "date": "UNDEFINED"
+          }
+        ]
+      },
+      {
+        "title": "books",
+        "task": [
+          {
+            "title": "The Rust (2nd)",
+            "state": "DONE",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "Mastering Bitcoin",
+            "state": "DONE",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "MicroPython",
+            "state": "DONE",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "The Markdown guide",
+            "state": "DONE",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "Mastering Etherum",
+            "state": "DOING",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "Mastering the lighning network",
+            "state": "TODO",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "Rust in action",
+            "state": "TODO",
+            "date": "UNDEFINED"
+          },
+          {
+            "title": "Mastering Linux Security and Hardening",
+            "state": "TODO",
+            "date": "UNDEFINED"
+          }
+        ]
+      }
+    ]
   },
   {
-    "title": "two"
+    "title": "perso",
+    "list": [
+      {
+        "title": "projects",
+        "task": []
+      }
+    ]
   },
   {
-    "title": "three"
+    "title": "misc",
+    "list": []
   }
 ]
