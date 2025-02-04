@@ -44,8 +44,8 @@ function M.get_lists(board_title)
 	for _, board in ipairs(data) do
 		if board.title and board.title == board_title then
 			local lists = {}
-			for _, list in ipairs(board.list) do
-				table.insert(lists, "󰧞 " .. list.title)
+			for _, list in ipairs(board.lists) do
+				table.insert(lists, list.title)
 			end
 			return lists
 		end
@@ -61,11 +61,11 @@ function M.get_tasks(board_title, list_title)
 
 	for _, board in ipairs(data) do
 		if board.title and board.title == board_title then
-			for _, list in ipairs(board.list) do
+			for _, list in ipairs(board.lists) do
 				if list.title and list.title == list_title then
 					local tasks = {}
-					for _, task in ipairs(list.list) do
-						table.insert(tasks, "󰧞 " .. task.title)
+					for _, task in ipairs(list.tasks) do
+						table.insert(tasks, task.title)
 					end
 					return tasks
 				end
@@ -84,7 +84,12 @@ function M.update_highlight(buf, namespace)
 end
 
 function M.update_contents(buf, contents)
-	api.nvim_buf_set_lines(buf, 0, -1, false, contents)
+	local success, result = pcall(function()
+		api.nvim_buf_set_lines(buf, 0, -1, false, contents)
+	end)
+	if not success then
+		print("Error in update_contents: " .. result)
+	end
 end
 
 return M

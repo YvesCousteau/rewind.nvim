@@ -1,6 +1,7 @@
 local api = vim.api
 
 local util = require("rewind.util")
+local workflow = require("rewind.workflow")
 
 -- UI Module for Rewind Plugin
 ---@class RewindUI
@@ -22,37 +23,12 @@ local win = nil
 ---@type table|nil
 local buf = nil
 
-local rewind_highlight_namespace = api.nvim_create_namespace("RewindHighlight")
 local rewind_augroup = api.nvim_create_augroup("RewindGroup", { clear = true })
 
 --------------------------------------------------
 -- Helper Functions
 --------------------------------------------------
-local function setup_boards_selection(callback)
-	-- Set up autocmd to update highlight on cursor move
-	api.nvim_create_autocmd("CursorMoved", {
-		buffer = buf.boards,
-		callback = function()
-			util.update_highlight(buf.boards, rewind_highlight_namespace)
-			util.update_contents(buf.lists, util.get_lists(api.nvim_get_current_line()))
-		end,
-	})
-
-	-- Initial highlight
-	util.update_highlight(buf.boards, rewind_highlight_namespace)
-
-	api.nvim_buf_set_keymap(buf.boards, "n", "<CR>", "", {
-		callback = function()
-			local line = api.nvim_get_current_line()
-			api.nvim_win_close(0, true)
-			callback(line)
-		end,
-		noremap = true,
-		silent = true,
-	})
-end
-
-local function setup_close_autocmd()
+local function init_close_autocmd()
 	api.nvim_create_autocmd("WinClosed", {
 		group = rewind_augroup,
 		callback = function(opts)
@@ -135,7 +111,7 @@ local function create_tasks_window()
 	return lists_win
 end
 
-local function create_window()
+local function init_window()
 	buf = {
 		boards = api.nvim_create_buf(false, true),
 		lists = api.nvim_create_buf(false, true),
@@ -150,12 +126,9 @@ local function create_window()
 
 	api.nvim_buf_set_lines(buf.boards, 0, -1, false, util.get_boards())
 
-	-- only select board
-	setup_boards_selection(function(selection)
-		print("Selected: " .. selection)
-	end)
+	workflow.init_boards_selection(win, buf)
 
-	setup_close_autocmd()
+	init_close_autocmd()
 end
 
 --------------------------------------------------
@@ -177,7 +150,7 @@ function M.toggle_ui()
 	if M.is_window_open() then
 		M.close_window()
 	else
-		create_window()
+		init_window()
 	end
 end
 

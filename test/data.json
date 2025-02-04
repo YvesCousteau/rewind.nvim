@@ -1,10 +1,10 @@
 [
   {
     "title": "work",
-    "list": [
+    "lists": [
       {
         "title": "projects",
-        "task": [
+        "tasks": [
           {
             "title": "rewind",
             "state": "DOING",
@@ -24,7 +24,7 @@
       },
       {
         "title": "books",
-        "task": [
+        "tasks": [
           {
             "title": "The Rust (2nd)",
             "state": "DONE",
@@ -71,15 +71,19 @@
   },
   {
     "title": "perso",
-    "list": [
+    "lists": [
       {
-        "title": "projects",
-        "task": []
+        "title": "projects_1",
+        "tasks": []
+      },
+      {
+        "title": "projects_2",
+        "tasks": []
       }
     ]
   },
   {
     "title": "misc",
-    "list": []
+    "lists": []
   }
 ]
