@@ -11,6 +11,7 @@ local function lazy_load(module_name)
 end
 
 M.config = lazy_load("rewind.config")
+M.state = lazy_load("rewind.state")
 M.ui = lazy_load("rewind.ui")
 M.workflow = lazy_load("rewind.workflow")
 M.help = lazy_load("rewind.help")

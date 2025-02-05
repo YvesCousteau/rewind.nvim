@@ -118,6 +118,7 @@ end
 
 function M.get_tasks(board_title, list_title)
 	local tasks = extract_data("tasks", board_title, list_title)
+
 	if not tasks then
 		return {}
 	end
@@ -189,6 +190,20 @@ function M.update_data(input, todo_type, board_title, list_title, task_title)
 			end
 		end
 	end
+end
+
+function M.is_buffer_empty(buf)
+	local lines = api.nvim_buf_get_lines(buf, 0, -1, false)
+	return #lines == 0 or (#lines == 1 and lines[1] == "")
+end
+
+function M.get_buffer_type(buf_table, buffer)
+	for key, value in pairs(buf_table) do
+		if value == buffer then
+			return key
+		end
+	end
+	return nil
 end
 
 return M
