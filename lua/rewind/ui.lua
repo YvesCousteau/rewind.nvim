@@ -131,11 +131,11 @@ local function create_help_window()
 	return win
 end
 
-local function create_input_window(callback)
-	local row = math.floor((vim.o.lines - height) / 1)
-	local col = math.floor((vim.o.columns - width) / 1)
+local function create_input_window(callback, default_input)
+	local row = math.floor((vim.o.lines - 1) / 2)
+	local col = math.floor((vim.o.columns - 60) / 2)
 
-	api.nvim_buf_set_lines(buf.input, 0, -1, false, {})
+	api.nvim_buf_set_lines(buf.input, 0, -1, false, { default_input or "" })
 
 	win_input = api.nvim_open_win(buf.input, true, {
 		relative = "editor",
@@ -152,13 +152,9 @@ local function create_input_window(callback)
 
 	rewind.help.update(buf.help, "input")
 
-	local line_count = api.nvim_buf_line_count(buf.input)
-	local target_line = math.min(2, line_count)
-	local line_length = #api.nvim_buf_get_lines(buf.input, target_line - 1, target_line, false)[1]
-	local target_column = math.min(0, line_length)
-
-	api.nvim_win_set_cursor(win_input, { target_line, target_column })
-	vim.cmd("startinsert")
+	local line_length = #default_input
+	api.nvim_win_set_cursor(win_input, { 1, line_length })
+	vim.cmd("startinsert!")
 
 	vim.keymap.set("i", "<CR>", function()
 		local input = api.nvim_buf_get_lines(buf.input, 0, -1, false)[1]
@@ -196,14 +192,14 @@ end
 --------------------------------------------------
 -- Public Functions
 --------------------------------------------------
-function M.open_input(callback)
+function M.open_input(callback, default_input)
 	create_input_window(function(input)
 		vim.schedule(function()
 			if input then
 				callback(input)
 			end
 		end)
-	end)
+	end, default_input)
 	return input_result
 end
 

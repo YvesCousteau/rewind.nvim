@@ -10,6 +10,21 @@ local M = {}
 local rewind_highlight_namespace = api.nvim_create_namespace("RewindHighlight")
 
 --------------------------------------------------
+-- Helper Functions
+--------------------------------------------------
+local function update_board_selection(buf, current_board)
+	rewind.util.update_contents(buf.lists, rewind.util.get_lists(current_board))
+	rewind.util.update_contents(
+		buf.tasks,
+		rewind.util.get_tasks(current_board, rewind.util.get_first_list(current_board))
+	)
+end
+
+local function update_list_selection(buf, current_board, current_list)
+	rewind.util.update_contents(buf.tasks, rewind.util.get_tasks(current_board, current_list))
+end
+
+--------------------------------------------------
 -- Public Functions
 --------------------------------------------------
 function M.init_boards_selection(win, buf)
@@ -19,11 +34,7 @@ function M.init_boards_selection(win, buf)
 		callback = function()
 			rewind.util.update_highlight(buf.boards, rewind_highlight_namespace)
 			local current_board = api.nvim_get_current_line()
-			rewind.util.update_contents(buf.lists, rewind.util.get_lists(current_board))
-			rewind.util.update_contents(
-				buf.tasks,
-				rewind.util.get_tasks(current_board, rewind.util.get_first_list(current_board))
-			)
+			update_board_selection(buf, current_board)
 		end,
 	})
 
@@ -49,7 +60,7 @@ function M.init_lists_selection(win, buf, current_board)
 		callback = function()
 			rewind.util.update_highlight(buf.lists, rewind_highlight_namespace)
 			local current_list = api.nvim_get_current_line()
-			rewind.util.update_contents(buf.tasks, rewind.util.get_tasks(current_board, current_list))
+			update_list_selection(buf, current_board, current_list)
 		end,
 	})
 
@@ -88,13 +99,13 @@ function M.init_tasks_selection(win, buf, current_board, current_list)
 
 	-- maybe not enter
 	rewind.keymap.select_task(buf, function()
+		local current_task = api.nvim_get_current_line()
 		rewind.ui.open_input(function(input)
 			if input then
-				print(
-					"User entered: " .. input .. " | with board: " .. current_board .. " | with list: " .. current_list
-				)
+				rewind.util.update_data(input, "task", current_board, current_list, current_task)
+				update_list_selection(buf, current_board, current_list)
 			end
-		end)
+		end, current_task)
 	end)
 
 	rewind.keymap.escape_task(buf, function()

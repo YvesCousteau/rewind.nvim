@@ -48,8 +48,7 @@ local function save_json_file(path, data)
 	return true
 end
 
-local function extract_data_table(todo_type, board_title, list_title)
-	-- print(todo_type)
+local function extract_data(todo_type, board_title, list_title)
 	local boards = load_json_file(rewind.config.options.file_path)
 	if todo_type == "boards" then
 		return boards
@@ -70,14 +69,13 @@ local function extract_data_table(todo_type, board_title, list_title)
 			end
 		end
 	end
-	print("Shouldn't happened")
 end
 
 --------------------------------------------------
 -- Public Functions
 --------------------------------------------------
 function M.get_boards()
-	local boards = extract_data_table("boards")
+	local boards = extract_data("boards")
 	if not boards then
 		return {}
 	end
@@ -92,7 +90,7 @@ function M.get_boards()
 end
 
 function M.get_lists(board_title)
-	local lists = extract_data_table("lists", board_title)
+	local lists = extract_data("lists", board_title)
 	if not lists then
 		return {}
 	end
@@ -105,7 +103,7 @@ function M.get_lists(board_title)
 end
 
 function M.get_first_list(board_title)
-	local lists = extract_data_table("lists", board_title)
+	local lists = extract_data("lists", board_title)
 	if not lists then
 		return {}
 	end
@@ -119,7 +117,7 @@ function M.get_first_list(board_title)
 end
 
 function M.get_tasks(board_title, list_title)
-	local tasks = extract_data_table("tasks", board_title, list_title)
+	local tasks = extract_data("tasks", board_title, list_title)
 	if not tasks then
 		return {}
 	end
@@ -159,20 +157,37 @@ function M.update_contents(buf, contents)
 	end
 end
 
-function M.update_file(fn)
-	local data = load_json_file(rewind.config.options.file_path)
-	if not data then
-		return false
+function M.update_data(input, todo_type, board_title, list_title, task_title)
+	if not input or input == "" then
+		return nil
 	end
+	local boards = load_json_file(rewind.config.options.file_path)
 
-	local updated_data = fn(data)
-
-	if save_json_file(rewind.config.options.file_path, updated_data) then
-		print("JSON file updated successfully")
-		return true
-	else
-		print("Failed to update JSON file")
-		return false
+	for _, board in ipairs(boards) do
+		if board.title and board.title == board_title then
+			if todo_type == "board" then
+				board.title = input
+				return save_json_file(rewind.config.options.file_path, boards)
+			else
+				for _, list in ipairs(board.lists) do
+					if list.title and list.title == list_title then
+						if todo_type == "list" then
+							list.title = input
+							return save_json_file(rewind.config.options.file_path, boards)
+						else
+							for _, task in ipairs(list.tasks) do
+								if task.title and task.title == task_title then
+									if todo_type == "task" then
+										task.title = input
+										return save_json_file(rewind.config.options.file_path, boards)
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
 	end
 end
 
