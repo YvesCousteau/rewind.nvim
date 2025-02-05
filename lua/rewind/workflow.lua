@@ -60,8 +60,9 @@ function M.init_lists_selection(win, buf, current_board)
 	rewind.util.update_highlight(buf.lists, rewind_highlight_namespace)
 
 	rewind.keymap.select_list(buf, function()
+		local current_list = api.nvim_get_current_line()
 		api.nvim_set_current_win(win.tasks)
-		M.init_tasks_selection(win, buf)
+		M.init_tasks_selection(win, buf, current_board, current_list)
 	end)
 
 	rewind.keymap.escape_list(buf, function()
@@ -70,7 +71,7 @@ function M.init_lists_selection(win, buf, current_board)
 	end)
 end
 
-function M.init_tasks_selection(win, buf)
+function M.init_tasks_selection(win, buf, current_board, current_list)
 	-- Set up autocmd to update highlight on cursor move
 	api.nvim_create_autocmd("CursorMoved", {
 		buffer = buf.tasks,
@@ -87,8 +88,13 @@ function M.init_tasks_selection(win, buf)
 
 	-- maybe not enter
 	rewind.keymap.select_task(buf, function()
-		local line = api.nvim_get_current_line()
-		rewind.ui.open_input(line)
+		rewind.ui.open_input(function(input)
+			if input then
+				print(
+					"User entered: " .. input .. " | with board: " .. current_board .. " | with list: " .. current_list
+				)
+			end
+		end)
 	end)
 
 	rewind.keymap.escape_task(buf, function()

@@ -132,8 +132,8 @@ local function create_help_window()
 end
 
 local function create_input_window(callback)
-	local row = math.floor((vim.o.lines - height) / 4)
-	local col = math.floor((vim.o.columns - width) / 4)
+	local row = math.floor((vim.o.lines - height) / 1)
+	local col = math.floor((vim.o.columns - width) / 1)
 
 	api.nvim_buf_set_lines(buf.input, 0, -1, false, {})
 
@@ -149,6 +149,8 @@ local function create_input_window(callback)
 		border = "rounded",
 		zindex = 200,
 	})
+
+	rewind.help.update(buf.help, "input")
 
 	local line_count = api.nvim_buf_line_count(buf.input)
 	local target_line = math.min(2, line_count)
@@ -194,12 +196,15 @@ end
 --------------------------------------------------
 -- Public Functions
 --------------------------------------------------
-function M.open_input(line)
+function M.open_input(callback)
 	create_input_window(function(input)
-		if input then
-			-- change boards/lists/tasks name
-		end
+		vim.schedule(function()
+			if input then
+				callback(input)
+			end
+		end)
 	end)
+	return input_result
 end
 
 function M.is_window_open()

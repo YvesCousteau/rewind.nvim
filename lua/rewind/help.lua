@@ -45,6 +45,13 @@ local help_content = {
 		"  Esc   - Go back to Lists",
 		"  Enter - Display Task name",
 	},
+	input = {
+		"in => Tasks",
+		"",
+		"Navigation:",
+		"  Esc   - Exit Input",
+		"  Enter - Save modification",
+	},
 }
 
 --------------------------------------------------

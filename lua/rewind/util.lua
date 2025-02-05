@@ -14,89 +14,121 @@ local function load_json_file(path)
 	end
 	local content = file:read("*all")
 	file:close()
-	return vim.json.decode(content)
+
+	local success, decoded = pcall(vim.json.decode, content)
+	if not success then
+		print("Error: Invalid JSON in file " .. path)
+		return nil
+	end
+
+	if not decoded or type(decoded) ~= "table" then
+		print("Failed to load JSON file or invalid data")
+		return nil
+	end
+
+	return decoded
+end
+
+local function save_json_file(path, data)
+	local file = io.open(path, "w")
+	if not file then
+		print("Error: Unable to open file for writing at " .. path)
+		return false
+	end
+
+	local success, encoded = pcall(vim.json.encode, data)
+	if not success then
+		print("Error: Unable to encode data to JSON")
+		file:close()
+		return false
+	end
+
+	file:write(encoded)
+	file:close()
+	return true
+end
+
+local function extract_data_table(todo_type, board_title, list_title)
+	-- print(todo_type)
+	local boards = load_json_file(rewind.config.options.file_path)
+	if todo_type == "boards" then
+		return boards
+	else
+		for _, board in ipairs(boards) do
+			if board.title and board.title == board_title and board.lists and #board.lists > 0 then
+				if todo_type == "lists" then
+					return board.lists
+				else
+					for _, list in ipairs(board.lists) do
+						if list.title and list.title == list_title and list.tasks and #list.tasks > 0 then
+							if todo_type == "tasks" then
+								return list.tasks
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	print("Shouldn't happened")
 end
 
 --------------------------------------------------
 -- Public Functions
 --------------------------------------------------
 function M.get_boards()
-	local data = load_json_file("/home/me/perso/rewind.nvim/test/data.json")
-	if not data or type(data) ~= "table" then
-		print("Failed to load JSON file or invalid data")
-		return
+	local boards = extract_data_table("boards")
+	if not boards then
+		return {}
 	end
 
-	local boards = {}
-	for _, board in ipairs(data) do
+	local boards_title = {}
+	for _, board in ipairs(boards) do
 		if board.title then
-			table.insert(boards, board.title)
+			table.insert(boards_title, board.title)
 		end
 	end
-	return boards
+	return boards_title
 end
 
 function M.get_lists(board_title)
-	local data = load_json_file("/home/me/perso/rewind.nvim/test/data.json")
-	if not data or type(data) ~= "table" then
-		print("Failed to load JSON file or invalid data")
-		return
+	local lists = extract_data_table("lists", board_title)
+	if not lists then
+		return {}
 	end
 
-	for _, board in ipairs(data) do
-		if board.title and board.title == board_title then
-			local lists = {}
-			for _, list in ipairs(board.lists) do
-				table.insert(lists, list.title)
-			end
-			return lists
-		end
+	local lists_title = {}
+	for _, list in ipairs(lists) do
+		table.insert(lists_title, list.title)
 	end
+	return lists_title
 end
 
 function M.get_first_list(board_title)
-	local data = load_json_file("/home/me/perso/rewind.nvim/test/data.json")
-	if not data or type(data) ~= "table" then
-		print("Failed to load JSON file or invalid data")
-		return
+	local lists = extract_data_table("lists", board_title)
+	if not lists then
+		return {}
 	end
 
-	for _, board in ipairs(data) do
-		if board.title and board.title == board_title then
-			if board.lists and #board.lists > 0 then
-				local first_list = board.lists[1].title
-				if first_list then
-					return first_list
-				else
-					return nil
-				end
-			else
-				return nil
-			end
-		end
+	local first_list = lists[1].title
+	if first_list then
+		return first_list
+	else
+		return nil
 	end
 end
 
 function M.get_tasks(board_title, list_title)
-	local data = load_json_file("/home/me/perso/rewind.nvim/test/data.json")
-	if not data or type(data) ~= "table" then
-		print("Failed to load JSON file or invalid data")
-		return
+	local tasks = extract_data_table("tasks", board_title, list_title)
+	if not tasks then
+		return {}
 	end
 
-	for _, board in ipairs(data) do
-		if board.title and board.title == board_title then
-			for _, list in ipairs(board.lists) do
-				if list.title and list.title == list_title then
-					local tasks = {}
-					for _, task in ipairs(list.tasks) do
-						table.insert(tasks, task.title)
-					end
-					return tasks
-				end
-			end
-		end
+	local tasks_title = {}
+	for _, task in ipairs(tasks) do
+		table.insert(tasks_title, task.title)
 	end
+	return tasks_title
 end
 
 function M.clear_highlights(buf, namespace)
@@ -127,11 +159,20 @@ function M.update_contents(buf, contents)
 	end
 end
 
-function M.save()
-	local file = io.open(rewind.config.options.file_path, "w")
-	if file then
-		file:write(vim.fn.json_encode({ ugly = "sexe " }))
-		file:close()
+function M.update_file(fn)
+	local data = load_json_file(rewind.config.options.file_path)
+	if not data then
+		return false
+	end
+
+	local updated_data = fn(data)
+
+	if save_json_file(rewind.config.options.file_path, updated_data) then
+		print("JSON file updated successfully")
+		return true
+	else
+		print("Failed to update JSON file")
+		return false
 	end
 end
 

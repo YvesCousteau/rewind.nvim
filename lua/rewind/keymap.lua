@@ -17,11 +17,6 @@ function M.quit(buf)
 			)
 		end
 	end
-
-	api.nvim_buf_set_keymap(buf.boards, "n", "s", ":lua require('rewind.util').save()<CR>", {
-		noremap = true,
-		silent = true,
-	})
 end
 
 function M.select_board(buf, callback)
