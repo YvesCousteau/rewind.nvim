@@ -45,10 +45,9 @@ local function init_close_autocmd()
 		callback = function(opts)
 			local closed_win_id = tonumber(opts.match)
 			if win_core then
-				for _, win_id in pairs(win_core) do
-					if closed_win_id == win_id then
-						M.close_window(win_core)
-						M.close_window(win_opt)
+				for _, win in pairs(win_core) do
+					if closed_win_id == win then
+						M.close_all_window()
 						return
 					end
 				end
@@ -57,7 +56,7 @@ local function init_close_autocmd()
 	})
 end
 
-local function create_window(type, win, title, width, height, col, row, is_focused, is_modifiable)
+local function create_window(type, win, title, width, height, col, row, is_focused, is_modifiable, position)
 	win[type] = api.nvim_open_win(buf[type], is_focused, {
 		relative = "editor",
 		width = width,
@@ -65,13 +64,13 @@ local function create_window(type, win, title, width, height, col, row, is_focus
 		col = col,
 		row = row,
 		title = title,
-		title_pos = "center",
+		title_pos = position or "center",
 		style = "minimal",
 		border = "rounded",
 		zindex = 100,
 	})
 	api.nvim_buf_set_option(buf[type], "modifiable", is_modifiable)
-	rewind.keymap.quit(win, buf[type])
+	rewind.keymap.quit(win[type], buf[type])
 	rewind.keymap.help(buf[type])
 end
 
@@ -138,17 +137,18 @@ local function create_help_window()
 	api.nvim_buf_set_option(buf.help, "modifiable", false)
 end
 
-local function create_input_window(callback, default_input)
+local function create_input_window(title, callback, default_input)
 	create_window(
 		"input",
 		win_opt,
-		"   INPUT ",
+		"   INPUT " .. "- " .. title,
 		60,
 		1,
 		math.floor((vim.o.lines * 60) / 2),
 		math.floor((vim.o.lines * 1) / 2),
 		true,
-		true
+		true,
+		"left"
 	)
 
 	local line_length = #default_input
@@ -180,31 +180,35 @@ end
 -- Public Functions
 --------------------------------------------------
 function M.is_window_open(win)
-	if win == nil then
+	if win and api.nvim_win_is_valid(win) then
+		return true
+	else
 		return false
 	end
-	for _, window_id in pairs(win) do
-		if api.nvim_win_is_valid(window_id) then
-			return true
-		end
-	end
-	return false
 end
 
 function M.close_window(win)
 	if M.is_window_open(win) then
-		for _, win_id in pairs(win) do
-			if api.nvim_win_is_valid(win_id) then
-				api.nvim_win_close(win_id, true)
-			end
-		end
+		api.nvim_win_close(win, true)
 		win = nil
-		api.nvim_clear_autocmds({ group = rewind_augroup })
 	end
 end
 
-function M.open_input_window(callback, default_input)
-	create_input_window(function(input)
+function M.close_all_window(win)
+	for _, win in pairs(win_core) do
+		if M.is_window_open(win) then
+			M.close_window(win)
+		end
+	end
+	for _, win in pairs(win_opt) do
+		if M.is_window_open(win) then
+			M.close_window(win)
+		end
+	end
+end
+
+function M.open_input_window(title, callback, default_input)
+	create_input_window(title, function(input)
 		vim.schedule(function()
 			if input then
 				callback(input)
@@ -240,10 +244,20 @@ function M.toggle_help_window()
 end
 
 function M.toggle_ui()
-	if M.is_window_open(win_core) or M.is_window_open(win_opt) then
-		M.close_window(win_core)
-		M.close_window(win_opt)
-	else
+	local win_is_open = false
+	for _, win in pairs(win_core) do
+		if M.is_window_open(win) then
+			M.close_window(win)
+			win_is_open = true
+		end
+	end
+	for _, win in pairs(win_opt) do
+		if M.is_window_open(win) then
+			M.close_window(win)
+			win_is_open = true
+		end
+	end
+	if not win_is_open then
 		init_window()
 	end
 end

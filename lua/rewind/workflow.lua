@@ -105,7 +105,7 @@ function M.init_tasks_selection(win, buf, current_board, current_list)
 	-- maybe not enter
 	rewind.keymap.select_task(buf.tasks, function()
 		local current_task = api.nvim_get_current_line()
-		rewind.ui.open_input_window(function(input)
+		rewind.ui.open_input_window("Update Task", function(input)
 			if input then
 				rewind.util.update_data(input, "task", current_board, current_list, current_task)
 				update_list_selection(buf, current_board, current_list)
