@@ -7,6 +7,7 @@ M.boards = rewind.lazy_load("rewind.ui.boards")
 M.lists = rewind.lazy_load("rewind.ui.lists")
 M.tasks = rewind.lazy_load("rewind.ui.tasks")
 M.input = rewind.lazy_load("rewind.ui.input")
+M.help = rewind.lazy_load("rewind.ui.help")
 
 --------------------------------------------------
 -- Helper Functions
@@ -21,6 +22,8 @@ local function init_window()
 	M.boards.create_window()
 	M.lists.create_window()
 	M.tasks.create_window()
+
+	M.help.open_window()
 
 	rewind.ui.boards.setup()
 	rewind.autocmd.setup()

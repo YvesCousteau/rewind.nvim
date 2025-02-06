@@ -4,6 +4,7 @@ local M = {}
 M.boards = rewind.lazy_load("rewind.controller.boards")
 M.lists = rewind.lazy_load("rewind.controller.lists")
 M.tasks = rewind.lazy_load("rewind.controller.tasks")
+M.help = rewind.lazy_load("rewind.controller.help")
 
 function M.get_data(type, board_title, list_title)
 	local boards = rewind.util.load_json_file(rewind.config.options.file_path)

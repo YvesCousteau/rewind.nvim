@@ -14,6 +14,10 @@ function M.setup()
 						return
 					end
 				end
+			elseif rewind.state.win.floating then
+				if rewind.state.win.floating.help then
+					rewind.controller.help.toggle()
+				end
 			end
 		end,
 	})

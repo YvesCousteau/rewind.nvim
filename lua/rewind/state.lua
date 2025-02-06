@@ -30,6 +30,11 @@ M.current = {
 	task = nil,
 }
 
+M.help = {
+	is_expanded = false,
+	content = {},
+}
+
 function M.set_current(type, value)
 	M.current[type] = value
 	return M.current[type]
