@@ -1,7 +1,8 @@
 local api = vim.api
+
 local M = {}
 
-function M.lazy_load(module_name)
+local function lazy_load(module_name)
 	return setmetatable({}, {
 		__index = function(_, key)
 			return require(module_name)[key]
@@ -9,10 +10,12 @@ function M.lazy_load(module_name)
 	})
 end
 
-M.state = M.lazy_load("rewind.state")
-M.util = M.lazy_load("rewind.util")
-M.ui = M.lazy_load("rewind.ui")
-M.config = M.lazy_load("rewind.config")
+M.config = lazy_load("rewind.config")
+M.ui = lazy_load("rewind.ui")
+M.workflow = lazy_load("rewind.workflow")
+M.help = lazy_load("rewind.help")
+M.util = lazy_load("rewind.util")
+M.keymap = lazy_load("rewind.keymap")
 
 function M.setup(opts)
 	M.config.setup(opts)

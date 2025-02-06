@@ -1,7 +1,5 @@
 local api = vim.api
-
 local rewind = require("rewind")
-
 local M = {}
 
 --------------------------------------------------
@@ -28,7 +26,7 @@ end
 -- Public Functions
 --------------------------------------------------
 function M.init_boards_selection(win, buf)
-	rewind.ui.close_help_window()
+	rewind.ui.help.close_window(win)
 
 	-- Set up autocmd to update highlight on cursor move
 	api.nvim_create_autocmd("CursorMoved", {
@@ -44,7 +42,7 @@ function M.init_boards_selection(win, buf)
 	rewind.util.clear_highlights(buf, rewind_highlight_namespace)
 	rewind.util.update_highlight(buf.boards, rewind_highlight_namespace)
 
-	rewind.keymap.select_board(buf.boards, function()
+	rewind.keymap.enter_neutral(buf.boards, function()
 		local current_board = api.nvim_get_current_line()
 
 		if not rewind.util.is_buffer_empty(buf.lists) then
@@ -53,7 +51,9 @@ function M.init_boards_selection(win, buf)
 		end
 	end)
 
-	rewind.keymap.escape_board(win.boards, buf.boards)
+	rewind.keymap.escape_neutral(buf.boards, function()
+		rewind.ui.close_window(win.boards)
+	end)
 end
 
 function M.init_lists_selection(win, buf, current_board)
@@ -73,7 +73,7 @@ function M.init_lists_selection(win, buf, current_board)
 	rewind.util.clear_highlights(buf, rewind_highlight_namespace)
 	rewind.util.update_highlight(buf.lists, rewind_highlight_namespace)
 
-	rewind.keymap.select_list(buf.lists, function()
+	rewind.keymap.enter_neutral(buf.lists, function()
 		local current_list = api.nvim_get_current_line()
 		if not rewind.util.is_buffer_empty(buf.tasks) then
 			api.nvim_set_current_win(win.tasks)
@@ -81,7 +81,7 @@ function M.init_lists_selection(win, buf, current_board)
 		end
 	end)
 
-	rewind.keymap.escape_list(buf.lists, function()
+	rewind.keymap.escape_neutral(buf.lists, function()
 		api.nvim_set_current_win(win.boards)
 		M.init_boards_selection(win, buf)
 	end)
@@ -103,7 +103,7 @@ function M.init_tasks_selection(win, buf, current_board, current_list)
 	rewind.util.update_highlight(buf.tasks, rewind_highlight_namespace)
 
 	-- maybe not enter
-	rewind.keymap.select_task(buf.tasks, function()
+	rewind.keymap.enter_neutral(buf.tasks, function()
 		local current_task = api.nvim_get_current_line()
 		rewind.ui.open_input_window("Update Task", function(input)
 			if input then
@@ -113,7 +113,7 @@ function M.init_tasks_selection(win, buf, current_board, current_list)
 		end, current_task)
 	end)
 
-	rewind.keymap.escape_task(buf.tasks, function()
+	rewind.keymap.escape_neutral(buf.tasks, function()
 		api.nvim_set_current_win(win.lists)
 		M.init_lists_selection(win, buf, current_board)
 	end)
