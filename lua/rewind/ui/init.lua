@@ -1,7 +1,6 @@
 local api = vim.api
 local rewind = require("rewind")
 local M = {}
-local win_augroup = api.nvim_create_augroup("WindowGroup", { clear = true })
 
 M.util = rewind.lazy_load("rewind.ui.util")
 M.boards = rewind.lazy_load("rewind.ui.boards")
@@ -11,23 +10,6 @@ M.tasks = rewind.lazy_load("rewind.ui.tasks")
 --------------------------------------------------
 -- Helper Functions
 --------------------------------------------------
-local function init_close_autocmd()
-	api.nvim_create_autocmd("WinClosed", {
-		group = win_group,
-		callback = function(opts)
-			local closed_win_id = tonumber(opts.match)
-			if rewind.state.win.static then
-				for _, win in pairs(rewind.state.win.static) do
-					if closed_win_id == win then
-						M.close_all_window()
-						return
-					end
-				end
-			end
-		end,
-	})
-end
-
 local function init_window()
 	rewind.state.buf.boards = api.nvim_create_buf(false, true)
 	rewind.state.buf.lists = api.nvim_create_buf(false, true)
@@ -39,8 +21,8 @@ local function init_window()
 	M.lists.create_window()
 	M.tasks.create_window()
 
-	-- rewind.workflow.init_boards_selection(win_core, buf)
-	init_close_autocmd()
+	rewind.ui.boards.setup()
+	rewind.autocmd.setup()
 end
 
 --------------------------------------------------

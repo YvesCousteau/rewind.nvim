@@ -1,0 +1,30 @@
+local rewind = require("rewind")
+local M = {}
+
+function M.get(board_title)
+	local lists = rewind.controller.get_data("lists", board_title)
+	if lists and #lists > 0 then
+		local lists_title = {}
+		for _, list in ipairs(lists) do
+			table.insert(lists_title, list.title)
+		end
+		return lists_title
+	end
+	return {}
+end
+
+function M.get_first(board_title)
+	local lists = rewind.controller.get_data("lists", board_title)
+	if lists and #lists > 0 then
+		local first_list = lists[1].title
+		if first_list then
+			return first_list
+		end
+	end
+end
+
+function M.set(board_title, list_title, input)
+	rewind.controller.update_data(input, "list", board_title, list_title)
+end
+
+return M
