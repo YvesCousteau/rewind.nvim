@@ -10,6 +10,7 @@ end
 
 local function help(buf, type)
 	rewind.util.set_keymap(buf[type], "n", rewind.config.options.keymaps.help, function()
+		rewind.state.help.type = type
 		rewind.ui.close_window(rewind.state.win.floating.help)
 	end)
 end

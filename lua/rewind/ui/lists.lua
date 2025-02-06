@@ -3,20 +3,11 @@ local rewind = require("rewind")
 local M = {}
 
 function M.setup()
-	api.nvim_buf_set_option(rewind.state.buf.lists, "modifiable", true)
-
-	rewind.autocmd.cursor_move(rewind.state.buf.lists, function()
-		rewind.util.update_highlight(rewind.state.buf.lists, rewind.state.highlight_namespace)
-		local current_board = rewind.state.current.board
-		local current_list = rewind.state.set_current("list", api.nvim_get_current_line())
-		local updated_tasks = rewind.controller.tasks.get(current_board, current_list)
-		rewind.util.update_contents(rewind.state.buf.tasks, updated_tasks)
-	end)
+	rewind.autocmd.lists.setup()
 
 	api.nvim_buf_set_option(rewind.state.buf.lists, "modifiable", false)
-
-	rewind.util.clear_highlights(rewind.state.buf, rewind.state.highlight_namespace)
-	rewind.util.update_highlight(rewind.state.buf.lists, rewind.state.highlight_namespace)
+	rewind.util.clear_highlights(rewind.state.buf, rewind.state.namespace.highlight)
+	rewind.util.update_highlight(rewind.state.buf.lists, rewind.state.namespace.highlight)
 
 	rewind.util.set_keymap(rewind.state.buf.lists, "n", rewind.config.options.keymaps.select, function()
 		local current_board = rewind.state.current.board

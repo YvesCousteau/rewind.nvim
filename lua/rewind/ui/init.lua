@@ -25,8 +25,8 @@ local function init_window()
 
 	M.help.open_window()
 
-	rewind.ui.boards.setup()
 	rewind.autocmd.setup()
+	rewind.ui.boards.setup()
 end
 
 --------------------------------------------------

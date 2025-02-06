@@ -21,8 +21,9 @@ M.win = {
 	},
 }
 
-M.win_auto_group = api.nvim_create_augroup("WindowAugroup", { clear = true })
-M.highlight_namespace = api.nvim_create_namespace("HighlightNamespace")
+M.namespace = {
+	highlight = api.nvim_create_namespace("HighlightNamespace"),
+}
 
 M.current = {
 	board = nil,
@@ -32,7 +33,7 @@ M.current = {
 
 M.help = {
 	is_expanded = false,
-	content = {},
+	type = nil,
 }
 
 function M.set_current(type, value)
