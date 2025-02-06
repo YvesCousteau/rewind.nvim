@@ -16,13 +16,11 @@ function M.setup()
 	rewind.util.update_highlight(rewind.state.buf.tasks, rewind.state.highlight_namespace)
 
 	rewind.util.set_keymap(rewind.state.buf.tasks, "n", rewind.config.options.keymaps.select, function()
+		local current_board = rewind.state.current.board
+		local current_list = rewind.state.current.list
 		local current_task = api.nvim_get_current_line()
-		rewind.ui.input.open_window(" |> Update Task", function(input)
-			if input then
-				print(input)
-				-- rewind.util.update_data(input, "task", current_board, current_list, current_task)
-				-- update_list_selection(buf, current_board, current_list)
-			end
+		rewind.ui.input.open_window("|> Update Task ", function(input)
+			rewind.controller.tasks.set(current_board, current_list, current_task, input)
 		end, current_task)
 	end)
 

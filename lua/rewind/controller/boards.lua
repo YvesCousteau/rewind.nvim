@@ -16,7 +16,10 @@ function M.get()
 end
 
 function M.set(board_title, input)
-	rewind.controller.update_data(input, "tasks", board_title)
+	if rewind.controller.update_data(input, "board", board_title) then
+		local updated_data = M.get()
+		rewind.util.update_contents(rewind.state.buf.boards, updated_data)
+	end
 end
 
 return M

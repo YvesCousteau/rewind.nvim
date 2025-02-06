@@ -24,7 +24,10 @@ function M.get_first(board_title)
 end
 
 function M.set(board_title, list_title, input)
-	rewind.controller.update_data(input, "list", board_title, list_title)
+	if rewind.controller.update_data(input, "list", board_title, list_title) then
+		local updated_data = M.get(board_title)
+		rewind.util.update_contents(rewind.state.buf.lists, updated_data)
+	end
 end
 
 return M

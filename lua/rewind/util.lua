@@ -35,14 +35,19 @@ function M.save_json_file(path, data)
 	local file = io.open(path, "w")
 	if not file then
 		print("Error: Unable to open file for writing at " .. path)
-		return false
+		return nil
 	end
 
 	local success, encoded = pcall(vim.json.encode, data)
 	if not success then
 		print("Error: Unable to encode data to JSON")
 		file:close()
-		return false
+		return nil
+	end
+
+	if not encoded then
+		print("Failed to load table")
+		return nil
 	end
 
 	file:write(encoded)

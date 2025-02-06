@@ -6,6 +6,7 @@ M.util = rewind.lazy_load("rewind.ui.util")
 M.boards = rewind.lazy_load("rewind.ui.boards")
 M.lists = rewind.lazy_load("rewind.ui.lists")
 M.tasks = rewind.lazy_load("rewind.ui.tasks")
+M.input = rewind.lazy_load("rewind.ui.input")
 
 --------------------------------------------------
 -- Helper Functions
