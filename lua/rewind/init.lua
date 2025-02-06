@@ -15,6 +15,7 @@ M.ui = M.lazy_load("rewind.ui")
 M.config = M.lazy_load("rewind.config")
 M.controller = M.lazy_load("rewind.controller")
 M.autocmd = M.lazy_load("rewind.autocmd")
+M.keymaps = M.lazy_load("rewind.keymaps")
 
 function M.setup(opts)
 	M.config.setup(opts)

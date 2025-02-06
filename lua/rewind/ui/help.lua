@@ -4,14 +4,11 @@ local M = {}
 
 local function setup()
 	rewind.autocmd.help.setup()
+	rewind.keymaps.boards.setup()
 
 	api.nvim_buf_set_option(rewind.state.buf.help, "modifiable", true)
 	api.nvim_buf_set_lines(rewind.state.buf.help, 0, -1, false, rewind.controller.help.get())
 	api.nvim_buf_set_option(rewind.state.buf.help, "modifiable", false)
-
-	rewind.util.set_keymap(rewind.state.buf.help, "n", rewind.config.options.keymaps.back, function()
-		rewind.ui.close_window(rewind.state.win.floating.help)
-	end)
 end
 
 local function create_window()

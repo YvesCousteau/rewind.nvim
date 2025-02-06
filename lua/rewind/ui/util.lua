@@ -2,19 +2,6 @@ local api = vim.api
 local rewind = require("rewind")
 local M = {}
 
-local function quit(buf, win, type)
-	rewind.util.set_keymap(buf[type], "n", rewind.config.options.keymaps.quit, function()
-		rewind.ui.close_window(win[type])
-	end)
-end
-
-local function help(buf, type)
-	rewind.util.set_keymap(buf[type], "n", rewind.config.options.keymaps.help, function()
-		rewind.state.help.type = type
-		rewind.ui.close_window(rewind.state.win.floating.help)
-	end)
-end
-
 function M.create_window(buf, type, win, pos, is_focused, is_modifiable)
 	local width = math.floor(vim.o.columns * rewind.config.options.ui.width_percentage)
 	local height = math.floor(vim.o.lines * rewind.config.options.ui.height_percentage)
@@ -32,8 +19,7 @@ function M.create_window(buf, type, win, pos, is_focused, is_modifiable)
 	})
 	api.nvim_buf_set_option(buf[type], "modifiable", is_modifiable)
 
-	quit(buf, win, type)
-	help(buf, type)
+	rewind.keymaps.setup()
 end
 
 return M
