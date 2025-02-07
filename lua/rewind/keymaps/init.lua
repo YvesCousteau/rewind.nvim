@@ -21,7 +21,7 @@ local function help(buf, type)
 	end)
 end
 
-function setup(buf, win, type)
+function M.setup(buf, win, type)
 	quit(buf, win, type)
 	help(buf, type)
 end

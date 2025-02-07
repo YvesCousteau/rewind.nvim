@@ -19,7 +19,7 @@ function M.create_window(buf, type, win, pos, is_focused, is_modifiable)
 	})
 	api.nvim_buf_set_option(buf[type], "modifiable", is_modifiable)
 
-	rewind.keymaps.setup()
+	rewind.keymaps.setup(buf, win, type)
 end
 
 return M

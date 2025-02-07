@@ -30,4 +30,18 @@ function M.set(board_title, list_title, input)
 	end
 end
 
+function M.add(board_title, input)
+	if rewind.controller.add_data(input, "list", board_title) then
+		local updated_data = M.get(board_title)
+		rewind.util.update_contents(rewind.state.buf.lists, updated_data)
+	end
+end
+
+function M.delete(board_title, list_title)
+	if rewind.controller.delete_data("list", board_title, list_title) then
+		local updated_data = M.get(board_title)
+		rewind.util.update_contents(rewind.state.buf.lists, updated_data)
+	end
+end
+
 return M

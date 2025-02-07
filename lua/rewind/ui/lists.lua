@@ -4,7 +4,7 @@ local M = {}
 
 function M.setup()
 	rewind.autocmd.lists.setup()
-	rewind.keymaps.boards.setup()
+	rewind.keymaps.lists.setup()
 
 	api.nvim_buf_set_option(rewind.state.buf.lists, "modifiable", false)
 	rewind.util.clear_highlights(rewind.state.buf, rewind.state.namespace.highlight)
