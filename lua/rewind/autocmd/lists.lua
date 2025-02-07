@@ -9,11 +9,9 @@ function M.setup()
 
 	rewind.autocmd.cursor_move(rewind.state.buf.lists, function()
 		rewind.util.update_highlight(rewind.state.buf.lists, rewind.state.namespace.highlight)
-		local current_board = rewind.state.get_current("board")
-		local current_list = rewind.state.set_current("list", api.nvim_get_current_line())
-		local current_tasks =
-			rewind.state.set_current("tasks", rewind.controller.tasks.get(current_board, current_list))
-		rewind.util.update_contents(rewind.state.buf.tasks, current_tasks)
+		rewind.state.set_current("list", api.nvim_get_current_line())
+		rewind.state.set_current("tasks", rewind.controller.tasks.get())
+		rewind.util.update_contents("tasks")
 	end)
 end
 

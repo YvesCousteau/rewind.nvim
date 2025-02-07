@@ -67,12 +67,13 @@ function M.update_highlight(buf, namespace)
 	api.nvim_buf_add_highlight(buf, namespace, "Visual", current_line, 0, -1)
 end
 
-function M.update_contents(buf, contents)
-	if contents then
+function M.update_contents(content_type)
+	local content = rewind.state.set_current(content_type, rewind.controller[content_type].get())
+	if content then
 		local success, result = pcall(function()
-			api.nvim_buf_set_option(buf, "modifiable", true)
-			api.nvim_buf_set_lines(buf, 0, -1, false, contents)
-			api.nvim_buf_set_option(buf, "modifiable", false)
+			api.nvim_buf_set_option(rewind.state.buf[content_type], "modifiable", true)
+			api.nvim_buf_set_lines(rewind.state.buf[content_type], 0, -1, false, content)
+			api.nvim_buf_set_option(rewind.state.buf[content_type], "modifiable", false)
 		end)
 		if not success then
 			print("Error in update_contents: " .. result)
