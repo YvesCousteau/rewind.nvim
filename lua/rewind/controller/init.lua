@@ -68,7 +68,6 @@ function M.get_data(type, board_title, list_title)
 
 	local _, item = find_data(boards, type, board_title, list_title)
 	if not item then
-		print("Error: Item not found " .. type .. " (get)")
 		return nil
 	end
 	return item
@@ -76,7 +75,6 @@ end
 
 function M.update_data(input, type, board_title, list_title, task_title)
 	if not input or input == "" then
-		print("Error: Input not valid " .. type .. " (update)")
 		return nil
 	end
 
@@ -87,7 +85,6 @@ function M.update_data(input, type, board_title, list_title, task_title)
 
 	local _, item = find_data(boards, type, board_title, list_title, task_title)
 	if not item then
-		print("Error: Item not found " .. type .. " (update)")
 		return nil
 	end
 
@@ -102,7 +99,6 @@ end
 
 function M.add_data(input, type, board_title, list_title)
 	if not input or input == "" then
-		print("Error: Input not valid " .. type .. " (add)")
 		return nil
 	end
 
@@ -113,7 +109,6 @@ function M.add_data(input, type, board_title, list_title)
 
 	local _, item = find_data(boards, type, board_title, list_title)
 	if not item then
-		print("Error: Item not found " .. type .. " (add)")
 		return nil
 	end
 	table.insert(item, M[type].default_value(input))
@@ -133,13 +128,11 @@ function M.delete_data(type, board_title, list_title, task_title)
 
 	local _, parent = find_data(boards, type .. "s", board_title, list_title, task_title)
 	if not parent then
-		print("Error: Item not found " .. type .. "s" .. " (delete)")
 		return nil
 	end
 
 	local index, item = find_data(boards, type, board_title, list_title, task_title)
 	if not item then
-		print("Error: Item not found " .. type .. " (delete)")
 		return nil
 	end
 	table.remove(parent, index)

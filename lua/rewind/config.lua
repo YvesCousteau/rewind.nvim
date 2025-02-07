@@ -99,14 +99,42 @@ M.defaults = {
 		-- open_todo_scratchpad = "<leader>p",
 	},
 	formatting = {
-		todo = {
-			icon = " 󰽤 ",
+		boards = {
+			is_active = {
+				icon = "   ",
+			},
+			is_inactive = {
+				icon = "   ",
+			},
 		},
-		doing = {
-			icon = " 󰪡 ",
+		lists = {
+			is_active = {
+				icon = "   ",
+			},
+			is_inactive = {
+				icon = "   ",
+			},
 		},
-		done = {
-			icon = " 󰪥 ",
+		tasks = {
+			date = {
+				is_defined = {
+					icon = "  ",
+				},
+				is_undefined = {
+					icon = "  ",
+				},
+			},
+			state = {
+				todo = {
+					icon = " 󰽤 ",
+				},
+				doing = {
+					icon = " 󰪡 ",
+				},
+				done = {
+					icon = " 󰪥 ",
+				},
+			},
 		},
 	},
 }

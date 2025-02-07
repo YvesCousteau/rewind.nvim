@@ -3,23 +3,23 @@ local rewind = require("rewind")
 local M = {}
 
 function M.add()
-	local current_board = rewind.state.current.board
+	local current_board = rewind.state.get_current("board")
 	rewind.ui.input.open_window("|> Add List ", function(input)
 		rewind.controller.lists.add(current_board, input)
 	end)
 end
 
 function M.update()
-	local current_board = rewind.state.current.board
-	local current_list = rewind.state.current.list
+	local current_board = rewind.state.get_current("board")
+	local current_list = rewind.state.get_current("list")
 	rewind.ui.input.open_window("|> Update Board ", function(input)
 		rewind.controller.lists.set(current_board, current_list, input)
 	end, current_list)
 end
 
 function M.delete()
-	local current_board = rewind.state.current.board
-	local current_list = rewind.state.current.list
+	local current_board = rewind.state.get_current("board")
+	local current_list = rewind.state.get_current("list")
 	rewind.controller.lists.delete(current_board, current_list)
 end
 
@@ -35,7 +35,8 @@ end
 
 function M.setup()
 	rewind.util.set_keymap(rewind.state.buf.lists, "n", rewind.config.options.keymaps.select, function()
-		if rewind.state.current.tasks and #rewind.state.current.tasks > 0 then
+		local current_tasks = rewind.state.get_current("tasks")
+		if current_tasks and #current_tasks > 0 then
 			M.next()
 		else
 			rewind.keymaps.tasks.add()

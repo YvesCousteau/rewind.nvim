@@ -2,13 +2,10 @@ local rewind = require("rewind")
 local M = {}
 
 function M.get(board_title, list_title)
-	local tasks = rewind.controller.get_data("tasks", board_title, list_title)
-	if tasks and #tasks > 0 then
-		local tasks_title = {}
-		for _, task in ipairs(tasks) do
-			table.insert(tasks_title, task.title)
-		end
-		return tasks_title
+	local content = rewind.controller.get_data("tasks", board_title, list_title)
+	local formated_content = rewind.formatting.setup(content, "tasks")
+	if formated_content and #formated_content > 0 then
+		return formated_content
 	end
 	return {}
 end

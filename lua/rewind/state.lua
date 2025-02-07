@@ -1,4 +1,5 @@
 local api = vim.api
+local rewind = require("rewind")
 local M = {}
 
 M.buf = {
@@ -39,9 +40,18 @@ M.help = {
 	type = nil,
 }
 
-function M.set_current(type, value)
-	M.current[type] = value
-	return M.current[type]
+function M.get_current(content_type)
+	return M.current[content_type]
+end
+
+function M.set_current(content_type, content)
+	local unformated_content = rewind.formatting.reverse(content, content_type)
+	if unformated_content then
+		M.current[content_type] = unformated_content
+	else
+		M.current[content_type] = content
+	end
+	return M.current[content_type]
 end
 
 return M

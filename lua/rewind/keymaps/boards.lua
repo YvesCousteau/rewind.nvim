@@ -9,14 +9,14 @@ function M.add()
 end
 
 function M.update()
-	local current_board = rewind.state.current.board
+	local current_board = rewind.state.get_current("board")
 	rewind.ui.input.open_window("|> Update Board ", function(input)
 		rewind.controller.boards.set(current_board, input)
 	end, current_board)
 end
 
 function M.delete()
-	local current_board = rewind.state.current.board
+	local current_board = rewind.state.get_current("board")
 	rewind.controller.boards.delete(current_board)
 end
 
@@ -32,7 +32,8 @@ end
 
 function M.setup()
 	rewind.util.set_keymap(rewind.state.buf.boards, "n", rewind.config.options.keymaps.select, function()
-		if rewind.state.current.lists and #rewind.state.current.lists > 0 then
+		local current_lists = rewind.state.get_current("lists")
+		if current_lists and #current_lists > 0 then
 			M.next()
 		else
 			rewind.keymaps.lists.add()
