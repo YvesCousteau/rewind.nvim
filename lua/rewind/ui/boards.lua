@@ -6,8 +6,9 @@ function M.setup()
 	rewind.autocmd.boards.setup()
 	rewind.keymaps.boards.setup()
 
+	local current_boards = rewind.state.set_current("boards", rewind.controller.boards.get())
 	api.nvim_buf_set_option(rewind.state.buf.boards, "modifiable", true)
-	api.nvim_buf_set_lines(rewind.state.buf.boards, 0, -1, false, rewind.controller.boards.get())
+	api.nvim_buf_set_lines(rewind.state.buf.boards, 0, -1, false, current_boards)
 	api.nvim_buf_set_option(rewind.state.buf.boards, "modifiable", false)
 
 	rewind.util.clear_highlights(rewind.state.buf, rewind.state.namespace.highlight)

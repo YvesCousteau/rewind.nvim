@@ -70,6 +70,8 @@ M.defaults = {
 		help = "h",
 		add = "a",
 		delete = "d",
+		update = "u",
+
 		-- toggle_window = "<leader>td",
 		-- new_todo = "i",
 		-- toggle_todo = "x",

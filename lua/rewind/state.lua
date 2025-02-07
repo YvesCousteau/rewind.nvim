@@ -27,8 +27,11 @@ M.namespace = {
 
 M.current = {
 	board = nil,
+	boards = nil,
 	list = nil,
+	lists = nil,
 	task = nil,
+	tasks = nil,
 }
 
 M.help = {

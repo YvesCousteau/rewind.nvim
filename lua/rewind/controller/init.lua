@@ -8,51 +8,55 @@ M.help = rewind.lazy_load("rewind.controller.help")
 
 local function find_data(boards, type, board_title, list_title, task_title)
 	if type == "boards" then
-		return boards
+		return nil, boards
 	elseif board_title then
 		for board_index, board in ipairs(boards) do
 			if board.title and board.title == board_title then
 				if type == "board" then
-					return board
-				elseif board.lists and #board.lists > 0 then
+					return board_index, board
+				elseif board.lists then
 					if type == "lists" then
-						return board.lists
+						return nil, board.lists
 					elseif list_title then
 						for list_index, list in ipairs(board.lists) do
 							if list.title and list.title == list_title then
 								if type == "list" then
-									return list
-								elseif list.tasks and #list.tasks > 0 then
+									return list_index, list
+								elseif list.tasks then
 									if type == "tasks" then
-										return list.tasks
+										return nil, list.tasks
 									elseif task_title then
 										for task_index, task in ipairs(list.tasks) do
 											if task.title and task.title == task_title then
 												if type == "task" then
-													return task
+													return task_index, task
 												else
-													return nil
+													print("Invalid type for task level")
+													return nil, nil
 												end
 											end
 										end
 									else
-										return nil
+										print("Invalid type for list level")
+										return nil, nil
 									end
 								else
-									return nil
+									return nil, nil
 								end
 							end
 						end
 					else
-						return nil
+						print("Invalid type for board level")
+						return nil, nil
 					end
 				else
-					return nil
+					return nil, nil
 				end
 			end
 		end
 	else
-		return nil
+		print("No matching data found")
+		return nil, nil
 	end
 end
 
@@ -62,12 +66,17 @@ function M.get_data(type, board_title, list_title)
 		return nil
 	end
 
-	return find_data(boards, type, board_title, list_title)
+	local _, item = find_data(boards, type, board_title, list_title)
+	if not item then
+		print("Error: Item not found " .. type .. " (get)")
+		return nil
+	end
+	return item
 end
 
 function M.update_data(input, type, board_title, list_title, task_title)
 	if not input or input == "" then
-		print("Error: Input not valid")
+		print("Error: Input not valid " .. type .. " (update)")
 		return nil
 	end
 
@@ -76,54 +85,24 @@ function M.update_data(input, type, board_title, list_title, task_title)
 		return nil
 	end
 
-	local updated = false
-	for _, board in ipairs(boards) do
-		if board.title == board_title then
-			if type == "board" then
-				board.title = input
-				updated = true
-				break
-			elseif type == "list" or type == "task" then
-				for _, list in ipairs(board.lists or {}) do
-					if list.title == list_title then
-						if type == "list" then
-							list.title = input
-							updated = true
-							break
-						elseif type == "task" then
-							for _, task in ipairs(list.tasks or {}) do
-								if task.title == task_title then
-									task.title = input
-									updated = true
-									break
-								end
-							end
-						end
-						if updated then
-							break
-						end
-					end
-				end
-			end
-			if updated then
-				break
-			end
-		end
+	local _, item = find_data(boards, type, board_title, list_title, task_title)
+	if not item then
+		print("Error: Item not found " .. type .. " (update)")
+		return nil
 	end
-	if updated then
-		local success = rewind.util.save_json_file(rewind.config.options.file_path, boards)
-		if not success then
-			return nil
-		end
-	else
-		print("Error: Item not found for update")
+
+	item.title = input
+
+	local success = rewind.util.save_json_file(rewind.config.options.file_path, boards)
+	if not success then
+		return nil
 	end
 	return true
 end
 
 function M.add_data(input, type, board_title, list_title)
 	if not input or input == "" then
-		print("Error: Input not valid")
+		print("Error: Input not valid " .. type .. " (add)")
 		return nil
 	end
 
@@ -132,42 +111,16 @@ function M.add_data(input, type, board_title, list_title)
 		return nil
 	end
 
-	local updated = false
-	if type == "board" then
-		table.insert(boards, { title = input })
-		updated = true
-	else
-		for _, board in ipairs(boards) do
-			if board.title == board_title and board.lists and #board.lists > 0 then
-				if type == "list" then
-					table.insert(board.lists, { title = input })
-					updated = true
-					break
-				else
-					for _, list in ipairs(board.lists or {}) do
-						if list.title == list_title and list.tasks and #list.tasks > 0 then
-							if type == "task" then
-								table.insert(list.tasks, { title = input })
-								updated = true
-								break
-							end
-						end
-					end
-				end
-				if updated then
-					break
-				end
-			end
-		end
+	local _, item = find_data(boards, type, board_title, list_title)
+	if not item then
+		print("Error: Item not found " .. type .. " (add)")
+		return nil
 	end
+	table.insert(item, M[type].default_value(input))
 
-	if updated then
-		local success = rewind.util.save_json_file(rewind.config.options.file_path, boards)
-		if not success then
-			return nil
-		end
-	else
-		print("Error: Item not found for update")
+	local success = rewind.util.save_json_file(rewind.config.options.file_path, boards)
+	if not success then
+		return nil
 	end
 	return true
 end
@@ -178,47 +131,22 @@ function M.delete_data(type, board_title, list_title, task_title)
 		return nil
 	end
 
-	local updated = false
-	for board_index, board in ipairs(boards) do
-		if board.title == board_title then
-			if type == "board" then
-				table.remove(boards, board_index)
-				updated = true
-				break
-			elseif type == "list" or type == "task" then
-				for list_index, list in ipairs(board.lists or {}) do
-					if list.title == list_title then
-						if type == "list" then
-							table.remove(board.lists, list_index)
-							updated = true
-							break
-						elseif type == "task" then
-							for task_index, task in ipairs(list.tasks or {}) do
-								if task.title == task_title then
-									table.remove(list.tasks, task_index)
-									updated = true
-									break
-								end
-							end
-						end
-						if updated then
-							break
-						end
-					end
-				end
-			end
-			if updated then
-				break
-			end
-		end
+	local _, parent = find_data(boards, type .. "s", board_title, list_title, task_title)
+	if not parent then
+		print("Error: Item not found " .. type .. "s" .. " (delete)")
+		return nil
 	end
-	if updated then
-		local success = rewind.util.save_json_file(rewind.config.options.file_path, boards)
-		if not success then
-			return nil
-		end
-	else
-		print("Error: Item not found for update")
+
+	local index, item = find_data(boards, type, board_title, list_title, task_title)
+	if not item then
+		print("Error: Item not found " .. type .. " (delete)")
+		return nil
+	end
+	table.remove(parent, index)
+
+	local success = rewind.util.save_json_file(rewind.config.options.file_path, boards)
+	if not success then
+		return nil
 	end
 	return true
 end

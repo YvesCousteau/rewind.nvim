@@ -7,7 +7,6 @@ function M.setup()
 	rewind.keymaps.tasks.setup()
 
 	api.nvim_buf_set_option(rewind.state.buf.tasks, "modifiable", false)
-
 	rewind.util.clear_highlights(rewind.state.buf, rewind.state.namespace.highlight)
 	rewind.util.update_highlight(rewind.state.buf.tasks, rewind.state.namespace.highlight)
 end

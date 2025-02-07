@@ -11,8 +11,9 @@ function M.setup()
 		rewind.util.update_highlight(rewind.state.buf.lists, rewind.state.namespace.highlight)
 		local current_board = rewind.state.current.board
 		local current_list = rewind.state.set_current("list", api.nvim_get_current_line())
-		local updated_tasks = rewind.controller.tasks.get(current_board, current_list)
-		rewind.util.update_contents(rewind.state.buf.tasks, updated_tasks)
+		local current_tasks =
+			rewind.state.set_current("tasks", rewind.controller.tasks.get(current_board, current_list))
+		rewind.util.update_contents(rewind.state.buf.tasks, current_tasks)
 	end)
 end
 

@@ -25,23 +25,30 @@ end
 
 function M.set(board_title, list_title, input)
 	if rewind.controller.update_data(input, "list", board_title, list_title) then
-		local updated_data = M.get(board_title)
-		rewind.util.update_contents(rewind.state.buf.lists, updated_data)
+		local current_lists = rewind.state.set_current("lists", M.get(board_title))
+		rewind.util.update_contents(rewind.state.buf.lists, current_lists)
 	end
 end
 
 function M.add(board_title, input)
-	if rewind.controller.add_data(input, "list", board_title) then
-		local updated_data = M.get(board_title)
-		rewind.util.update_contents(rewind.state.buf.lists, updated_data)
+	if rewind.controller.add_data(input, "lists", board_title) then
+		local current_lists = rewind.state.set_current("lists", M.get(board_title))
+		rewind.util.update_contents(rewind.state.buf.lists, current_lists)
 	end
 end
 
 function M.delete(board_title, list_title)
 	if rewind.controller.delete_data("list", board_title, list_title) then
-		local updated_data = M.get(board_title)
-		rewind.util.update_contents(rewind.state.buf.lists, updated_data)
+		local current_lists = rewind.state.set_current("lists", M.get(board_title))
+		rewind.util.update_contents(rewind.state.buf.lists, current_lists)
 	end
+end
+
+function M.default_value(title)
+	return {
+		title = title,
+		tasks = {},
+	}
 end
 
 return M

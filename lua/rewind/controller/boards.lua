@@ -17,23 +17,30 @@ end
 
 function M.set(board_title, input)
 	if rewind.controller.update_data(input, "board", board_title) then
-		local updated_data = M.get()
-		rewind.util.update_contents(rewind.state.buf.boards, updated_data)
+		local current_boards = rewind.state.set_current("boards", M.get())
+		rewind.util.update_contents(rewind.state.buf.boards, current_boards)
 	end
 end
 
 function M.add(input)
-	if rewind.controller.add_data(input, "board") then
-		local updated_data = M.get()
-		rewind.util.update_contents(rewind.state.buf.boards, updated_data)
+	if rewind.controller.add_data(input, "boards") then
+		local current_boards = rewind.state.set_current("boards", M.get())
+		rewind.util.update_contents(rewind.state.buf.boards, current_boards)
 	end
 end
 
 function M.delete(board_title, list_title)
 	if rewind.controller.delete_data("board", board_title) then
-		local updated_data = M.get()
-		rewind.util.update_contents(rewind.state.buf.boards, updated_data)
+		local current_boards = rewind.state.set_current("boards", M.get())
+		rewind.util.update_contents(rewind.state.buf.boards, current_boards)
 	end
+end
+
+function M.default_value(title)
+	return {
+		title = title,
+		lists = {},
+	}
 end
 
 return M
