@@ -9,7 +9,7 @@ M.list = rewind.lazy_load("rewind.formatting.list")
 M.tasks = rewind.lazy_load("rewind.formatting.tasks")
 M.task = rewind.lazy_load("rewind.formatting.task")
 
-function M.setup(content, content_type)
+function M.setup(content_type, content)
 	if content then
 		return M[content_type].setup(content)
 	else
@@ -17,7 +17,7 @@ function M.setup(content, content_type)
 	end
 end
 
-function M.reverse(content, content_type)
+function M.reverse(content_type, content)
 	if content then
 		return M[content_type].reverse(content)
 	else

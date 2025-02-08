@@ -15,7 +15,7 @@ function M.update()
 	local current_list = rewind.state.get_current("list")
 	local current_task = rewind.state.get_current("task")
 	rewind.ui.input.open_window("|> Update Task ", function(input)
-		rewind.controller.tasks.set(current_board, current_list, current_task, input)
+		rewind.controller.set("task", input)
 	end, current_task)
 end
 

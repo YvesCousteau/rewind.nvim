@@ -6,38 +6,42 @@ M.lists = rewind.lazy_load("rewind.controller.lists")
 M.tasks = rewind.lazy_load("rewind.controller.tasks")
 M.help = rewind.lazy_load("rewind.controller.help")
 
-local function find_data(boards, type, board_title, list_title, task_title)
-	if type == "boards" then
-		return nil, boards
-	elseif board_title then
-		for board_index, board in ipairs(boards) do
-			if board.title and board.title == board_title then
-				if type == "board" then
+local function find_data(content_type, content)
+	local current_board = rewind.state.get_current("board")
+	local current_list = rewind.state.get_current("list")
+	local current_task = rewind.state.get_current("task")
+
+	if content_type == "boards" then
+		return nil, content
+	elseif current_board then
+		for board_index, board in ipairs(content) do
+			if board.title and board.title == current_board then
+				if content_type == "board" then
 					return board_index, board
 				elseif board.lists then
-					if type == "lists" then
+					if content_type == "lists" then
 						return nil, board.lists
-					elseif list_title then
+					elseif current_list then
 						for list_index, list in ipairs(board.lists) do
-							if list.title and list.title == list_title then
-								if type == "list" then
+							if list.title and list.title == current_list then
+								if content_type == "list" then
 									return list_index, list
 								elseif list.tasks then
-									if type == "tasks" then
+									if content_type == "tasks" then
 										return nil, list.tasks
-									elseif task_title then
+									elseif current_task then
 										for task_index, task in ipairs(list.tasks) do
-											if task.title and task.title == task_title then
-												if type == "task" then
+											if task.title and task.title == current_task then
+												if content_type == "task" then
 													return task_index, task
 												else
-													print("Invalid type for task level")
+													-- print("Invalid type for task level")
 													return nil, nil
 												end
 											end
 										end
 									else
-										print("Invalid type for list level")
+										-- print("Invalid type for list level")
 										return nil, nil
 									end
 								else
@@ -46,7 +50,7 @@ local function find_data(boards, type, board_title, list_title, task_title)
 							end
 						end
 					else
-						print("Invalid type for board level")
+						-- print("Invalid type for board level")
 						return nil, nil
 					end
 				else
@@ -60,20 +64,19 @@ local function find_data(boards, type, board_title, list_title, task_title)
 	end
 end
 
-function M.get_data(type, board_title, list_title)
+function M.get_data(content_type)
 	local boards = rewind.util.load_json_file(rewind.config.options.file_path)
 	if not boards then
 		return nil
 	end
 
-	local _, item = find_data(boards, type, board_title, list_title)
-	if not item then
-		return nil
+	local _, item = find_data(content_type, boards)
+	if item then
+		return item
 	end
-	return item
 end
 
-function M.update_data(input, type, board_title, list_title, task_title)
+local function update(content_type, input)
 	if not input or input == "" then
 		return nil
 	end
@@ -83,7 +86,7 @@ function M.update_data(input, type, board_title, list_title, task_title)
 		return nil
 	end
 
-	local _, item = find_data(boards, type, board_title, list_title, task_title)
+	local _, item = find_data(content_type, boards)
 	if not item then
 		return nil
 	end
@@ -97,7 +100,7 @@ function M.update_data(input, type, board_title, list_title, task_title)
 	return true
 end
 
-function M.add_data(input, type, board_title, list_title)
+function M.add_data(input, content_type, board_title, list_title)
 	if not input or input == "" then
 		return nil
 	end
@@ -107,11 +110,11 @@ function M.add_data(input, type, board_title, list_title)
 		return nil
 	end
 
-	local _, item = find_data(boards, type, board_title, list_title)
+	local _, item = find_data(content_type, boards)
 	if not item then
 		return nil
 	end
-	table.insert(item, M[type].default_value(input))
+	table.insert(item, M[content_type].default_value(input))
 
 	local success = rewind.util.save_json_file(rewind.config.options.file_path, boards)
 	if not success then
@@ -120,18 +123,18 @@ function M.add_data(input, type, board_title, list_title)
 	return true
 end
 
-function M.delete_data(type, board_title, list_title, task_title)
+function M.delete_data(content_type, board_title, list_title, task_title)
 	local boards = rewind.util.load_json_file(rewind.config.options.file_path)
 	if not boards then
 		return nil
 	end
 
-	local _, parent = find_data(boards, type .. "s", board_title, list_title, task_title)
+	local _, parent = find_data(content_type .. "s", boards)
 	if not parent then
 		return nil
 	end
 
-	local index, item = find_data(boards, type, board_title, list_title, task_title)
+	local index, item = find_data(content_type, boards)
 	if not item then
 		return nil
 	end
@@ -142,6 +145,37 @@ function M.delete_data(type, board_title, list_title, task_title)
 		return nil
 	end
 	return true
+end
+
+function M.get(content_type)
+	local content = M.get_data(content_type)
+	if content then
+		local formated_content = rewind.formatting.setup(content_type, content)
+		if formated_content and #formated_content > 0 then
+			rewind.state.set_current(content_type, formated_content)
+		else
+			rewind.state.set_current(content_type, {})
+		end
+	else
+		rewind.state.set_current(content_type, {})
+	end
+end
+
+function M.get_first(content_type)
+	local content = rewind.controller.get_data(content_type)
+	if content and #content > 0 then
+		local first_list = content[1].title
+		if first_list then
+			return first_list
+		end
+	end
+end
+
+function M.set(content_type, input)
+	print(content_type or "" .. input or "")
+	if update(content_type, input) then
+		rewind.util.update_content(content_type .. "s")
+	end
 end
 
 return M

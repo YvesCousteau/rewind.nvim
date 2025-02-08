@@ -45,7 +45,7 @@ function M.get_current(content_type)
 end
 
 function M.set_current(content_type, content)
-	local unformated_content = rewind.formatting.reverse(content, content_type)
+	local unformated_content = rewind.formatting.reverse(content_type, content)
 	if unformated_content then
 		M.current[content_type] = unformated_content
 	else
