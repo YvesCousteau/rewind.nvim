@@ -7,7 +7,7 @@ local function setup()
 	rewind.keymaps.boards.setup()
 
 	api.nvim_buf_set_option(rewind.state.buf.help, "modifiable", true)
-	api.nvim_buf_set_lines(rewind.state.buf.help, 0, -1, false, rewind.controller.help.get())
+	api.nvim_buf_set_lines(rewind.state.buf.help, 0, -1, false, rewind.state.get_current("help"))
 	api.nvim_buf_set_option(rewind.state.buf.help, "modifiable", false)
 end
 

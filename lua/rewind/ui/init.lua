@@ -23,6 +23,7 @@ local function init_window()
 	M.lists.create_window()
 	M.tasks.create_window()
 
+	rewind.state.help_toggle()
 	M.help.open_window()
 
 	rewind.autocmd.setup()

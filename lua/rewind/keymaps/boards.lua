@@ -4,7 +4,7 @@ local M = {}
 
 function M.add()
 	rewind.ui.input.open_window("|> Add Board ", function(input)
-		rewind.controller.boards.add(input)
+		rewind.controller.add("boards", input)
 	end)
 end
 
@@ -16,8 +16,7 @@ function M.update()
 end
 
 function M.delete()
-	local current_board = rewind.state.get_current("board")
-	rewind.controller.boards.delete(current_board)
+	rewind.controller.delete("board")
 end
 
 function M.back()

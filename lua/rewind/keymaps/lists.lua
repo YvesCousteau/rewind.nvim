@@ -3,14 +3,12 @@ local rewind = require("rewind")
 local M = {}
 
 function M.add()
-	local current_board = rewind.state.get_current("board")
 	rewind.ui.input.open_window("|> Add List ", function(input)
-		rewind.controller.lists.add(current_board, input)
+		rewind.controller.add("lists", input)
 	end)
 end
 
 function M.update()
-	local current_board = rewind.state.get_current("board")
 	local current_list = rewind.state.get_current("list")
 	rewind.ui.input.open_window("|> Update List ", function(input)
 		rewind.controller.set("board", input)
@@ -18,9 +16,7 @@ function M.update()
 end
 
 function M.delete()
-	local current_board = rewind.state.get_current("board")
-	local current_list = rewind.state.get_current("list")
-	rewind.controller.lists.delete(current_board, current_list)
+	rewind.controller.lists.delete("list")
 end
 
 function M.back()

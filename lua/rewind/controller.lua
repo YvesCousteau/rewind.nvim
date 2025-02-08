@@ -100,7 +100,7 @@ local function update(content_type, input)
 	return true
 end
 
-function M.add_data(input, content_type, board_title, list_title)
+function M.add_data(content_type, input)
 	if not input or input == "" then
 		return nil
 	end
@@ -123,7 +123,7 @@ function M.add_data(input, content_type, board_title, list_title)
 	return true
 end
 
-function M.delete_data(content_type, board_title, list_title, task_title)
+function M.delete_data(content_type)
 	local boards = rewind.util.load_json_file(rewind.config.options.file_path)
 	if not boards then
 		return nil
@@ -174,6 +174,18 @@ end
 function M.set(content_type, input)
 	print(content_type or "" .. input or "")
 	if update(content_type, input) then
+		rewind.util.update_content(content_type .. "s")
+	end
+end
+
+function M.add(content_type, input)
+	if rewind.controller.add_data(input, content_type) then
+		rewind.util.update_content(content_type)
+	end
+end
+
+function M.delete(content_type)
+	if rewind.controller.delete_data(content_type) then
 		rewind.util.update_content(content_type .. "s")
 	end
 end
