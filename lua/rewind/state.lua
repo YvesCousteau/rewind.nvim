@@ -5,14 +5,17 @@ local M = {
 
 function M.reset_buffers()
 	for _, buf in pairs(M.buf) do
-		if api.nvim_buf_is_valid(buf) then
-			api.nvim_buf_delete(buf, { force = true })
+		if vim.api.nvim_buf_is_valid(buf) then
+			vim.api.nvim_buf_delete(buf, { force = true })
 		end
 	end
 end
 
 function M.init_buffer(key)
 	M.buf[key] = vim.api.nvim_create_buf(false, true)
+	if not vim.api.nvim_buf_is_valid(M.buf[key]) then
+		print("Buffer " .. key .. " is not valid")
+	end
 end
 
 function M.reset_windows()
