@@ -24,7 +24,7 @@ local function create_window()
 		pos = rewind.config.options.ui.position.help_collapse
 		is_focused = false
 	end
-	rewind.ui.util.create_window(rewind.state.buf, "help", rewind.state.win.floating, pos, is_focused, false)
+	rewind.ui.create_window(rewind.state.buf, "help", rewind.state.win.floating, pos, is_focused, false)
 end
 
 function M.open_window()

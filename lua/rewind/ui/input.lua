@@ -15,7 +15,7 @@ end
 
 local function create_window()
 	local pos = rewind.config.options.ui.position.input
-	rewind.ui.util.create_window(rewind.state.buf, "input", rewind.state.win.floating, pos, true, true)
+	rewind.ui.create_window(rewind.state.buf, "input", rewind.state.win.floating, pos, true, true)
 end
 
 function M.open_window(title, callback, default)

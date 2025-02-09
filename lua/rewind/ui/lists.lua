@@ -13,7 +13,7 @@ end
 
 function M.create_window(buf, win, config)
 	local pos = rewind.config.options.ui.position.lists
-	rewind.ui.util.create_window(rewind.state.buf, "lists", rewind.state.win.static, pos, false, false)
+	rewind.ui.create_window(rewind.state.buf, "lists", rewind.state.win.static, pos, false, false)
 end
 
 return M

@@ -17,7 +17,7 @@ end
 
 function M.create_window()
 	local pos = rewind.config.options.ui.position.boards
-	rewind.ui.util.create_window(rewind.state.buf, "boards", rewind.state.win.static, pos, true, true)
+	rewind.ui.create_window(rewind.state.buf, "boards", rewind.state.win.static, pos, true, true)
 end
 
 return M

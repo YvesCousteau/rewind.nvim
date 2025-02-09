@@ -16,7 +16,7 @@ function M.update()
 end
 
 function M.delete()
-	rewind.controller.lists.delete("list")
+	rewind.controller.delete("list")
 end
 
 function M.back()
