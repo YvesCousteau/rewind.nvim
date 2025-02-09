@@ -11,13 +11,13 @@ rewind.nvim/
 │       ├── state.lua         -- State management
 │       ├── command.lua       -- Functions for user commands
 │       ├── util.lua          -- Helper functions
-        ├── ui/
-        │   ├── init.lua      -- Entry point for UI
-        │   ├── boards.lua    -- Board-specific UI logic
-        │   ├── lists.lua     -- List-specific UI logic
-        │   ├── tasks.lua     -- Task-specific UI logic
-        │   ├── input.lua     -- Input handling
-        │   └── help.lua      -- Help window logic
+│       ├── ui/
+│       │   ├── init.lua      -- Entry point for UI
+│       │   ├── boards.lua    -- Board-specific UI logic
+│       │   ├── lists.lua     -- List-specific UI logic
+│       │   ├── tasks.lua     -- Task-specific UI logic
+│       │   ├── input.lua     -- Input handling
+│       │   └── help.lua      -- Help window logic
 │       └── data.lua          -- Data handling
 ├── README.md                 -- Documentation
 └── LICENSE                   -- License file

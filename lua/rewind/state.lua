@@ -1,29 +1,27 @@
 local M = {
 	buf = {},
-	win = {
-		core = {},
-		optinal = {},
-	},
+	win = {},
 }
 
-function M.init_buffers()
-	M.buf.boards = vim.api.nvim_create_buf(false, true)
-	M.buf.lists = vim.api.nvim_create_buf(false, true)
-	M.buf.tasks = vim.api.nvim_create_buf(false, true)
-	M.buf.help = vim.api.nvim_create_buf(false, true)
-	M.buf.input = vim.api.nvim_create_buf(false, true)
+function M.reset_buffers()
+	for _, buf in pairs(M.buf) do
+		if api.nvim_buf_is_valid(buf) then
+			api.nvim_buf_delete(buf, { force = true })
+		end
+	end
+end
+
+function M.init_buffer(key)
+	M.buf[key] = vim.api.nvim_create_buf(false, true)
 end
 
 function M.reset_windows()
-	for _, item in pairs(M.win) do
-		for _, win in pairs(M.win[item]) do
-			if vim.api.nvim_win_is_valid(win) then
-				vim.api.nvim_win_close(win, true)
-			end
+	for _, win in pairs(M.win) do
+		if vim.api.nvim_win_is_valid(win) then
+			vim.api.nvim_win_close(win, true)
 		end
 	end
-	M.win.static = {}
-	M.win.floating = {}
+	M.win = {}
 end
 
 return M
