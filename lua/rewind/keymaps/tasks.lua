@@ -4,7 +4,7 @@ local M = {}
 
 function M.add()
 	rewind.ui.input.open_window("|> Add Task ", function(input)
-		rewind.controller.tasks.add("tasks", input)
+		rewind.controller.add("tasks", input)
 	end)
 end
 
@@ -16,7 +16,7 @@ function M.update()
 end
 
 function M.delete()
-	rewind.controller.tasks.delete("task")
+	rewind.controller.delete("task")
 end
 
 function M.back()

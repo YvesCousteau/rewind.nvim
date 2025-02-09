@@ -8,6 +8,7 @@ M.lists = rewind.lazy_load("rewind.formatting.lists")
 M.list = rewind.lazy_load("rewind.formatting.list")
 M.tasks = rewind.lazy_load("rewind.formatting.tasks")
 M.task = rewind.lazy_load("rewind.formatting.task")
+M.help = rewind.lazy_load("rewind.formatting.help")
 
 function M.setup(content_type, content)
 	if content then

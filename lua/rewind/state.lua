@@ -41,6 +41,7 @@ end
 
 function M.set_current(content_type, content)
 	local unformated_content = rewind.formatting.reverse(content_type, content)
+	-- local unformated_content = content
 	if unformated_content then
 		M.current[content_type] = unformated_content
 	else
@@ -52,7 +53,7 @@ end
 M.default_format = {
 	board = {
 		title = "UNDEFINED",
-		tasks = {},
+		lists = {},
 	},
 	list = {
 		title = "UNDEFINED",
@@ -66,7 +67,7 @@ M.default_format = {
 }
 
 M.help = {
-	is_expanded = false,
+	is_expanded = true,
 	type = nil,
 	collapse = {
 		init = {
@@ -135,9 +136,9 @@ function M.help_toggle()
 				table.insert(updated_content, line)
 			end
 		end
-		M.state.set_current("help", updated_content)
+		M.set_current("help", updated_content)
 	else
-		M.state.set_current("help", M.help.collapse.init)
+		M.set_current("help", M.help.collapse.init)
 	end
 end
 

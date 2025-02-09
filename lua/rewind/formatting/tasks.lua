@@ -21,6 +21,8 @@ function M.setup(content)
 	return formated_content
 end
 
-function M.reverse(content) end
+function M.reverse(content)
+	return content
+end
 
 return M

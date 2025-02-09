@@ -35,13 +35,13 @@ local function find_data(content_type, content)
 												if content_type == "task" then
 													return task_index, task
 												else
-													-- print("Invalid type for task level")
+													print("Invalid type for task level")
 													return nil, nil
 												end
 											end
 										end
 									else
-										-- print("Invalid type for list level")
+										print("Invalid type for list level")
 										return nil, nil
 									end
 								else
@@ -50,7 +50,7 @@ local function find_data(content_type, content)
 							end
 						end
 					else
-						-- print("Invalid type for board level")
+						print("Invalid type for board level")
 						return nil, nil
 					end
 				else
@@ -64,7 +64,7 @@ local function find_data(content_type, content)
 	end
 end
 
-function M.get_data(content_type)
+local function get(content_type)
 	local boards = rewind.util.load_json_file(rewind.config.options.file_path)
 	if not boards then
 		return nil
@@ -76,7 +76,7 @@ function M.get_data(content_type)
 	end
 end
 
-local function update(content_type, input)
+local function set(content_type, input)
 	if not input or input == "" then
 		return nil
 	end
@@ -100,7 +100,7 @@ local function update(content_type, input)
 	return true
 end
 
-function M.add_data(content_type, input)
+local function add(content_type, input)
 	if not input or input == "" then
 		return nil
 	end
@@ -114,7 +114,9 @@ function M.add_data(content_type, input)
 	if not item then
 		return nil
 	end
-	table.insert(item, M[content_type].default_value(input))
+
+	table.insert(item, rewind.state.default_format[content_type:sub(1, -2)])
+	item[#item].title = input
 
 	local success = rewind.util.save_json_file(rewind.config.options.file_path, boards)
 	if not success then
@@ -123,7 +125,7 @@ function M.add_data(content_type, input)
 	return true
 end
 
-function M.delete_data(content_type)
+local function delete(content_type)
 	local boards = rewind.util.load_json_file(rewind.config.options.file_path)
 	if not boards then
 		return nil
@@ -148,7 +150,7 @@ function M.delete_data(content_type)
 end
 
 function M.get(content_type)
-	local content = M.get_data(content_type)
+	local content = get(content_type)
 	if content then
 		local formated_content = rewind.formatting.setup(content_type, content)
 		if formated_content and #formated_content > 0 then
@@ -162,7 +164,7 @@ function M.get(content_type)
 end
 
 function M.get_first(content_type)
-	local content = rewind.controller.get_data(content_type)
+	local content = get(content_type)
 	if content and #content > 0 then
 		local first_list = content[1].title
 		if first_list then
@@ -172,20 +174,19 @@ function M.get_first(content_type)
 end
 
 function M.set(content_type, input)
-	print(content_type or "" .. input or "")
-	if update(content_type, input) then
+	if set(content_type, input) then
 		rewind.util.update_content(content_type .. "s")
 	end
 end
 
 function M.add(content_type, input)
-	if rewind.controller.add_data(input, content_type) then
+	if add(content_type, input) then
 		rewind.util.update_content(content_type)
 	end
 end
 
 function M.delete(content_type)
-	if rewind.controller.delete_data(content_type) then
+	if delete(content_type) then
 		rewind.util.update_content(content_type .. "s")
 	end
 end

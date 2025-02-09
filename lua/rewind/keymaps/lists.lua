@@ -11,7 +11,7 @@ end
 function M.update()
 	local current_list = rewind.state.get_current("list")
 	rewind.ui.input.open_window("|> Update List ", function(input)
-		rewind.controller.set("board", input)
+		rewind.controller.set("list", input)
 	end, current_list)
 end
 
