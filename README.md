@@ -6,21 +6,42 @@
 rewind.nvim/
 ├── lua/
 │   └── rewind/
-│       ├── init.lua          -- Entry point for the plugin
-│       ├── config.lua        -- Default configuration and user overrides
-│       ├── state.lua         -- State management
-│       ├── command.lua       -- Functions for user commands
-│       ├── util.lua          -- Helper functions
-│       ├── ui/
-│       │   ├── init.lua      -- Entry point for UI
-│       │   ├── boards.lua    -- Board-specific UI logic
-│       │   ├── lists.lua     -- List-specific UI logic
-│       │   ├── tasks.lua     -- Task-specific UI logic
-│       │   ├── input.lua     -- Input handling
-│       │   └── help.lua      -- Help window logic
-│       └── data.lua          -- Data handling
+│       ├── init.lua          -- Entry point for the plugin |> deps: [ui, config]
+│       ├── config.lua        -- Default configuration and user overrides |> deps: []
+│       ├── state.lua         -- State management |> deps: []
+│       ├── util.lua          -- Helper functions |> deps: [state]
+│       ├── data.lua          -- Data handling |> deps: [config]
+│       │
+│       ├── keymap/
+│       │   ├── init.lua      -- Entry Point of UI logic |> deps: [config, keymap, command]
+│       │   └── util.lua      -- Help functions |> deps: [util]
+│       ├── keymap/
+│       │   ├── init.lua      -- Entry Point of keymap |> deps: [util, config]
+│       │   ├── boards.lua    -- Keymap for Boards UI |> deps: [util, config]
+│       │   └── help.lua      -- Keymap for Help UI |> deps: [util, config]
+│       └── command/
+│           ├── init.lua      -- Entry Point of keymap |> deps: [util]
+│           ├── boards.lua    -- Command to access Boards functions |> deps: [data]
+│           ├── lists.lua     -- Command to access Lists functions |> deps: [data]
+│           ├── tasks.lua     -- Command to access Tasks functions |> deps: [data]
+│           └── help.lua      -- Command to access Help functions |> deps: [config, util]
 ├── README.md                 -- Documentation
 └── LICENSE                   -- License file
+```
+
+```
+init.lua
+├── config.lua
+└── ui.lua
+    ├── config.lua
+    ├── util.lua
+    ├── command/init.lua
+    │   └── data.lua
+    └── keymap/init.lua
+        ├── util.lua
+        └── config.lua
+
+
 ```
 
 ## 📏 Arch
