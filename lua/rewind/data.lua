@@ -1,28 +1,50 @@
 local M = {}
-local config = require("rewind.config").config
+local config = require("rewind.config")
 
 function M.load_items()
-	local file = io.open(config.todo_file, "r")
+	local path = config.options.file_path
+	local file = io.open(path, "r")
 	if not file then
+		print("Unable to open file for reanding at " .. path)
 		return {}
 	end
+	local content = file:read("*all")
+	file:close()
 
-	local items = {}
-	for line in file:lines() do
-		table.insert(items, line)
+	local success, decoded_content = pcall(vim.json.decode, content)
+	if not success then
+		print("Unable to decode JSON to table")
+		return {}
+	elseif not decoded_content or type(decoded_content) ~= "table" then
+		print("Unable to get table")
+		return {}
+	else
+		return decoded_content
 	end
-	file:close()
-	return items
 end
 
-function M.add_item(item)
-	local file = io.open(config.todo_file, "a")
-	file:write(string.format("[%s] %s\n", item.status, item.content))
-	file:close()
-end
+function M.save_items(data)
+	local path = config.options.file_path
+	local file = io.open(path, "w")
+	if not file then
+		print("Unable to open file for writing at " .. path)
+		return nil
+	end
 
-function M.toggle_status(id)
-	-- Logic to toggle status in the file (e.g., TODO -> DONE).
+	local success, encoded = pcall(vim.json.encode, data)
+	if not success then
+		print("Unable to encode table to JSON")
+		file:close()
+		return nil
+	elseif not encoded then
+		print("Unable to get JSON")
+		file:close()
+		return
+	end
+
+	file:write(encoded)
+	file:close()
+	return true
 end
 
 return M

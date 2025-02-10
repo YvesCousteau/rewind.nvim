@@ -3,8 +3,8 @@ local state = require("rewind.state")
 local config = require("rewind.config")
 
 function create_window(key)
-	local config_default = config.defaults.window
-	local config_specific = config.defaults.window.custom[key] or {}
+	local config_default = config.windows
+	local config_specific = config.windows.custom[key] or {}
 
 	local width_percentage = config_specific.width_percentage or config_default.width_percentage
 	local height_percentage = config_specific.height_percentage or config_default.height_percentage
@@ -37,6 +37,8 @@ function create_window(key)
 		zindex = zindex,
 	})
 
+	state.set_buffer(key)
+
 	if is_visible == "false" then
 		vim.api.nvim_win_hide(state.win[key])
 	elseif not vim.api.nvim_win_is_valid(state.win[key]) then
@@ -48,7 +50,7 @@ function M.setup()
 	state.reset_buffers()
 	state.reset_windows()
 
-	for key, _ in pairs(config.defaults.window.custom) do
+	for key, _ in pairs(config.windows.custom) do
 		create_window(key)
 	end
 end
