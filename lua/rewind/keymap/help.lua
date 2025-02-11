@@ -10,6 +10,8 @@ function M.setup()
 			util.win.toggle_window("help_min")
 			util.win.toggle_window("help_max")
 		end)
+	else
+		print("lksdfj")
 	end
 end
 

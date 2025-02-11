@@ -1,7 +1,9 @@
 local M = {}
 local rewind = require("rewind")
+local config = rewind.config
 local state = rewind.state
 local util = rewind.util
+local ui = rewind.ui
 
 function M.reset_windows()
 	for _, win in pairs(state.win) do
@@ -16,10 +18,14 @@ function M.get_window(key)
 	local win = state.win[key]
 	if win and not vim.api.nvim_win_is_valid(win) then
 		print("Unable to get window " .. key)
-	elseif not win then
-		return nil
 	else
 		return win
+	end
+end
+
+function M.set_window(key, win)
+	if win and vim.api.nvim_win_is_valid(win) then
+		state.win[key] = win
 	end
 end
 
@@ -34,12 +40,17 @@ function M.toggle_window(key)
 	if is_visible == "false" then
 		M.close_window(key)
 	else
-		util.init_window(key)
+		ui.util.init_window(key)
 	end
 end
 
-function M.close_window(key)
-	vim.api.nvim_win_close(state.win[key], true)
+function M.close_window(key, x)
+	local win = state.win[key]
+	if win and vim.api.nvim_win_is_valid(win) then
+		vim.api.nvim_win_close(win, true)
+	else
+		print("Window with key '" .. key .. "' is not valid or does not exist.")
+	end
 	state.win[key] = nil
 end
 

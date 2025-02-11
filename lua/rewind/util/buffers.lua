@@ -21,8 +21,6 @@ function M.get_buffer(key)
 	local buf = state.buf[key]
 	if buf and not vim.api.nvim_buf_is_valid(buf) then
 		print("Unable to get buffer " .. key)
-	elseif not buf then
-		return nil
 	else
 		return buf
 	end

@@ -1,6 +1,4 @@
 local M = {}
-local config = require("rewind.config")
-local ui = require("rewind.ui")
 
 function M.lazy_load(module_name)
 	return setmetatable({}, {
@@ -19,8 +17,8 @@ M.command = M.lazy_load("rewind.command")
 M.data = M.lazy_load("rewind.data")
 
 function M.setup(opts)
-	config.setup(opts)
-	vim.api.nvim_create_user_command("RewindToggle", ui.setup, {})
+	M.config.setup(opts)
+	vim.api.nvim_create_user_command("RewindToggle", M.ui.setup, {})
 end
 
 return M
