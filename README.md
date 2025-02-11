@@ -12,7 +12,7 @@ rewind.nvim/
 │       ├── util.lua          -- Helper functions |> deps: [state]
 │       ├── data.lua          -- Data handling |> deps: [config]
 │       │
-│       ├── keymap/
+│       ├── ui/
 │       │   ├── init.lua      -- Entry Point of UI logic |> deps: [config, keymap, command]
 │       │   └── util.lua      -- Help functions |> deps: [util]
 │       ├── keymap/
