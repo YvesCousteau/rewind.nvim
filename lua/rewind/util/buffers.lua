@@ -1,5 +1,6 @@
 local M = {}
-local state = require("rewind.state")
+local rewind = require("rewind")
+local state = rewind.state
 
 function M.reset_buffers()
 	for _, buf in pairs(state.buf) do
@@ -18,8 +19,10 @@ end
 
 function M.get_buffer(key)
 	local buf = state.buf[key]
-	if not vim.api.nvim_buf_is_valid(buf) then
-		print("Buffer " .. key .. " is not valid")
+	if buf and not vim.api.nvim_buf_is_valid(buf) then
+		print("Unable to get buffer " .. key)
+	elseif not buf then
+		return nil
 	else
 		return buf
 	end

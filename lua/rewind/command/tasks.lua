@@ -1,5 +1,5 @@
 local M = {}
-local data = require("rewind.data")
+local data = require("rewind").data
 
 function M.get_items()
 	local titles = {}

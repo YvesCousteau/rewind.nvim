@@ -1,9 +1,10 @@
 local M = {}
-local boards = require("rewind.command.boards")
-local lists = require("rewind.command.lists")
-local tasks = require("rewind.command.tasks")
-local help = require("rewind.command.help")
-local util = require("rewind.util")
+local rewind = require("rewind")
+local util = rewind.util
+local boards = rewind.lazy_load("rewind.command.boards")
+local lists = rewind.lazy_load("rewind.command.lists")
+local tasks = rewind.lazy_load("rewind.command.tasks")
+local help = rewind.lazy_load("rewind.command.help")
 
 M.commands = {
 	boards = boards,

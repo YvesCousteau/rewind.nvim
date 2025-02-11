@@ -1,8 +1,9 @@
-local M = {
-    buf = require("rewind.util.buffers")
-    win = require("rewind.util.windows")
-}
-local state = require("rewind.state")
+local M = {}
+local rewind = require("rewind")
+local state = rewind.state
+local config = rewind.config
+M.buf = rewind.lazy_load("rewind.util.buffers")
+M.win = rewind.lazy_load("rewind.util.windows")
 
 function M.reset_namespace()
 	for _, buf in pairs(state.buf) do
@@ -30,7 +31,6 @@ function M.set_keymap(buf, mode, key, callback, opts)
 end
 
 function M.toggle_visiblity(key)
-	config.windows.custom[key].is_visible = not config.windows.custom[key].is_visible
 	if config.windows.custom[key].is_visible == "false" then
 		config.windows.custom[key].is_visible = "true"
 	else

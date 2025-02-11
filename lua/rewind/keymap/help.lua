@@ -1,15 +1,16 @@
 local M = {}
-local config = require("rewind.config")
+local rewind = require("rewind")
+local config = rewind.config
+local util = rewind.util
 
 function M.setup()
-
-	-- util.set_keymap(util.get_buffer("help_min"), "n", config.keymaps.help, function()
-	-- 	print("should max")
-	-- end)
-
-	-- util.set_keymap(util.get_buffer("help_max"), "n", config.keymaps.help, function()
-	-- 	print("should min")
-	-- end)
+	local buf = util.buf.get_buffer("help_max")
+	if buf then
+		util.set_keymap(buf, "n", config.keymaps.help, function()
+			util.win.toggle_window("help_min")
+			util.win.toggle_window("help_max")
+		end)
+	end
 end
 
 return M

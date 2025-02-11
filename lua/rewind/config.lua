@@ -57,6 +57,7 @@ M.windows = {
 			row_mult = 0.5,
 			zindex = 100,
 			is_visible = "false",
+			is_focused = "true",
 		},
 	},
 }

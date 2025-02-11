@@ -1,5 +1,6 @@
 local M = {}
-local config = require("rewind.config")
+local rewind = require("rewind")
+local config = rewind.config
 
 function M.load_items()
 	local path = config.options.file_path

@@ -1,6 +1,9 @@
 local M = {}
-local help = require("rewind.keymap.help")
-local boards = require("rewind.keymap.boards")
+local rewind = require("rewind")
+local config = rewind.config
+local util = rewind.util
+local help = rewind.lazy_load("rewind.keymap.help")
+local boards = rewind.lazy_load("rewind.keymap.boards")
 
 M.keymaps = {
 	help_min = help,
