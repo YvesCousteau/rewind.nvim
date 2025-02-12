@@ -57,8 +57,7 @@ function M.init_window(key)
 end
 
 function M.toggle_window(key)
-	local is_visible = util.win.toggle_visiblity(key)
-	print(key .. " |> " .. is_visible)
+	local is_visible = util.toggle_visiblity(key)
 	if is_visible == "false" then
 		util.win.close_window(key)
 	else

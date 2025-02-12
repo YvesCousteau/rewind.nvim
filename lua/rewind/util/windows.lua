@@ -29,21 +29,6 @@ function M.set_window(key, win)
 	end
 end
 
-function M.toggle_window(key)
-	if config.windows.custom[key].is_visible == "false" then
-		config.windows.custom[key].is_visible = "true"
-	else
-		config.windows.custom[key].is_visible = "false"
-	end
-	local is_visible = config.windows.custom[key].is_visible
-	print(key .. " |> " .. is_visible)
-	if is_visible == "false" then
-		M.close_window(key)
-	else
-		ui.util.init_window(key)
-	end
-end
-
 function M.close_window(key, x)
 	local win = state.win[key]
 	if win and vim.api.nvim_win_is_valid(win) then

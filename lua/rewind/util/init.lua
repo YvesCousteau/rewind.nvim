@@ -21,15 +21,6 @@ function M.get_focused_line()
 	return vim.api.nvim_get_current_line()
 end
 
-function M.set_keymap(buf, mode, key, callback, opts)
-	opts = vim.tbl_extend("force", {
-		noremap = true,
-		silent = true,
-		callback = callback,
-	}, opts or {})
-	vim.api.nvim_buf_set_keymap(buf, mode, key, "", opts)
-end
-
 function M.toggle_visiblity(key)
 	if config.windows.custom[key].is_visible == "false" then
 		config.windows.custom[key].is_visible = "true"
