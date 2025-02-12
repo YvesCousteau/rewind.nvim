@@ -16,9 +16,7 @@ end
 
 function M.get_window(key)
 	local win = state.win[key]
-	if win and not vim.api.nvim_win_is_valid(win) then
-		print("Unable to get window " .. key)
-	else
+	if win and vim.api.nvim_win_is_valid(win) then
 		return win
 	end
 end
@@ -29,9 +27,9 @@ function M.set_window(key, win)
 	end
 end
 
-function M.close_window(key, x)
-	local win = state.win[key]
-	if win and vim.api.nvim_win_is_valid(win) then
+function M.close_window(key)
+	local win = M.get_window(key)
+	if win then
 		vim.api.nvim_win_close(win, true)
 	else
 		print("Window with key '" .. key .. "' is not valid or does not exist.")

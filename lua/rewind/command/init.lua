@@ -22,7 +22,7 @@ function M.get_items(key)
 			content = items
 		end
 	end
-	util.buf.set_buffer(key, content)
+	util.buf.set_buffer_content(key, content)
 end
 
 return M

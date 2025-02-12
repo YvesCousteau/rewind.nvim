@@ -11,10 +11,11 @@ function M.reset_buffers()
 end
 
 function M.init_buffer(key)
-	state.buf[key] = vim.api.nvim_create_buf(false, true)
-	if not vim.api.nvim_buf_is_valid(state.buf[key]) then
+	local buf = vim.api.nvim_create_buf(false, true)
+	if not vim.api.nvim_buf_is_valid(buf) then
 		print("Buffer " .. key .. " is not valid")
 	end
+	M.set_buffer(key, buf)
 end
 
 function M.get_buffer(key)
@@ -26,18 +27,16 @@ function M.get_buffer(key)
 	end
 end
 
-function M.get_current_buffer()
-	local current_buf = vim.api.nvim_get_current_buf()
-	for key, buf in pairs(state.buf) do
-		if current_buf == buf then
-			print(key)
-		end
+function M.set_buffer(key, buf)
+	if buf and vim.api.nvim_buf_is_valid(buf) then
+		state.buf[key] = buf
 	end
 end
 
 function M.get_buffer_line(key)
-	local row, col = unpack(vim.api.nvim_buf_get_mark(state.buf[key], '"'))
-	local lines = vim.api.nvim_buf_get_lines(state.buf[key], row - 1, row, false)
+	local buf = M.get_buffer(key)
+	local row, col = unpack(vim.api.nvim_buf_get_mark(buf, '"'))
+	local lines = vim.api.nvim_buf_get_lines(buf, row - 1, row, false)
 	if #lines > 0 then
 		return lines[1]
 	else
@@ -45,10 +44,21 @@ function M.get_buffer_line(key)
 	end
 end
 
-function M.set_buffer(key, content)
-	vim.api.nvim_buf_set_option(state.buf[key], "modifiable", true)
-	vim.api.nvim_buf_set_lines(state.buf[key], 0, -1, false, content)
-	vim.api.nvim_buf_set_option(state.buf[key], "modifiable", false)
+function M.is_buffer_empty(key)
+	local buf = M.get_buffer(key)
+	if buf then
+		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+		if #lines > 0 then
+			return true
+		end
+	end
+end
+
+function M.set_buffer_content(key, content)
+	local buf = M.get_buffer(key)
+	vim.api.nvim_buf_set_option(buf, "modifiable", true)
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
+	vim.api.nvim_buf_set_option(buf, "modifiable", false)
 end
 
 return M

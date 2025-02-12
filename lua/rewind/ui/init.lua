@@ -5,6 +5,7 @@ local util = rewind.util
 M.util = rewind.lazy_load("rewind.ui.util")
 
 function create_window(key)
+	print(key)
 	util.buf.init_buffer(key)
 	M.util.init_window(key)
 end

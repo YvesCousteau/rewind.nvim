@@ -30,4 +30,19 @@ function M.toggle_visiblity(key)
 	return config.windows.custom[key].is_visible
 end
 
+function M.switch_window(key)
+	local win = M.win.get_window(key)
+	if win then
+		vim.api.nvim_set_current_win(win)
+	end
+end
+
+function M.get_prev_buf()
+	return state.prev_buf
+end
+
+function M.set_prev_buf(key)
+	state.prev_buf = key
+end
+
 return M
