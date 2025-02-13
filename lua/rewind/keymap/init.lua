@@ -9,7 +9,7 @@ local lists = rewind.lazy_load("rewind.keymap.lists")
 local tasks = rewind.lazy_load("rewind.keymap.tasks")
 M.util = rewind.lazy_load("rewind.keymap.util")
 
-M.keymaps = {
+M.list = {
 	help_min = help,
 	help_max = help,
 	prompt = prompt,
@@ -19,15 +19,15 @@ M.keymaps = {
 }
 
 local function common(key)
-	M.util.set_keymap(key, "n", { config.keymaps.help }, function()
-		ui.util.help_toggle_window("help_min")
-		ui.util.help_toggle_window("help_max")
+	M.util.set(key, "n", { config.keymaps.help }, function()
+		ui.help.toggle_window("help_min")
+		ui.help.toggle_window("help_max")
 	end)
 end
 
 function M.setup(key)
-	if M.keymaps[key] ~= nil then
-		M.keymaps[key].setup()
+	if M.list[key] ~= nil then
+		M.list[key].setup()
 	end
 	common(key)
 end

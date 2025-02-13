@@ -5,7 +5,7 @@ local state = rewind.state
 local util = rewind.util
 local ui = rewind.ui
 
-function M.reset_windows()
+function M.reset()
 	for _, win in pairs(state.win) do
 		if vim.api.nvim_win_is_valid(win) then
 			vim.api.nvim_win_close(win, true)
@@ -14,21 +14,21 @@ function M.reset_windows()
 	state.win = {}
 end
 
-function M.get_window(key)
+function M.get(key)
 	local win = state.win[key]
 	if win and vim.api.nvim_win_is_valid(win) then
 		return win
 	end
 end
 
-function M.set_window(key, win)
+function M.set(key, win)
 	if win and vim.api.nvim_win_is_valid(win) then
 		state.win[key] = win
 	end
 end
 
-function M.close_window(key)
-	local win = M.get_window(key)
+function M.close(key)
+	local win = M.get(key)
 	if win then
 		vim.api.nvim_win_close(win, true)
 	else

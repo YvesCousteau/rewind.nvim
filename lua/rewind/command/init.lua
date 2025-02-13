@@ -6,7 +6,7 @@ local lists = rewind.lazy_load("rewind.command.lists")
 local tasks = rewind.lazy_load("rewind.command.tasks")
 local help = rewind.lazy_load("rewind.command.help")
 
-M.commands = {
+M.list = {
 	boards = boards,
 	lists = lists,
 	tasks = tasks,
@@ -16,13 +16,13 @@ M.commands = {
 
 function M.get_items(key)
 	local content = {}
-	if M.commands[key] ~= nil then
-		local items = M.commands[key].get_items()
+	if M.list[key] ~= nil then
+		local items = M.list[key].get_items()
 		if items and #items > 0 then
 			content = items
 		end
 	end
-	util.buf.set_buffer_content(key, content)
+	util.buf.set_content(key, content)
 end
 
 return M

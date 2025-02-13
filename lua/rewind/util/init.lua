@@ -4,6 +4,7 @@ local state = rewind.state
 local config = rewind.config
 M.buf = rewind.lazy_load("rewind.util.buffers")
 M.win = rewind.lazy_load("rewind.util.windows")
+M.prompt = rewind.lazy_load("rewind.util.prompt")
 
 function M.reset_namespace()
 	for _, buf in pairs(state.buf) do
@@ -30,8 +31,14 @@ function M.toggle_visiblity(key)
 	return config.windows.custom[key].is_visible
 end
 
+function M.change_window_title(key, title)
+	if title then
+		config.windows.custom[key].title_opt = title
+	end
+end
+
 function M.switch_window(key)
-	local win = M.win.get_window(key)
+	local win = M.win.get(key)
 	if win then
 		vim.api.nvim_set_current_win(win)
 	end

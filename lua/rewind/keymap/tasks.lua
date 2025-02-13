@@ -6,8 +6,15 @@ local util = rewind.util
 local ui = rewind.ui
 
 function M.setup()
-	keymap.util.set_keymap("tasks", "n", { config.keymaps.select }, function()
-		ui.util.prompt_toggle_window("prompt")
+	keymap.util.set("tasks", "n", { config.keymaps.select }, function()
+		util.prompt.set("tasks", function(prompt)
+			print("will update this task with: " .. prompt)
+		end)
+		ui.prompt.toggle_window("prompt")
+	end)
+
+	keymap.util.set("tasks", "n", { config.keymaps.back }, function()
+		util.switch_window("lists")
 	end)
 end
 
