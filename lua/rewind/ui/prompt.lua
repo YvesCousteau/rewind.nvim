@@ -18,7 +18,7 @@ function M.open_window(key)
 	if not prompt.key or not prompt.callback then
 		return nil
 	end
-	util.change_window_title(key, prompt.key)
+	util.change_window_title(key, "--- [" .. prompt.key .. "] ")
 	ui.util.init(key)
 	local default_prompt = util.buf.get_line(prompt.key) or ""
 	local buf = util.buf.get(key)
