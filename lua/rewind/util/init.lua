@@ -7,7 +7,8 @@ M.win = rewind.lazy_load("rewind.util.windows")
 M.prompt = rewind.lazy_load("rewind.util.prompt")
 
 function M.reset_namespace()
-	for _, buf in pairs(state.buf) do
+	for _, key in pairs(state.list) do
+		M.buf.get(key)
 		vim.api.nvim_buf_clear_namespace(buf, state.namespace, 0, -1)
 	end
 end

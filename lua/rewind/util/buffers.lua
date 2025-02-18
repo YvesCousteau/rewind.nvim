@@ -3,7 +3,8 @@ local rewind = require("rewind")
 local state = rewind.state
 
 function M.reset()
-	for _, buf in pairs(state.buf) do
+	for _, key in pairs(state.list) do
+		local buf = M.get(key)
 		if vim.api.nvim_buf_is_valid(buf) then
 			vim.api.nvim_buf_delete(buf, { force = true })
 		end
@@ -12,14 +13,14 @@ end
 
 function M.init(key)
 	local buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_name(buf, key)
 	if not vim.api.nvim_buf_is_valid(buf) then
 		print("Buffer " .. key .. " is not valid")
 	end
-	M.set(key, buf)
 end
 
 function M.get(key)
-	local buf = state.buf[key]
+	local buf = vim.fn.bufnr(key)
 	if buf and not vim.api.nvim_buf_is_valid(buf) then
 		print("Unable to get buffer " .. key)
 	else
@@ -27,11 +28,11 @@ function M.get(key)
 	end
 end
 
-function M.set(key, buf)
-	if buf and vim.api.nvim_buf_is_valid(buf) then
-		state.buf[key] = buf
-	end
-end
+-- function M.set_var(key, buf, var)
+-- 	if buf and vim.api.nvim_buf_is_valid(buf) then
+-- 		vim.api.nvim_buf_set_var(buf, key, uuid_map)
+-- 	end
+-- end
 
 function M.get_line(key)
 	local buf = M.get(key)

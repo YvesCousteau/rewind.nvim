@@ -5,7 +5,7 @@ local util = rewind.util
 local ui = rewind.ui
 local command = rewind.command
 
-function M.init(key)
+function M.get_opts(key)
 	local config_default = config.windows
 	local config_specific = config.windows.custom[key] or {}
 
@@ -27,7 +27,7 @@ function M.init(key)
 	local width = math.floor(vim.o.columns * width_percentage)
 	local height = math.floor(vim.o.lines * height_percentage)
 
-	local opts = {
+	return {
 		relative = "editor",
 		width = math.floor(width * width_mult),
 		height = math.floor(height * height_mult),
@@ -38,21 +38,9 @@ function M.init(key)
 		style = "minimal",
 		border = border,
 		zindex = zindex,
-	}
-
-	local current_win = vim.api.nvim_open_win(util.buf.get(key), is_focused == "true", opts)
-
-	if not vim.api.nvim_win_is_valid(current_win) then
-		print("Window " .. key .. " is not valid")
-	end
-
-	util.win.set(key, current_win)
-
-	command.get_items(key)
-
-	if is_visible == "false" then
-		util.win.close(key, current_win)
-	end
+	},
+		is_focused,
+		is_visible
 end
 
 function M.close_all_window()
