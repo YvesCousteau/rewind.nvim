@@ -10,7 +10,7 @@ M.help = rewind.lazy_load("rewind.ui.help")
 
 function create_window(key)
 	util.buf.init(key)
-	M.util.init(key)
+	util.win.init(key)
 end
 
 function M.setup()

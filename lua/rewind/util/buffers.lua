@@ -5,7 +5,7 @@ local state = rewind.state
 function M.reset()
 	for _, key in pairs(state.list) do
 		local buf = M.get(key)
-		if vim.api.nvim_buf_is_valid(buf) then
+		if buf and vim.api.nvim_buf_is_valid(buf) then
 			vim.api.nvim_buf_delete(buf, { force = true })
 		end
 	end
@@ -21,9 +21,7 @@ end
 
 function M.get(key)
 	local buf = vim.fn.bufnr(key)
-	if buf and not vim.api.nvim_buf_is_valid(buf) then
-		print("Unable to get buffer " .. key)
-	else
+	if buf and vim.api.nvim_buf_is_valid(buf) then
 		return buf
 	end
 end

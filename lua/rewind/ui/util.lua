@@ -1,6 +1,7 @@
 local M = {}
 local rewind = require("rewind")
 local config = rewind.config
+local state = rewind.state
 local util = rewind.util
 local ui = rewind.ui
 local command = rewind.command
@@ -44,7 +45,7 @@ function M.get_opts(key)
 end
 
 function M.close_all_window()
-	for key, _ in pairs(config.windows.custom) do
+	for _, key in pairs(state.list) do
 		util.win.close(key)
 	end
 end

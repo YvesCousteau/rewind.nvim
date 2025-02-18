@@ -9,7 +9,7 @@ local command = rewind.command
 function M.reset()
 	for _, key in pairs(state.list) do
 		local win = M.get(key)
-		if vim.api.nvim_win_is_valid(win) then
+		if win and vim.api.nvim_win_is_valid(win) then
 			vim.api.nvim_win_close(win, true)
 		end
 	end
@@ -18,24 +18,26 @@ end
 function M.init(key)
 	local opts, is_focused, is_visible = ui.util.get_opts(key)
 
-	local win = vim.api.nvim_open_win(util.buf.get(key), is_focused == "true", opts)
-	vim.api.nvim_win_set_name(win, key)
+	local buf = util.buf.get(key)
+	if buf then
+		local win = vim.api.nvim_open_win(buf, is_focused == "true", opts)
+		if win and vim.api.nvim_win_is_valid(win) then
+			command.get_items(key)
 
-	if not vim.api.nvim_win_is_valid(win) then
-		print("Window " .. key .. " is not valid")
-	end
-
-	command.get_items(key)
-
-	if is_visible == "false" then
-		M.close(key, win)
+			if is_visible == "false" then
+				M.close(key, win)
+			end
+		end
 	end
 end
 
 function M.get(key)
-	local win = vim.fn.win_findbuf(util.buf.get(key))
-	if win and vim.api.nvim_win_is_valid(win) then
-		return win
+	local buf = util.buf.get(key)
+	if buf then
+		local wins = vim.fn.win_findbuf(buf)
+		if #wins > 0 and vim.api.nvim_win_is_valid(wins[1]) then
+			return wins[1]
+		end
 	end
 end
 
