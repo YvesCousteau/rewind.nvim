@@ -1,5 +1,7 @@
 local M = {}
-local data = require("rewind").data
+local rewind = require("rewind")
+local data = rewind.data
+local util = rewind.util
 
 function M.get_items()
 	local titles = {}
@@ -11,5 +13,18 @@ function M.get_items()
 	end
 	return titles
 end
+
+function M.add_item(title)
+	local new_item = {
+		uuid = util.uuid(),
+		title = title,
+		lists = {},
+	}
+	return data.add_item(new_item)
+end
+
+-- function M.delete_item(id)
+-- 	return data.delete_item(uuid)
+-- end
 
 return M

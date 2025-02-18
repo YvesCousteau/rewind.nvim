@@ -72,6 +72,7 @@ M.windows = {
 			height_mult = 0.03,
 			col_mult = 0.245,
 			row_mult = 0.9,
+			is_visible = "false",
 			is_focused = "true",
 		},
 	},
@@ -143,6 +144,17 @@ M.help = {
 			"  u     - Update selected Task",
 		},
 	},
+}
+
+M.confirmation = {
+	yes = " 󰱒 ",
+	no = " 󰅘 ",
+}
+
+M.date_picker = {
+	year = " 󰰳 ",
+	month = " 󰰏 ",
+	day = " 󰯴 ",
 }
 
 M.options = {}

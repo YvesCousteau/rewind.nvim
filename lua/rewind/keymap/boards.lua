@@ -4,9 +4,11 @@ local config = rewind.config
 local keymap = rewind.keymap
 local util = rewind.util
 local ui = rewind.ui
+local command = rewind.command
 
 function M.setup()
-	keymap.util.set("boards", "n", { config.keymaps.select }, function()
+	local key = "boards"
+	keymap.util.set(key, "n", { config.keymaps.select }, function()
 		if util.buf.is_empty("lists") then
 			util.switch_window("lists")
 		else
@@ -14,8 +16,12 @@ function M.setup()
 		end
 	end)
 
-	keymap.util.set("boards", "n", { config.keymaps.back }, function()
+	keymap.util.set(key, "n", { config.keymaps.back }, function()
 		ui.util.close_all_window()
+	end)
+
+	keymap.util.set(key, "n", { config.keymaps.add }, function()
+		command.add_item(key, "sexe")
 	end)
 end
 

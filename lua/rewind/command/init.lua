@@ -25,4 +25,20 @@ function M.get_items(key)
 	util.buf.set_content(key, content)
 end
 
+function M.add_item(key, title)
+	local content = {}
+	if M.list[key] ~= nil and title then
+		local success = M.list[key].add_item(title)
+		print(success)
+		if success then
+			local items = M.list[key].get_items()
+			if items and #items > 0 then
+				content = items
+			end
+			print(vim.inspect(content))
+			util.buf.set_content(key, content)
+		end
+	end
+end
+
 return M

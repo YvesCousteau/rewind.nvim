@@ -6,7 +6,8 @@ local util = rewind.util
 local ui = rewind.ui
 
 function M.setup()
-	keymap.util.set("lists", "n", { config.keymaps.select }, function()
+	local key = "lists"
+	keymap.util.set(key, "n", { config.keymaps.select }, function()
 		if util.buf.is_empty("tasks") then
 			util.switch_window("tasks")
 		else
@@ -14,7 +15,7 @@ function M.setup()
 		end
 	end)
 
-	keymap.util.set("lists", "n", { config.keymaps.back }, function()
+	keymap.util.set(key, "n", { config.keymaps.back }, function()
 		util.switch_window("boards")
 	end)
 end

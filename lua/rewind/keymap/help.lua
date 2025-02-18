@@ -5,14 +5,15 @@ local keymap = rewind.keymap
 local ui = rewind.ui
 
 function M.setup()
-	keymap.util.set("help_max", "n", { config.keymaps.back }, function()
-		ui.help.toggle_window("help_min")
-		ui.help.toggle_window("help_max")
+	local key = "help"
+	keymap.util.set(key .. "_max", "n", { config.keymaps.back }, function()
+		ui.help.toggle_window(key .. "_min")
+		ui.help.toggle_window(key, "_max")
 	end)
 
-	keymap.util.set("help_min", "n", { config.keymaps.back }, function()
-		ui.help.toggle_window("help_min")
-		ui.help.toggle_window("help_max")
+	keymap.util.set(key .. "_min", "n", { config.keymaps.back }, function()
+		ui.help.toggle_window(key .. "_min")
+		ui.help.toggle_window(key .. "_max")
 	end)
 end
 

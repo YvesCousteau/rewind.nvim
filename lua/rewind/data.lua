@@ -48,4 +48,44 @@ function M.save_items(data)
 	return true
 end
 
+function M.add_item(new_item)
+	if new_item then
+		local items = M.load_items()
+
+		table.insert(items, new_item)
+
+		local success = M.save_items(items)
+
+		if success then
+			print("Item added successfully: " .. vim.inspect(new_item))
+		else
+			print("Failed to save new added item")
+		end
+
+		return success
+	else
+		print("Failed to add empty item")
+	end
+end
+
+-- function M.delete_item(uuid)
+-- 	if uuid then
+-- 		local items = M.load_items()
+--
+-- 		-- search uuid for items and remove it
+--
+-- 		local success = M.save_items(items)
+--
+-- 		if success then
+-- 			print("Item deleted successfully: " .. vim.inspect(uuid))
+-- 		else
+-- 			print("Failed to save new deleted item")
+-- 		end
+--
+-- 		return success
+-- 	else
+-- 		print("Failed to delete empty uud")
+-- 	end
+-- end
+
 return M
