@@ -16,15 +16,14 @@ end
 
 function M.add_item(title)
 	local new_item = {
-		uuid = util.uuid(),
 		title = title,
 		lists = {},
 	}
 	return data.add_item(new_item)
 end
 
--- function M.delete_item(id)
--- 	return data.delete_item(uuid)
--- end
+function M.delete_item(id)
+	return data.delete_item(id)
+end
 
 return M

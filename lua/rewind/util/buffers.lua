@@ -1,6 +1,7 @@
 local M = {}
 local rewind = require("rewind")
 local state = rewind.state
+local command = rewind.command
 
 function M.reset()
 	for _, key in pairs(state.list) do
@@ -29,7 +30,10 @@ end
 function M.get_var(key)
 	local buf = M.get(key)
 	if buf then
-		return vim.api.nvim_buf_get_var(buf, key)
+		local var = vim.api.nvim_buf_get_var(buf, key)
+		if var then
+			return var
+		end
 	end
 end
 
@@ -54,8 +58,9 @@ function M.is_empty(key)
 	end
 end
 
-function M.set_var(key, buf, var)
-	if buf and vim.api.nvim_buf_is_valid(buf) then
+function M.set_var(key, var)
+	local buf = M.get(key)
+	if buf and var and vim.api.nvim_buf_is_valid(buf) then
 		vim.api.nvim_buf_set_var(buf, key, var)
 	end
 end

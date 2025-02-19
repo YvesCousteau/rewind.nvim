@@ -23,6 +23,10 @@ function M.setup()
 	keymap.util.set(key, "n", { config.keymaps.add }, function()
 		command.add_item(key, "sexe")
 	end)
+
+	keymap.util.set(key, "n", { config.keymaps.delete }, function()
+		command.delete_item(key, vim.api.nvim_win_get_cursor(0)[1])
+	end)
 end
 
 return M

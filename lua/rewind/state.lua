@@ -14,8 +14,6 @@ local M = {
 		key = nil,
 		callback = nil,
 	},
-
-	uuid_map = {},
 }
 
 return M

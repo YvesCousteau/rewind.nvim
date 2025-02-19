@@ -1,18 +1,22 @@
 local M = {}
-local data = require("rewind").data
+local rewind = require("rewind")
+local data = rewind.data
+local util = rewind.util
 
 function M.get_items()
 	local titles = {}
 	local data = data.load_items()
-	if data then
-		-- need to check for current board
+	local current_board = util.get_cursor_content("boards")
+	if data and current_board then
 		for _, board in ipairs(data) do
-			for _, list in ipairs(board.lists) do
-				table.insert(titles, list.title)
+			if board.title == current_board.title then
+				for _, list in ipairs(board.lists) do
+					table.insert(titles, list.title)
+				end
+				return titles, board.lists
 			end
 		end
 	end
-	return titles, {}
 end
 
 return M

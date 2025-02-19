@@ -53,13 +53,24 @@ function M.set_prev_buf(key)
 	state.prev_buf = key
 end
 
-local random = math.random
-function M.uuid()
-	local template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
-	return string.gsub(template, "[xy]", function(c)
-		local v = (c == "x") and random(0, 0xf) or random(8, 0xb)
-		return string.format("%x", v)
-	end)
+function M.get_cursor_content(key)
+	local win = M.win.get(key)
+	if win then
+		local line_id = vim.api.nvim_win_get_cursor(win)[1]
+		local var = M.buf.get_var(key)
+		if var and line_id and var[line_id] then
+			return var[line_id]
+		end
+	end
 end
+
+-- local random = math.random
+-- function M.uuid()
+-- 	local template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+-- 	return string.gsub(template, "[xy]", function(c)
+-- 		local v = (c == "x") and random(0, 0xf) or random(8, 0xb)
+-- 		return string.format("%x", v)
+-- 	end)
+-- end
 
 return M
