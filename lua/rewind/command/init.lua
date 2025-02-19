@@ -17,11 +17,12 @@ M.list = {
 function M.get_items(key)
 	local content = {}
 	if M.list[key] ~= nil then
-		local items = M.list[key].get_items()
+		local items, raw_items = M.list[key].get_items()
 		if items and #items > 0 then
 			content = items
 		end
 	end
+	util.buf.set_var(key, raw_items)
 	util.buf.set_content(key, content)
 end
 

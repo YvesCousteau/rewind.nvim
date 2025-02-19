@@ -17,7 +17,7 @@ function M.get_items()
 				table.insert(items, line)
 			end
 		end
-		return items
+		return items, {}
 	end
 end
 

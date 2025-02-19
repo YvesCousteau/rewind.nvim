@@ -11,7 +11,7 @@ function M.get_items()
 			table.insert(titles, board.title)
 		end
 	end
-	return titles
+	return titles, data
 end
 
 function M.add_item(title)
