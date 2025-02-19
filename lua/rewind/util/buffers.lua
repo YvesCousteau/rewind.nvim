@@ -26,11 +26,12 @@ function M.get(key)
 	end
 end
 
--- function M.set_var(key, buf, var)
--- 	if buf and vim.api.nvim_buf_is_valid(buf) then
--- 		vim.api.nvim_buf_set_var(buf, key, uuid_map)
--- 	end
--- end
+function M.get_var(key)
+	local buf = M.get(key)
+	if buf then
+		return vim.api.nvim_buf_get_var(buf, key)
+	end
+end
 
 function M.get_line(key)
 	local buf = M.get(key)
@@ -50,6 +51,12 @@ function M.is_empty(key)
 		if #lines > 0 then
 			return true
 		end
+	end
+end
+
+function M.set_var(key, buf, var)
+	if buf and vim.api.nvim_buf_is_valid(buf) then
+		vim.api.nvim_buf_set_var(buf, key, var)
 	end
 end
 
