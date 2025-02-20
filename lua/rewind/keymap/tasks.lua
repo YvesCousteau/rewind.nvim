@@ -11,7 +11,6 @@ function M.setup()
 		util.prompt.set(key, function(prompt)
 			print("will update this task with: " .. prompt)
 		end)
-		ui.prompt.toggle_window("prompt")
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.back }, function()

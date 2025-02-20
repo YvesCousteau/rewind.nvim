@@ -16,6 +16,17 @@ function M.reset()
 end
 
 function M.init(key)
+	local _, _, is_visible = ui.util.get_opts(key)
+
+	local win = M.set(key)
+	if win then
+		if is_visible == "false" then
+			M.close(key, win)
+		end
+	end
+end
+
+function M.set(key)
 	local opts, is_focused, is_visible = ui.util.get_opts(key)
 
 	local buf = util.buf.get(key)
@@ -23,10 +34,7 @@ function M.init(key)
 		local win = vim.api.nvim_open_win(buf, is_focused == "true", opts)
 		if win and vim.api.nvim_win_is_valid(win) then
 			command.get_items(key)
-
-			if is_visible == "false" then
-				M.close(key, win)
-			end
+			return win
 		end
 	end
 end

@@ -5,8 +5,15 @@ local util = rewind.util
 local autocmd = rewind.autocmd
 local keymap = rewind.keymap
 M.util = rewind.lazy_load("rewind.ui.util")
-M.prompt = rewind.lazy_load("rewind.ui.prompt")
-M.help = rewind.lazy_load("rewind.ui.help")
+
+local prompt = rewind.lazy_load("rewind.ui.prompt")
+local help = rewind.lazy_load("rewind.ui.help")
+
+M.list = {
+	prompt = prompt,
+	help_min = help,
+	help_max = help,
+}
 
 function create_window(key)
 	util.buf.init(key)

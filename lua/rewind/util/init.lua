@@ -6,14 +6,14 @@ M.buf = rewind.lazy_load("rewind.util.buffers")
 M.win = rewind.lazy_load("rewind.util.windows")
 M.prompt = rewind.lazy_load("rewind.util.prompt")
 
-function M.toggle_visiblity(key)
-	if config.windows.custom[key].is_visible == "false" then
-		config.windows.custom[key].is_visible = "true"
-	else
-		config.windows.custom[key].is_visible = "false"
-	end
-	return config.windows.custom[key].is_visible
-end
+-- function M.toggle_visiblity(key)
+-- 	if config.windows.custom[key].is_visible == "false" then
+-- 		config.windows.custom[key].is_visible = "true"
+-- 	else
+-- 		config.windows.custom[key].is_visible = "false"
+-- 	end
+-- 	return config.windows.custom[key].is_visible
+-- end
 
 function M.change_window_title(key, title)
 	if title then
@@ -28,12 +28,15 @@ function M.switch_window(key)
 	end
 end
 
-function M.get_prev_buf()
-	return state.prev_buf
+function M.get_var(name)
+	local var = vim.api.nvim_get_var(name)
+	if var then
+		return var
+	end
 end
 
-function M.set_prev_buf(key)
-	state.prev_buf = key
+function M.set_var(name, key)
+	vim.api.nvim_set_var(name, key)
 end
 
 function M.get_cursor_content(key)

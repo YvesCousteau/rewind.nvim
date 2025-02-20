@@ -3,23 +3,15 @@ local rewind = require("rewind")
 local ui = rewind.ui
 local util = rewind.util
 
-function M.toggle_window()
-	local key = "prompt"
-	local is_visible = util.toggle_visiblity(key)
-	if is_visible == "false" then
-		M.close_window(key, prompt)
-	else
-		M.open_window(key, prompt)
-	end
-end
-
 function M.open_window(key)
-	local prompt = util.prompt.get()
-	if not prompt.key or not prompt.callback then
+	local prompt = util.get_var("prompt")
+	if not prompt or not prompt.key or not prompt.callback then
 		return nil
 	end
+
 	util.change_window_title(key, "--- [" .. prompt.key .. "] ")
-	ui.util.init(key)
+	util.win.set(key)
+
 	local default_prompt = util.buf.get_line(prompt.key) or ""
 	local buf = util.buf.get(key)
 	local win = util.win.get(key)
@@ -33,8 +25,8 @@ function M.open_window(key)
 end
 
 function M.close_window(key)
-	local prompt = util.prompt.get()
-	if not prompt.key or not prompt.callback then
+	local prompt = util.get_var("prompt")
+	if not prompt or not prompt.key or not prompt.callback then
 		return nil
 	end
 	vim.cmd("stopinsert")

@@ -11,7 +11,7 @@ function M.setup()
 		if util.buf.is_empty("tasks") then
 			util.switch_window("tasks")
 		else
-			ui.prompt.toggle_window("prompt")
+			ui.util.toggle_window("prompt")
 		end
 	end)
 

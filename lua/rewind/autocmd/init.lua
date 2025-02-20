@@ -14,7 +14,7 @@ M.list = {
 
 local function common(key)
 	M.util.set(key, { "WinLeave" }, function()
-		util.set_prev_buf(key)
+		util.set_var("prev_buf", key)
 	end)
 end
 

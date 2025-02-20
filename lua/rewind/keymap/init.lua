@@ -20,8 +20,8 @@ M.list = {
 
 local function common(key)
 	M.util.set(key, "n", { config.keymaps.help }, function()
-		ui.help.toggle_window("help_min")
-		ui.help.toggle_window("help_max")
+		ui.util.toggle_window("help_min")
+		ui.util.toggle_window("help_max")
 	end)
 end
 

@@ -12,7 +12,7 @@ function M.setup()
 		if util.buf.is_empty("lists") then
 			util.switch_window("lists")
 		else
-			ui.prompt.toggle_window("prompt")
+			ui.util.toggle_window("prompt")
 		end
 	end)
 

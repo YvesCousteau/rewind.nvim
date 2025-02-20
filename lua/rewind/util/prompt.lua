@@ -4,20 +4,17 @@ local state = rewind.state
 local util = rewind.util
 local ui = rewind.ui
 
-function M.get()
-	return state.prompt
-end
-
 function M.set(key, callback)
-	local buf = util.buf.get(key)
-	if vim.api.nvim_buf_is_valid(buf) then
-		ui.prompt.close_window(key)
+	local win = util.win.get("prompt")
+	if win then
+		ui.prompt.close_window("prompt")
 	end
-	if key and callback and state.prompt then
-		state.prompt = {
+	if key and callback then
+		util.set_var("prompt", {
 			key = key,
 			callback = callback,
-		}
+		})
+		ui.util.toggle_window("prompt")
 	end
 end
 

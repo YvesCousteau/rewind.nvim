@@ -10,7 +10,7 @@ function M.get_items()
 		return config.help.min.init
 	elseif help_max_win then
 		local items = vim.deepcopy(config.help.max.init)
-		local prev_buf = util.get_prev_buf()
+		local prev_buf = util.get_var("prev_buf")
 		local prev_buf_help = config.help.max[prev_buf]
 		if prev_buf and prev_buf_help ~= nil then
 			for _, line in ipairs(config.help.max[prev_buf]) do
