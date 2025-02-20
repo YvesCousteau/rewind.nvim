@@ -6,6 +6,8 @@ local M = {
 		"prompt",
 		"confirmation",
 		"date_picker",
+		"help_min",
+		"help_max",
 	},
 
 	namespace = nil,

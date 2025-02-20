@@ -1,6 +1,6 @@
 local M = {}
 local rewind = require("rewind")
-local config = rewind.config
+local state = rewind.state
 local util = rewind.util
 local autocmd = rewind.autocmd
 local keymap = rewind.keymap
@@ -17,10 +17,10 @@ function M.setup()
 	util.buf.reset()
 	util.win.reset()
 
-	for key, _ in pairs(config.windows.custom) do
+	for _, key in pairs(state.list) do
 		create_window(key)
 	end
-	for key, _ in pairs(config.windows.custom) do
+	for _, key in pairs(state.list) do
 		autocmd.setup(key)
 		keymap.setup(key)
 	end
