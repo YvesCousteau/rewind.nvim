@@ -5,10 +5,9 @@ local util = rewind.util
 local command = rewind.command
 
 function M.setup()
-	local key = "boards"
+	local key = "lists"
 	autocmd.util.set(key, { "CursorMoved" }, function()
 		util.update_highlight(key)
-		command.get_items("lists")
 		command.get_items("tasks")
 	end)
 end
