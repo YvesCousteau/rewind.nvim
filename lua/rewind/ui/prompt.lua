@@ -4,7 +4,7 @@ local ui = rewind.ui
 local util = rewind.util
 
 function M.open_window(key)
-	local prompt = util.get_var("prompt")
+	local prompt = util.get_var(key)
 	if not prompt or not prompt.key or not prompt.callback then
 		return nil
 	end
@@ -12,8 +12,10 @@ function M.open_window(key)
 	util.change_window_title(key, "--- [" .. prompt.key .. "] ")
 	util.win.set(key)
 
-	-- local default_prompt = util.buf.get_line(prompt.key) or ""
-	local default_prompt = util.get_cursor_content(key)
+	local default_prompt = util.get_cursor_content(prompt.key).title
+	if not default_prompt then
+		default_prompt = ""
+	end
 
 	local buf = util.buf.get(key)
 	local win = util.win.get(key)
@@ -27,23 +29,20 @@ function M.open_window(key)
 end
 
 function M.close_window(key)
-	local prompt = util.get_var("prompt")
+	local prompt = util.get_var(key)
 	if not prompt or not prompt.key or not prompt.callback then
 		return nil
 	end
 	vim.cmd("stopinsert")
 
-	local prompt_value = util.get_cursor_content(key)
+	local prompt_value = util.buf.get_line(key, 1)
 	vim.schedule(function()
 		if prompt_value then
 			prompt.callback(prompt_value)
 		end
 	end)
 
-	local buf = util.buf.get(prompt.key)
-	if buf then
-		util.switch_window(buf)
-	end
+	util.switch_window(prompt.key)
 	util.win.close(key)
 end
 

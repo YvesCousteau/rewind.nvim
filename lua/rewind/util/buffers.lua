@@ -37,16 +37,15 @@ function M.get_var(key)
 	end
 end
 
--- function M.get_line(key)
--- 	local buf = M.get(key)
--- 	local row, col = unpack(vim.api.nvim_buf_get_mark(buf, '"'))
--- 	local lines = vim.api.nvim_buf_get_lines(buf, row - 1, row, false)
--- 	if #lines > 0 then
--- 		return lines[1]
--- 	else
--- 		return nil
--- 	end
--- end
+function M.get_line(key, line_id)
+	local buf = M.get(key)
+	if buf then
+		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+		if #lines > line_id - 1 then
+			return lines[line_id]
+		end
+	end
+end
 
 function M.is_empty(key)
 	local buf = M.get(key)
