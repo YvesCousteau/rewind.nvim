@@ -12,7 +12,9 @@ function M.open_window(key)
 	util.change_window_title(key, "--- [" .. prompt.key .. "] ")
 	util.win.set(key)
 
-	local default_prompt = util.buf.get_line(prompt.key) or ""
+	-- local default_prompt = util.buf.get_line(prompt.key) or ""
+	local default_prompt = util.get_cursor_content(key)
+
 	local buf = util.buf.get(key)
 	local win = util.win.get(key)
 	if win and buf then
@@ -30,16 +32,18 @@ function M.close_window(key)
 		return nil
 	end
 	vim.cmd("stopinsert")
-	local current_buf = util.buf.get(key)
-	local prompt_value = vim.api.nvim_buf_get_lines(current_buf, 0, -1, false)[1]
+
+	local prompt_value = util.get_cursor_content(key)
 	vim.schedule(function()
 		if prompt_value then
 			prompt.callback(prompt_value)
 		end
 	end)
 
-	local prev_buf = util.buf.get(util.prompt.key)
-	util.switch_window(prev_buf)
+	local buf = util.buf.get(prompt.key)
+	if buf then
+		util.switch_window(buf)
+	end
 	util.win.close(key)
 end
 
