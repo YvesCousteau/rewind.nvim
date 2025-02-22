@@ -12,8 +12,11 @@ function M.open_window(key)
 	util.change_window_title(key, "--- [" .. prompt.key .. "] ")
 	util.win.set(key)
 
-	-- local default_prompt = util.buf.get_line(prompt.key) or ""
-	local default_prompt = util.get_cursor_content(key)
+	local default_prompt = util.get_cursor_content(prompt.key).title
+	if not default_prompt then
+		default_prompt = ""
+	end
+	print("lsdkf: " .. default_prompt)
 
 	local buf = util.buf.get(key)
 	local win = util.win.get(key)
@@ -33,8 +36,9 @@ function M.close_window(key)
 	end
 	vim.cmd("stopinsert")
 
-	local prompt_value = util.get_cursor_content(key)
+	local prompt_value = util.buf.get_line(key, 1)
 	vim.schedule(function()
+		-- print(prompt_value)
 		if prompt_value then
 			prompt.callback(prompt_value)
 		end

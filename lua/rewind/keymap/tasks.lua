@@ -9,7 +9,7 @@ function M.setup()
 	local key = "tasks"
 	keymap.util.set(key, "n", { config.keymaps.select }, function()
 		util.prompt.set(key, function(prompt)
-			print("will update this task with: " .. prompt)
+			command.update_item(key, prompt)
 		end)
 	end)
 

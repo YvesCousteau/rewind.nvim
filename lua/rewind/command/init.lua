@@ -40,6 +40,16 @@ function M.add_item(key, title)
 	end
 end
 
+function M.update_item(key, title)
+	local content = {}
+	if M.list[key] ~= nil and title then
+		local success = M.list[key].update_item(title)
+		if success then
+			M.get_items(key)
+		end
+	end
+end
+
 function M.delete_item(key, title)
 	local content = {}
 	if M.list[key] ~= nil and title then
