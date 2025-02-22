@@ -4,7 +4,7 @@ local ui = rewind.ui
 local util = rewind.util
 
 function M.open_window(key)
-	local prompt = util.get_var("prompt")
+	local prompt = util.get_var(key)
 	if not prompt or not prompt.key or not prompt.callback then
 		return nil
 	end
@@ -16,7 +16,6 @@ function M.open_window(key)
 	if not default_prompt then
 		default_prompt = ""
 	end
-	print("lsdkf: " .. default_prompt)
 
 	local buf = util.buf.get(key)
 	local win = util.win.get(key)
@@ -30,7 +29,7 @@ function M.open_window(key)
 end
 
 function M.close_window(key)
-	local prompt = util.get_var("prompt")
+	local prompt = util.get_var(key)
 	if not prompt or not prompt.key or not prompt.callback then
 		return nil
 	end
@@ -44,10 +43,7 @@ function M.close_window(key)
 		end
 	end)
 
-	local buf = util.buf.get(prompt.key)
-	if buf then
-		util.switch_window(buf)
-	end
+	util.switch_window(prompt.key)
 	util.win.close(key)
 end
 

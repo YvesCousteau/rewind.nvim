@@ -37,12 +37,12 @@ function M.get_var(key)
 	end
 end
 
-function M.get_line(key, col)
+function M.get_line(key, line_id)
 	local buf = M.get(key)
 	if buf then
 		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-		if #lines > col - 1 then
-			return lines[col]
+		if #lines > line_id - 1 then
+			return lines[line_id]
 		end
 	end
 end

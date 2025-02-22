@@ -6,15 +6,6 @@ M.buf = rewind.lazy_load("rewind.util.buffers")
 M.win = rewind.lazy_load("rewind.util.windows")
 M.prompt = rewind.lazy_load("rewind.util.prompt")
 
--- function M.toggle_visiblity(key)
--- 	if config.windows.custom[key].is_visible == "false" then
--- 		config.windows.custom[key].is_visible = "true"
--- 	else
--- 		config.windows.custom[key].is_visible = "false"
--- 	end
--- 	return config.windows.custom[key].is_visible
--- end
-
 function M.change_window_title(key, title)
 	if title then
 		config.windows.custom[key].title_opt = title
@@ -52,10 +43,10 @@ end
 
 function M.update_highlight(key)
 	local buf = M.buf.get(key)
-	local current_line_id = vim.api.nvim_win_get_cursor(0)[1] - 1
-	if buf and current_line_id then
+	local line_id = vim.api.nvim_win_get_cursor(0)[1] - 1
+	if buf and line_id then
 		vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
-		vim.api.nvim_buf_add_highlight(buf, -1, "classic", current_line_id, 0, -1)
+		vim.api.nvim_buf_add_highlight(buf, -1, "classic", line_id, 0, -1)
 	end
 end
 
