@@ -6,6 +6,7 @@ M.buf = rewind.lazy_load("rewind.util.buffers")
 M.win = rewind.lazy_load("rewind.util.windows")
 M.prompt = rewind.lazy_load("rewind.util.prompt")
 M.confirmation = rewind.lazy_load("rewind.util.confirmation")
+M.date_picker = rewind.lazy_load("rewind.util.date_picker")
 
 function M.change_window_title(key, title)
 	if title then
@@ -27,8 +28,8 @@ function M.get_var(name)
 	end
 end
 
-function M.set_var(name, key)
-	vim.api.nvim_set_var(name, key)
+function M.set_var(name, value)
+	vim.api.nvim_set_var(name, value)
 end
 
 function M.get_cursor_content(key)

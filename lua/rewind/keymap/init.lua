@@ -8,6 +8,7 @@ local boards = rewind.lazy_load("rewind.keymap.boards")
 local lists = rewind.lazy_load("rewind.keymap.lists")
 local tasks = rewind.lazy_load("rewind.keymap.tasks")
 local confirmation = rewind.lazy_load("rewind.keymap.confirmation")
+local date_picker = rewind.lazy_load("rewind.keymap.date_picker")
 M.util = rewind.lazy_load("rewind.keymap.util")
 
 M.list = {
@@ -18,6 +19,7 @@ M.list = {
 	lists = lists,
 	tasks = tasks,
 	confirmation = confirmation,
+	date_picker = date_picker,
 }
 
 local function common(key)

@@ -66,9 +66,11 @@ end
 
 function M.set_content(key, content)
 	local buf = M.get(key)
-	vim.api.nvim_buf_set_option(buf, "modifiable", true)
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
-	vim.api.nvim_buf_set_option(buf, "modifiable", false)
+	if buf then
+		vim.api.nvim_buf_set_option(buf, "modifiable", true)
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
+		vim.api.nvim_buf_set_option(buf, "modifiable", false)
+	end
 end
 
 return M

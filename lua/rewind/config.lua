@@ -1,4 +1,6 @@
 local M = {}
+local rewind = require("rewind")
+local util = rewind.util
 
 M.defaults = {
 	file_path = "/path/to/save/todo.json",
@@ -86,6 +88,9 @@ M.keymaps = {
 	add = "a",
 	delete = "d",
 	update = "u",
+	date_picker = "p",
+	status = "s",
+	tags = "t",
 }
 
 M.help = {
@@ -161,6 +166,7 @@ M.options = {}
 
 function M.setup(opts)
 	vim.api.nvim_set_hl(0, "classic", { link = "Visual" })
+	util.date_picker.set()
 	M.options = vim.tbl_deep_extend("force", M.defaults, opts or {})
 end
 

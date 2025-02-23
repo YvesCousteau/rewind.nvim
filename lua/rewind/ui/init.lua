@@ -9,14 +9,14 @@ M.util = rewind.lazy_load("rewind.ui.util")
 local prompt = rewind.lazy_load("rewind.ui.prompt")
 local help = rewind.lazy_load("rewind.ui.help")
 local confirmation = rewind.lazy_load("rewind.ui.confirmation")
+local date_picker = rewind.lazy_load("rewind.ui.date_picker")
 
 M.list = {
 	prompt = prompt,
 	help_min = M.util,
 	help_max = M.util,
 	confirmation = confirmation,
-	-- date_picker = M.util,
-	-- tags = M.util,
+	date_picker = date_picker,
 }
 
 function create_window(key)

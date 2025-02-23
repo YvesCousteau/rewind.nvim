@@ -9,6 +9,8 @@ local M = {
 
 		"confirmation",
 		"date_picker",
+
+		-- "status",
 		-- "tags",
 	},
 }

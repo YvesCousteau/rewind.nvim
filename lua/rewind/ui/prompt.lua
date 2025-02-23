@@ -9,7 +9,6 @@ function M.open_window(key)
 		return nil
 	end
 
-	util.change_window_title(key, "--- [" .. prompt.key .. "] ")
 	util.win.set(key)
 
 	local buf = util.buf.get(key)

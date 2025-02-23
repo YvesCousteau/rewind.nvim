@@ -13,13 +13,13 @@ function M.close_window(key, skip)
 		return nil
 	end
 
-	if not skip then
-		local line_id = util.win.get_cursor_line_id(key)
-		local confirmation_value = nil
-		if line_id == 1 then
-			confirmation_value = true
-		end
+	local line_id = util.win.get_cursor_line_id(key)
+	local confirmation_value = nil
+	if line_id == 1 then
+		confirmation_value = true
+	end
 
+	if not skip then
 		vim.schedule(function()
 			if confirmation_value then
 				confirmation.callback(confirmation_value)
