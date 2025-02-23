@@ -5,43 +5,39 @@ local util = rewind.util
 
 function M.open_window(key)
 	local prompt = util.get_var(key)
-	if not prompt or not prompt.key or not prompt.callback then
+	if not prompt or not prompt.key or not prompt.callback or not prompt.prompt then
 		return nil
 	end
 
 	util.change_window_title(key, "--- [" .. prompt.key .. "] ")
 	util.win.set(key)
 
-	local default_prompt = util.get_cursor_content(prompt.key).title
-	if not default_prompt then
-		default_prompt = ""
-	end
-
 	local buf = util.buf.get(key)
 	local win = util.win.get(key)
 	if win and buf then
 		vim.api.nvim_buf_set_option(buf, "modifiable", true)
-		vim.api.nvim_buf_set_lines(buf, 0, -1, false, { default_prompt or "" })
-		local line_length = #default_prompt
+		vim.api.nvim_buf_set_lines(buf, 0, -1, false, { prompt.prompt or "" })
+		local line_length = #prompt.prompt
 		vim.api.nvim_win_set_cursor(win, { 1, line_length })
 		vim.cmd("startinsert!")
 	end
 end
 
-function M.close_window(key)
+function M.close_window(key, skip)
 	local prompt = util.get_var(key)
 	if not prompt or not prompt.key or not prompt.callback then
 		return nil
 	end
 	vim.cmd("stopinsert")
 
-	local prompt_value = util.buf.get_line(key, 1)
-	vim.schedule(function()
-		-- print(prompt_value)
-		if prompt_value then
-			prompt.callback(prompt_value)
-		end
-	end)
+	if not skip then
+		local prompt_value = util.buf.get_line(key, 1)
+		vim.schedule(function()
+			if prompt_value and prompt_value ~= "" then
+				prompt.callback(prompt_value)
+			end
+		end)
+	end
 
 	util.switch_window(prompt.key)
 	util.win.close(key)

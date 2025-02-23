@@ -21,7 +21,7 @@ function M.setup()
 	keymap.util.set(key, "n", { config.keymaps.add }, function()
 		util.prompt.set(key, function(prompt)
 			command.add_item(key, prompt)
-		end)
+		end, true)
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.delete }, function()

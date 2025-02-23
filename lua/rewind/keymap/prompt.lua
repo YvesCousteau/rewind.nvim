@@ -8,11 +8,11 @@ local ui = rewind.ui
 function M.setup()
 	local key = "prompt"
 	keymap.util.set(key, "n", { config.keymaps.back }, function()
-		ui.util.toggle_window(key)
+		ui.list.prompt.close_window(key, true)
 	end)
 
 	keymap.util.set(key, "i", { config.keymaps.back }, function()
-		ui.util.toggle_window(key)
+		ui.list.prompt.close_window(key, true)
 	end)
 
 	keymap.util.set(key, "i", { config.keymaps.select }, function()

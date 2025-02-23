@@ -52,9 +52,9 @@ function M.update_items(new_items)
 	local success = M.save_items(new_items)
 
 	if success then
-		print("Item deleted successfully: " .. vim.inspect(id))
+		print("Items updated successfully: " .. vim.inspect(id))
 	else
-		print("Failed to save new deleted item")
+		print("Failed to save new items")
 	end
 
 	return success
