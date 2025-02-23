@@ -50,10 +50,10 @@ function M.update_item(key, title)
 	end
 end
 
-function M.delete_item(key, title)
+function M.delete_item(key)
 	local content = {}
-	if M.list[key] ~= nil and title then
-		local success = M.list[key].delete_item(title)
+	if M.list[key] ~= nil then
+		local success = M.list[key].delete_item()
 		if success then
 			M.get_items(key)
 		end

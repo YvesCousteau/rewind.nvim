@@ -12,7 +12,9 @@ function M.setup()
 		if util.buf.is_empty("lists") then
 			util.switch_window("lists")
 		else
-			ui.util.toggle_window("prompt")
+			util.prompt.set(key, function(prompt)
+				command.add_item("lists", prompt)
+			end)
 		end
 	end)
 
@@ -20,12 +22,20 @@ function M.setup()
 		ui.util.close_all_window()
 	end)
 
+	keymap.util.set(key, "n", { config.keymaps.update }, function()
+		util.prompt.set(key, function(prompt)
+			command.update_item(key, prompt)
+		end)
+	end)
+
 	keymap.util.set(key, "n", { config.keymaps.add }, function()
-		command.add_item(key, "sexe")
+		util.prompt.set(key, function(prompt)
+			command.add_item(key, prompt)
+		end)
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.delete }, function()
-		command.delete_item(key, vim.api.nvim_win_get_cursor(0)[1])
+		command.delete_item(key)
 	end)
 end
 

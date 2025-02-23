@@ -5,46 +5,48 @@ local util = rewind.util
 
 function M.get_items()
 	local titles = {}
-	local data = data.load_items()
-	if data then
-		for _, board in ipairs(data) do
+	local boards = data.load_items()
+	if boards then
+		for _, board in ipairs(boards) do
 			table.insert(titles, board.title)
 		end
 	end
-	return titles, data
+	return titles, boards
 end
 
 function M.add_item(title)
-	local data = data.load_items()
+	local boards = data.load_items()
 	local new_item = {
 		title = title,
 		lists = {},
 	}
-	table.insert(data, new_item)
-	return data.update_items(data)
+	if boards then
+		table.insert(boards, new_item)
+		return data.update_items(boards)
+	end
 end
 
-function M.delete_item(title)
-	local data = data.load_items()
+function M.delete_item()
+	local boards = data.load_items()
 	local current_board = util.get_cursor_content("boards")
-	if data and current_board then
-		for id, board in ipairs(data) do
+	if boards and current_board then
+		for id, board in ipairs(boards) do
 			if board.title == current_board.title then
-				table.remove(data, id)
-				return data.update_items(data)
+				table.remove(boards, id)
+				return data.update_items(boards)
 			end
 		end
 	end
 end
 
 function M.update_item(title)
-	local data = data.load_items()
+	local boards = data.load_items()
 	local current_board = util.get_cursor_content("boards")
-	if data and current_board then
-		for _, board in ipairs(data) do
+	if boards and current_board then
+		for _, board in ipairs(boards) do
 			if board.title == current_board.title then
 				board.title = title
-				return data.update_items(data)
+				return data.update_items(boards)
 			end
 		end
 	end

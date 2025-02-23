@@ -5,10 +5,10 @@ local util = rewind.util
 
 function M.get_items()
 	local titles = {}
-	local data = data.load_items()
+	local boards = data.load_items()
 	local current_board = util.get_cursor_content("boards")
-	if data and current_board then
-		for _, board in ipairs(data) do
+	if boards and current_board then
+		for _, board in ipairs(boards) do
 			if board.title == current_board.title then
 				for _, list in ipairs(board.lists) do
 					table.insert(titles, list.title)
@@ -20,33 +20,33 @@ function M.get_items()
 end
 
 function M.add_item(title)
-	local data = data.load_items()
+	local boards = data.load_items()
 	local new_item = {
 		title = title,
 		tasks = {},
 	}
 	local current_board = util.get_cursor_content("boards")
-	if data and current_board then
-		for _, board in ipairs(data) do
+	if boards and current_board then
+		for _, board in ipairs(boards) do
 			if board.title == current_board.title then
 				table.insert(board.lists, new_item)
-				return data.update_items(data)
+				return data.update_items(boards)
 			end
 		end
 	end
 end
 
-function M.delete_item(title)
-	local data = data.load_items()
+function M.delete_item()
+	local boards = data.load_items()
 	local current_board = util.get_cursor_content("boards")
 	local current_list = util.get_cursor_content("lists")
-	if data and current_board and current_list then
-		for _, board in ipairs(data) do
+	if boards and current_board and current_list then
+		for _, board in ipairs(boards) do
 			if board.title == current_board.title then
 				for id, list in ipairs(board.lists) do
 					if list.title == current_list.title then
 						table.remove(board.lists, id)
-						return data.update_items(data)
+						return data.update_items(boards)
 					end
 				end
 			end
@@ -55,16 +55,16 @@ function M.delete_item(title)
 end
 
 function M.update_item(title)
-	local data = data.load_items()
+	local boards = data.load_items()
 	local current_board = util.get_cursor_content("boards")
 	local current_list = util.get_cursor_content("lists")
-	if data and current_board and current_list then
-		for _, board in ipairs(data) do
+	if boards and current_board and current_list then
+		for _, board in ipairs(boards) do
 			if board.title == current_board.title then
 				for _, list in ipairs(board.lists) do
 					if list.title == current_list.title then
 						list.title = title
-						return data.update_items(data)
+						return data.update_items(boards)
 					end
 				end
 			end

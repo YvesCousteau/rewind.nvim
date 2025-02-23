@@ -51,7 +51,7 @@ function M.is_empty(key)
 	local buf = M.get(key)
 	if buf then
 		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-		if #lines > 0 then
+		if #lines > 0 and lines[1] ~= "" then
 			return true
 		end
 	end
