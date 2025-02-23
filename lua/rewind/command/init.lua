@@ -5,6 +5,7 @@ local boards = rewind.lazy_load("rewind.command.boards")
 local lists = rewind.lazy_load("rewind.command.lists")
 local tasks = rewind.lazy_load("rewind.command.tasks")
 local help = rewind.lazy_load("rewind.command.help")
+local confirmation = rewind.lazy_load("rewind.command.confirmation")
 
 M.list = {
 	boards = boards,
@@ -12,6 +13,7 @@ M.list = {
 	tasks = tasks,
 	help_min = help,
 	help_max = help,
+	confirmation = confirmation,
 }
 
 function M.get_items(key)

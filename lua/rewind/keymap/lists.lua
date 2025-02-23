@@ -31,7 +31,9 @@ function M.setup()
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.delete }, function()
-		command.delete_item(key)
+		util.confirmation.set(key, function()
+			command.delete_item(key)
+		end)
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.back }, function()

@@ -5,11 +5,13 @@ M.util = rewind.lazy_load("rewind.autocmd.util")
 local boards = rewind.lazy_load("rewind.autocmd.boards")
 local lists = rewind.lazy_load("rewind.autocmd.lists")
 local tasks = rewind.lazy_load("rewind.autocmd.tasks")
+local confirmation = rewind.lazy_load("rewind.autocmd.confirmation")
 
 M.list = {
 	boards = boards,
 	lists = lists,
 	tasks = tasks,
+	confirmation = confirmation,
 }
 
 local function common(key)

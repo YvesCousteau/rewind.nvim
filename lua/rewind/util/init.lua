@@ -5,6 +5,7 @@ local config = rewind.config
 M.buf = rewind.lazy_load("rewind.util.buffers")
 M.win = rewind.lazy_load("rewind.util.windows")
 M.prompt = rewind.lazy_load("rewind.util.prompt")
+M.confirmation = rewind.lazy_load("rewind.util.confirmation")
 
 function M.change_window_title(key, title)
 	if title then
@@ -31,13 +32,10 @@ function M.set_var(name, key)
 end
 
 function M.get_cursor_content(key)
-	local win = M.win.get(key)
-	if win then
-		local line_id = vim.api.nvim_win_get_cursor(win)[1]
-		local var = M.buf.get_var(key)
-		if var and line_id and var[line_id] then
-			return var[line_id]
-		end
+	local line_id = M.win.get_cursor_line_id(key)
+	local var = M.buf.get_var(key)
+	if var and line_id and var[line_id] then
+		return var[line_id]
 	end
 end
 

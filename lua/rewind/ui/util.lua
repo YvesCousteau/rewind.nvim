@@ -50,6 +50,14 @@ function M.close_all_window()
 	end
 end
 
+function M.open_window(key)
+	util.win.set(key)
+end
+
+function M.close_window(key)
+	util.win.close(key)
+end
+
 function M.toggle_window(key)
 	local win = util.win.get(key)
 	if win and ui.list[key] ~= nil then

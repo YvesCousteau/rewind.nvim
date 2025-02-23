@@ -49,6 +49,13 @@ function M.get(key)
 	end
 end
 
+function M.get_cursor_line_id(key)
+	local win = M.get(key)
+	if win then
+		return vim.api.nvim_win_get_cursor(win)[1]
+	end
+end
+
 function M.close(key)
 	local win = M.get(key)
 	if win then

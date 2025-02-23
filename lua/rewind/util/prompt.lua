@@ -7,7 +7,7 @@ local ui = rewind.ui
 function M.set(key, callback, is_empty)
 	local win = util.win.get("prompt")
 	if win then
-		ui.prompt.close_window("prompt")
+		ui.list.prompt.close_window("prompt")
 	end
 	local prompt = ""
 	if not is_empty then

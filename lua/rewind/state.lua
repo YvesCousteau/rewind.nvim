@@ -4,10 +4,12 @@ local M = {
 		"lists",
 		"tasks",
 		"prompt",
-		"confirmation",
-		"date_picker",
 		"help_min",
 		"help_max",
+
+		"confirmation",
+		"date_picker",
+		-- "tags",
 	},
 }
 

@@ -60,7 +60,7 @@ M.windows = {
 		confirmation = {
 			title = " 󰱒 / 󰅘  ",
 			width_mult = 0.06,
-			height_mult = 0.06,
+			height_mult = 0.04,
 			col_mult = 0.6,
 			row_mult = 0.55,
 			zindex = 75,
@@ -147,8 +147,8 @@ M.help = {
 }
 
 M.confirmation = {
-	yes = " 󰱒 ",
-	no = " 󰅘 ",
+	yes = " Oh ! Yes",
+	no = " Hell ! No",
 }
 
 M.date_picker = {

@@ -7,6 +7,7 @@ local prompt = rewind.lazy_load("rewind.keymap.prompt")
 local boards = rewind.lazy_load("rewind.keymap.boards")
 local lists = rewind.lazy_load("rewind.keymap.lists")
 local tasks = rewind.lazy_load("rewind.keymap.tasks")
+local confirmation = rewind.lazy_load("rewind.keymap.confirmation")
 M.util = rewind.lazy_load("rewind.keymap.util")
 
 M.list = {
@@ -16,6 +17,7 @@ M.list = {
 	boards = boards,
 	lists = lists,
 	tasks = tasks,
+	confirmation = confirmation,
 }
 
 local function common(key)
