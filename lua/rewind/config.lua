@@ -77,6 +77,14 @@ M.windows = {
 			is_visible = "false",
 			is_focused = "true",
 		},
+		status = {
+			title = " Status  ",
+			height_mult = 0.06,
+			col_mult = 0.245,
+			row_mult = 0.9,
+			is_visible = "false",
+			is_focused = "true",
+		},
 	},
 }
 
@@ -157,9 +165,15 @@ M.confirmation = {
 }
 
 M.date_picker = {
-	year = " 󰰳 ",
-	month = " 󰰏 ",
-	day = " 󰯴 ",
+	year = " Year ",
+	month = " Month ",
+	day = " Day ",
+}
+
+M.status = {
+	todo = " TODO ",
+	doing = " DOING ",
+	done = " DONE ",
 }
 
 M.options = {}

@@ -41,6 +41,10 @@ function M.setup()
 	keymap.util.set(key, "n", { "c" }, function()
 		util.date_picker.clear()
 	end)
+
+	keymap.util.set(key, "n", { "s" }, function()
+		ui.util.toggle_window("status")
+	end)
 end
 
 return M

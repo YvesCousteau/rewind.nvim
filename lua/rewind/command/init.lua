@@ -7,6 +7,7 @@ local tasks = rewind.lazy_load("rewind.command.tasks")
 local help = rewind.lazy_load("rewind.command.help")
 local confirmation = rewind.lazy_load("rewind.command.confirmation")
 local date_picker = rewind.lazy_load("rewind.command.date_picker")
+local status = rewind.lazy_load("rewind.command.status")
 
 M.list = {
 	boards = boards,
@@ -16,6 +17,7 @@ M.list = {
 	help_max = help,
 	confirmation = confirmation,
 	date_picker = date_picker,
+	status = status,
 }
 
 function M.get_items(key)
