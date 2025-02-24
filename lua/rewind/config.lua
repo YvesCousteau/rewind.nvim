@@ -71,7 +71,7 @@ M.windows = {
 		},
 		date_picker = {
 			title = " 󰸗 Date Picker  ",
-			height_mult = 0.03,
+			height_mult = 0.06,
 			col_mult = 0.245,
 			row_mult = 0.9,
 			is_visible = "false",
@@ -166,7 +166,6 @@ M.options = {}
 
 function M.setup(opts)
 	vim.api.nvim_set_hl(0, "classic", { link = "Visual" })
-	util.date_picker.set()
 	M.options = vim.tbl_deep_extend("force", M.defaults, opts or {})
 end
 

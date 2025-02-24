@@ -34,20 +34,20 @@ function M.get_items(key)
 	util.buf.set_content(key, content)
 end
 
-function M.add_item(key, title)
+function M.add_item(key, value)
 	local content = {}
-	if M.list[key] ~= nil and title then
-		local success = M.list[key].add_item(title)
+	if M.list[key] ~= nil and value then
+		local success = M.list[key].add_item(value)
 		if success then
 			M.get_items(key)
 		end
 	end
 end
 
-function M.update_item(key, title)
+function M.update_item(key, value)
 	local content = {}
-	if M.list[key] ~= nil and title then
-		local success = M.list[key].update_item(title)
+	if M.list[key] ~= nil and value then
+		local success = M.list[key].update_item(value)
 		if success then
 			M.get_items(key)
 		end

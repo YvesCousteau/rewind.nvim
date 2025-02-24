@@ -18,11 +18,8 @@ end
 function M.init(key)
 	local _, _, is_visible = ui.util.get_opts(key)
 
-	local win = M.set(key)
-	if win then
-		if is_visible == "false" then
-			M.close(key, win)
-		end
+	if is_visible ~= "false" then
+		M.set(key)
 	end
 end
 

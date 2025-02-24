@@ -11,9 +11,9 @@ function M.set(key, callback, is_empty)
 	end
 	local prompt = ""
 	if not is_empty then
-		prompt = util.get_cursor_content(key).title
-		if not prompt then
-			prompt = ""
+		local _, value = util.get_cursor_content(key)
+		if value and value.title then
+			prompt = value.title
 		end
 	end
 	if key and callback and prompt then

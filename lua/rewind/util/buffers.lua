@@ -30,10 +30,7 @@ end
 function M.get_var(key)
 	local buf = M.get(key)
 	if buf then
-		local var = vim.api.nvim_buf_get_var(buf, key)
-		if var then
-			return var
-		end
+		return vim.api.nvim_buf_get_var(buf, key)
 	end
 end
 

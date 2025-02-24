@@ -22,10 +22,7 @@ function M.switch_window(key)
 end
 
 function M.get_var(name)
-	local var = vim.api.nvim_get_var(name)
-	if var then
-		return var
-	end
+	return vim.api.nvim_get_var(name)
 end
 
 function M.set_var(name, value)
@@ -36,7 +33,7 @@ function M.get_cursor_content(key)
 	local line_id = M.win.get_cursor_line_id(key)
 	local var = M.buf.get_var(key)
 	if var and line_id and var[line_id] then
-		return var[line_id]
+		return line_id, var[line_id]
 	end
 end
 

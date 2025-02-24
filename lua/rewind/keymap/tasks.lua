@@ -37,6 +37,10 @@ function M.setup()
 	keymap.util.set(key, "n", { config.keymaps.date_picker }, function()
 		ui.util.toggle_window("date_picker")
 	end)
+
+	keymap.util.set(key, "n", { "c" }, function()
+		util.date_picker.clear()
+	end)
 end
 
 return M
