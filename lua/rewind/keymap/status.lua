@@ -8,7 +8,7 @@ local util = rewind.util
 function M.setup()
 	local key = "status"
 	keymap.util.set(key, "n", { config.keymaps.back }, function()
-		ui.util.toggle_window(key)
+		ui.list.status.close_window(key, true)
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.select }, function()

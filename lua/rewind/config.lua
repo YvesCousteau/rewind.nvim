@@ -176,6 +176,21 @@ M.status = {
 	done = " DONE ",
 }
 
+M.month = {
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+}
+
 M.options = {}
 
 function M.setup(opts)

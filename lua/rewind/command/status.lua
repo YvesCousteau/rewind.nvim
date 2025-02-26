@@ -5,21 +5,6 @@ local util = rewind.util
 local data = rewind.data
 local command = rewind.command
 
-local month_names = {
-	"January",
-	"February",
-	"March",
-	"April",
-	"May",
-	"June",
-	"July",
-	"August",
-	"September",
-	"October",
-	"November",
-	"December",
-}
-
 function M.get_items()
 	local items = {}
 	local raw_items = {}

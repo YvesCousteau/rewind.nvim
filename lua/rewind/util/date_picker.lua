@@ -9,6 +9,7 @@ end
 
 function M.get_unformated(date)
 	local year, month, day = date:match("^(%d%d%d%d)-(%d%d)-(%d%d)$")
+
 	if year and month and day then
 		year = tonumber(year)
 		month = tonumber(month)
@@ -37,7 +38,11 @@ function M.get_unformated(date)
 		local is_valid = os.date("*t", os.time({ year = year, month = month, day = day }))
 
 		if is_valid and is_valid.year == year and is_valid.month == month and is_valid.day == day then
-			return is_valid
+			return {
+				is_valid.year,
+				is_valid.month,
+				is_valid.day,
+			}
 		else
 			print("Invalid date")
 		end
@@ -79,6 +84,10 @@ local function format_checker(date, new_value, line_id)
 	return true
 end
 
+function M.set(date)
+	util.buf.set_var("date_picker", date)
+end
+
 local function format_checker(date, new_value, line_id)
 	if new_value <= 0 then
 		return nil
@@ -94,6 +103,10 @@ local function format_checker(date, new_value, line_id)
 
 	local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
 
+	if year % 4 == 0 and (year % 100 ~= 0 or year % 400 == 0) then
+		days_in_month[2] = 29
+	end
+
 	if line_id == 2 then
 		if new_value > 12 then
 			return nil
@@ -101,11 +114,7 @@ local function format_checker(date, new_value, line_id)
 		month = new_value
 	end
 
-	if year % 4 == 0 and (year % 100 ~= 0 or year % 400 == 0) then
-		days_in_month[2] = 29
-	end
-
-	if line_id == 2 then
+	if line_id == 2 or line_id == 1 then
 		day = math.min(day, days_in_month[month])
 	elseif line_id == 3 then
 		if new_value > days_in_month[month] then
@@ -122,12 +131,14 @@ function M.increment()
 	local date = M.get()
 	if date and line_id and value and type(value) == "number" and date[line_id] then
 		local new_value = value + 1
-		local success, y, m, d = format_checker(date, new_value, line_id)
+		local success, year, month, day = format_checker(date, new_value, line_id)
 		if success then
-			date[1] = y or date[1]
-			date[2] = m or date[2]
-			date[3] = d or date[3]
-			command.update_item("date_picker", date)
+			command.update_item("date_picker", {
+				year or date[1],
+				month or date[2],
+				day or date[3],
+			})
+			command.get_items("date_picker")
 		else
 			print("Date format is invalid")
 		end
@@ -139,12 +150,14 @@ function M.decrement()
 	local date = M.get()
 	if date and line_id and value and type(value) == "number" and date[line_id] then
 		local new_value = value - 1
-		local success, y, m, d = format_checker(date, new_value, line_id)
+		local success, year, month, day = format_checker(date, new_value, line_id)
 		if success then
-			date[1] = y or date[1]
-			date[2] = m or date[2]
-			date[3] = d or date[3]
-			command.update_item("date_picker", date)
+			command.update_item("date_picker", {
+				year or date[1],
+				month or date[2],
+				day or date[3],
+			})
+			command.get_items("date_picker")
 		else
 			print("Date format is invalid")
 		end
@@ -152,7 +165,7 @@ function M.decrement()
 end
 
 function M.clear()
-	command.update_item("date_picker", "UNDEFINED")
+	command.update_item("tasks", { key = "date", data = "UNDEFINED" })
 end
 
 return M

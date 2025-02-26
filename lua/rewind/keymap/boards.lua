@@ -24,7 +24,7 @@ function M.setup()
 
 	keymap.util.set(key, "n", { config.keymaps.update }, function()
 		util.prompt.set(key, function(prompt)
-			command.update_item(key, prompt)
+			command.update_item(key, { key = "title", data = prompt })
 		end)
 	end)
 

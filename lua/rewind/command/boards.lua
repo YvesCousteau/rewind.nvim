@@ -56,14 +56,14 @@ function M.delete_item()
 	end
 end
 
-function M.update_item(title)
+function M.update_item(value)
 	local _, current_board = util.get_cursor_content("boards")
 
 	local boards = data.load_items()
 	if boards then
 		local _, board = M.get(boards, current_board)
-		if board and board.title then
-			board.title = title
+		if board and board[value.key] then
+			board[value.key] = value.data
 			return data.update_items(boards)
 		end
 	end
