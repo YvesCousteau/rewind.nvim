@@ -10,6 +10,7 @@ local tasks = rewind.lazy_load("rewind.keymap.tasks")
 local confirmation = rewind.lazy_load("rewind.keymap.confirmation")
 local date_picker = rewind.lazy_load("rewind.keymap.date_picker")
 local status = rewind.lazy_load("rewind.keymap.status")
+local tags = rewind.lazy_load("rewind.keymap.tags")
 M.util = rewind.lazy_load("rewind.keymap.util")
 
 M.list = {
@@ -22,6 +23,7 @@ M.list = {
 	confirmation = confirmation,
 	date_picker = date_picker,
 	status = status,
+	tags = tags,
 }
 
 local function common(key)

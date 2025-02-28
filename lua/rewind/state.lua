@@ -6,12 +6,10 @@ local M = {
 		"prompt",
 		"help_min",
 		"help_max",
-
 		"confirmation",
 		"date_picker",
 		"status",
-
-		-- "tags",
+		"tags",
 	},
 }
 
