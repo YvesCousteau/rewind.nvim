@@ -5,6 +5,20 @@ local util = rewind.util
 local data = rewind.data
 local command = rewind.command
 
+function M.get_tags(callback)
+	local key = "tags"
+	local _, board = util.get_cursor_content("boards")
+	local buf = util.buf.get(key)
+
+	if buf and board and board.tags and #board.tags > 0 then
+		for id, tag in pairs(board.tags) do
+			if tag.title and tag.color then
+				callback(buf, board, id, tag)
+			end
+		end
+	end
+end
+
 function M.get_items()
 	local items = {}
 	local raw_items = {}
@@ -30,9 +44,6 @@ function M.add_item(tag)
 			data = current_board.tags,
 		})
 		command.get_items("tags")
-
-		local ns = vim.api.nvim_create_namespace(current_board.title .. tag.title)
-		util.set_var(key .. "ns", ns)
 	end
 end
 

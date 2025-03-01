@@ -6,8 +6,21 @@ function M.load_items()
 	local path = config.options.file_path
 	local file = io.open(path, "r")
 	if not file then
-		print("Unable to open file for reanding at " .. path)
-		return {}
+		file = io.open(path, "w")
+		if file then
+			file:write("[]")
+			file:close()
+			print("Created new file at " .. path)
+		else
+			print("Unable to create file at " .. path)
+			return {}
+		end
+
+		file = io.open(path, "r")
+		if not file then
+			print("Unable to open newly created file for reading at " .. path)
+			return {}
+		end
 	end
 	local content = file:read("*all")
 	file:close()

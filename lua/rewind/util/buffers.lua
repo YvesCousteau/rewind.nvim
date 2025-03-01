@@ -17,7 +17,7 @@ function M.init(key)
 	local buf = vim.api.nvim_create_buf(false, true)
 
 	local ns = vim.api.nvim_create_namespace(key)
-	util.set_var(key .. "ns", ns)
+	util.set_var(key .. "_ns", ns)
 
 	vim.api.nvim_buf_set_name(buf, key)
 	if not vim.api.nvim_buf_is_valid(buf) then
