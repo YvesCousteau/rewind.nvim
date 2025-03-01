@@ -12,7 +12,7 @@ function M.setup()
 		if util.buf.is_empty("lists") then
 			util.switch_window("lists")
 		else
-			util.prompt.set(key, function(prompt)
+			util.prompt.set(key, nil, function(prompt)
 				command.add_item("lists", prompt)
 			end, true)
 		end
@@ -23,13 +23,13 @@ function M.setup()
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.update }, function()
-		util.prompt.set(key, function(prompt)
+		util.prompt.set(key, "title", function(prompt)
 			command.update_item(key, { key = "title", data = prompt })
 		end)
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.add }, function()
-		util.prompt.set(key, function(prompt)
+		util.prompt.set(key, nil, function(prompt)
 			command.add_item(key, prompt)
 		end, true)
 	end)
