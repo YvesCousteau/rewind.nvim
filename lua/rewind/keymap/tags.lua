@@ -36,7 +36,16 @@ function M.setup()
 
 	keymap.util.set(key, "n", { "c" }, function()
 		util.prompt.set(key, "color", function(prompt)
-			command.update_item(key, { key = "", data = prompt })
+			local function is_valid_rgb(color)
+				return color:match("^#%x%x%x%x%x%x$") ~= nil
+			end
+
+			local id, _ = util.get_cursor_content(key)
+			if is_valid_rgb(prompt) and id then
+				command.update_item(key, { id = id, key = "tags", data = prompt })
+			else
+				print("Invalid color format. Please use RGB format like #FFFFFF.")
+			end
 		end)
 	end)
 end

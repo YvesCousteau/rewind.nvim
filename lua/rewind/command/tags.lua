@@ -47,4 +47,17 @@ function M.add_item(tag)
 	end
 end
 
+function M.update_item(value)
+	local _, current_board = util.get_cursor_content("boards")
+	if current_board and current_board.tags then
+		current_board.tags[value.id][value.key] = value.data
+		command.update_item("boards", {
+			key = "tags",
+			data = current_board.tags,
+		})
+		command.get_items("tags")
+	end
+end
+
+command.update_item("boards", { key = "tags", data = prompt })
 return M
