@@ -5,40 +5,30 @@ local util = rewind.util
 local command = rewind.command
 
 function M.open_window(key)
-	-- local _, task = util.get_cursor_content("tasks")
-	-- local var = nil
-
-	-- if task and task.date then
-	-- 	if task.date == "UNDEFINED" then
-	-- 		local current_date = os.date("*t", os.time())
-	-- 		var = {
-	-- 			current_date.year,
-	-- 			current_date.month,
-	-- 			current_date.day,
-	-- 		}
-	-- 	else
-	-- 		local date_unformated = util.date_picker.get_unformated(task.date)
-	-- 		if date_unformated then
-	-- 			var = date_unformated
-	-- 		end
-	-- 	end
-	-- 	if var then
-	-- 		command.update_item(key, var)
-	-- 	end
-	-- end
-
 	util.win.set(key)
+
+	local _, board = util.get_cursor_content("boards")
+	local buf = util.buf.get(key)
+	if buf and board and board.tags and #board.tags > 0 then
+		for id, tag in pairs(board.tags) do
+			if tag.title then
+				vim.api.nvim_set_hl(2, key, { fg = "#FF0000" })
+				-- local line = id - 1
+				-- local col_start = 0
+				-- local col_end = #tag.title
+				-- vim.api.nvim_buf_add_highlight(buf, 0, tag.title, line, col_start, col_end)
+				vim.api.nvim_buf_add_highlight(buf, 2, key, id - 1, 0, -1)
+			end
+		end
+	end
 end
 
 function M.close_window(key, skip)
 	if not skip then
-		-- local date = util.date_picker.get(key)
-		-- if date then
-		-- local date_formated = util.date_picker.get_formated(date)
-		-- if date_formated then
-		-- command.update_item("tasks", { key = "tags", data = date_formated })
-		-- end
-		-- end
+		local tag = util.get_cursor_content(key)
+		if tag then
+			command.update_item("tasks", { key = "tags", data = tag })
+		end
 	end
 
 	util.switch_window("tasks")

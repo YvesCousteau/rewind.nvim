@@ -48,6 +48,7 @@ function M.add_item(title)
 		title = title,
 		state = "TODO",
 		date = "UNDEFINED",
+		tags = {},
 	}
 
 	local boards = data.load_items()

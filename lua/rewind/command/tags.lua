@@ -11,22 +11,24 @@ function M.get_items()
 	local _, current_board = util.get_cursor_content("boards")
 	if current_board and current_board.tags and #current_board.tags > 0 then
 		for _, tag in pairs(current_board.tags) do
-			table.insert(items, "hihi |> " .. tag)
+			table.insert(items, " 󰽢 " .. tag.title)
 			table.insert(raw_items, tag)
 		end
 	end
 	return items, raw_items
 end
 
-function M.update_item(value)
-	util.tags.set(value)
-end
-
 function M.add_item(tag)
 	local _, current_board = util.get_cursor_content("boards")
 	if current_board and current_board.tags then
-		table.insert(current_board.tags, tag)
-		command.update_item("boards", { key = "tags", data = current_board.tags })
+		table.insert(current_board.tags, {
+			title = tag,
+			color = "#FFFFFF",
+		})
+		command.update_item("boards", {
+			key = "tags",
+			data = current_board.tags,
+		})
 		command.get_items("tags")
 	end
 end

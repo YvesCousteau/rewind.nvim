@@ -30,7 +30,6 @@ M.defaults = {
 M.options = {}
 
 function M.setup(opts)
-	vim.api.nvim_set_hl(0, "classic", { link = "Visual" })
 	M.options = vim.tbl_deep_extend("force", M.defaults, opts or {})
 end
 

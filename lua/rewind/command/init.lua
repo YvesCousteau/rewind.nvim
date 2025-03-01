@@ -28,7 +28,6 @@ function M.get_items(key)
 		end
 	end
 	util.buf.set_var(key, raw_content)
-	print(content[#content])
 	util.buf.set_content(key, content)
 end
 
