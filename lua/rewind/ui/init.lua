@@ -5,22 +5,16 @@ local util = rewind.util
 local autocmd = rewind.autocmd
 local keymap = rewind.keymap
 M.util = rewind.lazy_load("rewind.ui.util")
-
-local prompt = rewind.lazy_load("rewind.ui.prompt")
 local help = rewind.lazy_load("rewind.ui.help")
-local confirmation = rewind.lazy_load("rewind.ui.confirmation")
-local date_picker = rewind.lazy_load("rewind.ui.date_picker")
-local status = rewind.lazy_load("rewind.ui.status")
-local tags = rewind.lazy_load("rewind.ui.tags")
 
 M.list = {
-	prompt = prompt,
+	prompt = rewind.lazy_load("rewind.ui.prompt"),
 	help_min = M.util,
 	help_max = M.util,
-	confirmation = confirmation,
-	date_picker = date_picker,
-	status = status,
-	tags = tags,
+	confirmation = rewind.lazy_load("rewind.ui.confirmation"),
+	date_picker = rewind.lazy_load("rewind.ui.date_picker"),
+	status = rewind.lazy_load("rewind.ui.status"),
+	tags = rewind.lazy_load("rewind.ui.tags"),
 }
 
 function create_window(key)

@@ -46,7 +46,7 @@ function M.setup()
 		ui.util.toggle_window("status")
 	end)
 
-	keymap.util.set(key, "n", { "t" }, function()
+	keymap.util.set(key, "n", { config.keymaps.tags }, function()
 		ui.util.toggle_window("tags")
 	end)
 end

@@ -1,23 +1,18 @@
 local M = {}
 local rewind = require("rewind")
 local util = rewind.util
-local boards = rewind.lazy_load("rewind.command.boards")
-local lists = rewind.lazy_load("rewind.command.lists")
-local tasks = rewind.lazy_load("rewind.command.tasks")
 local help = rewind.lazy_load("rewind.command.help")
-local confirmation = rewind.lazy_load("rewind.command.confirmation")
-local date_picker = rewind.lazy_load("rewind.command.date_picker")
-local status = rewind.lazy_load("rewind.command.status")
 
 M.list = {
-	boards = boards,
-	lists = lists,
-	tasks = tasks,
+	boards = rewind.lazy_load("rewind.command.boards"),
+	lists = rewind.lazy_load("rewind.command.lists"),
+	tasks = rewind.lazy_load("rewind.command.tasks"),
 	help_min = help,
 	help_max = help,
-	confirmation = confirmation,
-	date_picker = date_picker,
-	status = status,
+	confirmation = rewind.lazy_load("rewind.command.confirmation"),
+	date_picker = rewind.lazy_load("rewind.command.date_picker"),
+	status = rewind.lazy_load("rewind.command.status"),
+	tags = rewind.lazy_load("rewind.command.tags"),
 }
 
 function M.get_items(key)
@@ -33,6 +28,7 @@ function M.get_items(key)
 		end
 	end
 	util.buf.set_var(key, raw_content)
+	print(content[#content])
 	util.buf.set_content(key, content)
 end
 

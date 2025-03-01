@@ -8,7 +8,7 @@ local command = rewind.command
 function M.get_items()
 	local items = {}
 	local raw_items = {}
-	local date = util.date_picker.get()
+	local date = util.buf.get_var("date_picker")
 
 	if date then
 		table.insert(items, config.date_picker.year .. " : " .. tostring(date[1]))
@@ -22,7 +22,7 @@ function M.get_items()
 end
 
 function M.update_item(value)
-	util.date_picker.set(value)
+	util.buf.set_var("date_picker")
 end
 
 return M

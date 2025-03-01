@@ -3,10 +3,6 @@ local rewind = require("rewind")
 local util = rewind.util
 local command = rewind.command
 
-function M.get()
-	return util.buf.get_var("date_picker")
-end
-
 function M.get_unformated(date)
 	local year, month, day = date:match("^(%d%d%d%d)-(%d%d)-(%d%d)$")
 
@@ -57,35 +53,6 @@ function M.get_formated(date)
 	else
 		return "UNDEFINED"
 	end
-end
-
-local function format_checker(date, new_value, line_id)
-	if new_value <= 0 then
-		return nil
-	end
-
-	local year = date[1]
-	local month = date[2]
-	local day = date[3]
-
-	if line_id == 2 and new_value > 12 then
-		return nil
-	elseif line_id == 3 then
-		local days_in_month = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-
-		if year % 4 == 0 and (year % 100 ~= 0 or year % 400 == 0) then
-			days_in_month[2] = 29
-		end
-
-		if new_value > days_in_month[month] then
-			return nil
-		end
-	end
-	return true
-end
-
-function M.set(date)
-	util.buf.set_var("date_picker", date)
 end
 
 local function format_checker(date, new_value, line_id)

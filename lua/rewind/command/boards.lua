@@ -34,6 +34,7 @@ function M.add_item(title)
 	local new_item = {
 		title = title,
 		lists = {},
+		tags = {},
 	}
 
 	local boards = data.load_items()
@@ -45,9 +46,8 @@ end
 
 function M.delete_item()
 	local _, current_board = util.get_cursor_content("boards")
-
 	local boards = data.load_items()
-	if boards then
+	if boards and current_board then
 		local id, _ = M.get(boards, current_board)
 		if id then
 			table.remove(boards, id)
@@ -58,9 +58,8 @@ end
 
 function M.update_item(value)
 	local _, current_board = util.get_cursor_content("boards")
-
 	local boards = data.load_items()
-	if boards then
+	if boards and current_board then
 		local _, board = M.get(boards, current_board)
 		if board and board[value.key] then
 			board[value.key] = value.data

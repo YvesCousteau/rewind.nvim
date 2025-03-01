@@ -21,9 +21,8 @@ end
 function M.get_items()
 	local titles = {}
 	local _, current_board = util.get_cursor_content("boards")
-
 	local boards = data.load_items()
-	if boards then
+	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
 		if board and board.lists then
 			M.get(board, nil, function(title)
@@ -41,12 +40,11 @@ function M.add_item(title)
 		tasks = {},
 	}
 	local _, current_board = util.get_cursor_content("boards")
-
 	local boards = data.load_items()
-	if boards then
+	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
-		if board and board.list then
-			table.insert(board.list, new_item)
+		if board and board.lists then
+			table.insert(board.lists, new_item)
 			return data.update_items(boards)
 		end
 	end
@@ -57,12 +55,12 @@ function M.delete_item()
 	local _, current_list = util.get_cursor_content("lists")
 
 	local boards = data.load_items()
-	if boards then
+	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
-		if board then
+		if board and current_list then
 			local id, _ = M.get(board, current_list)
-			if board.list and id then
-				table.remove(board.list, id)
+			if board.lists and id then
+				table.remove(board.lists, id)
 				return data.update_items(boards)
 			end
 		end
@@ -74,9 +72,9 @@ function M.update_item(value)
 	local _, current_list = util.get_cursor_content("lists")
 
 	local boards = data.load_items()
-	if boards then
+	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
-		if board then
+		if board and current_list then
 			local _, list = M.get(board, current_list)
 			if list and list[value.key] then
 				list[value.key] = value.data

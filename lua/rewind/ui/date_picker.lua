@@ -32,7 +32,7 @@ end
 
 function M.close_window(key, skip)
 	if not skip then
-		local date = util.date_picker.get(key)
+		local date = util.buf.get_var(key)
 		if date then
 			local date_formated = util.date_picker.get_formated(date)
 			if date_formated then
