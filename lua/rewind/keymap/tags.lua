@@ -42,7 +42,7 @@ function M.setup()
 
 			local id, _ = util.get_cursor_content(key)
 			if is_valid_rgb(prompt) and id then
-				command.update_item(key, { id = id, key = "tags", data = prompt })
+				command.update_item(key, { id = id, key = "color", data = prompt })
 			else
 				print("Invalid color format. Please use RGB format like #FFFFFF.")
 			end

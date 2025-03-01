@@ -59,5 +59,4 @@ function M.update_item(value)
 	end
 end
 
-command.update_item("boards", { key = "tags", data = prompt })
 return M
