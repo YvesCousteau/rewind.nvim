@@ -2,6 +2,7 @@ local M = {}
 local rewind = require("rewind")
 local state = rewind.state
 local command = rewind.command
+local util = rewind.util
 
 function M.reset()
 	for _, key in pairs(state.list) do
@@ -14,6 +15,10 @@ end
 
 function M.init(key)
 	local buf = vim.api.nvim_create_buf(false, true)
+
+	local ns = vim.api.nvim_create_namespace(key)
+	util.set_var(key .. "ns", ns)
+
 	vim.api.nvim_buf_set_name(buf, key)
 	if not vim.api.nvim_buf_is_valid(buf) then
 		print("Buffer " .. key .. " is not valid")

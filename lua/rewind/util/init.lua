@@ -40,9 +40,12 @@ end
 function M.update_highlight(key)
 	local buf = M.buf.get(key)
 	local line_id = vim.api.nvim_win_get_cursor(0)[1] - 1
-	if buf and line_id then
-		vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
-		vim.api.nvim_buf_add_highlight(buf, -1, "classic", line_id, 0, -1)
+
+	local ns = M.get_var(key .. "ns")
+	if buf and line_id and ns then
+		vim.api.nvim_set_hl(0, "classic", { link = "Visual" })
+		vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
+		vim.api.nvim_buf_add_highlight(buf, ns, "classic", line_id, 0, -1)
 	end
 end
 

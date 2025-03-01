@@ -30,6 +30,9 @@ function M.add_item(tag)
 			data = current_board.tags,
 		})
 		command.get_items("tags")
+
+		local ns = vim.api.nvim_create_namespace(current_board.title .. tag.title)
+		util.set_var(key .. "ns", ns)
 	end
 end
 
