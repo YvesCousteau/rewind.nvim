@@ -34,7 +34,8 @@ end
 
 function M.add_item(tag)
 	local _, current_board = util.get_cursor_content("boards")
-	if current_board and current_board.tags then
+	local buf = util.buf.get("tags")
+	if current_board and current_board.tags and buf then
 		table.insert(current_board.tags, {
 			title = tag,
 			color = "#FFFFFF",
@@ -44,6 +45,7 @@ function M.add_item(tag)
 			data = current_board.tags,
 		})
 		command.get_items("tags")
+		util.tags.init_tags_color()
 	end
 end
 
@@ -56,6 +58,7 @@ function M.update_item(value)
 			data = current_board.tags,
 		})
 		command.get_items("tags")
+		util.tags.init_tags_color()
 	end
 end
 
