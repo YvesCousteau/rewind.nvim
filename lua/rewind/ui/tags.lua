@@ -11,9 +11,11 @@ end
 
 function M.close_window(key, skip)
 	if not skip then
-		local tag = util.get_cursor_content(key)
-		if tag then
-			command.update_item("tasks", { key = "tags", data = tag })
+		local _, tag = util.get_cursor_content(key)
+		local _, task = util.get_cursor_content("tasks")
+		if tag and task and task.tags then
+			table.insert(task.tags, tag)
+			command.update_item("tasks", { key = "tags", data = task.tags })
 		end
 	end
 
