@@ -34,12 +34,34 @@ function M.get_items()
 	local raw_items = {}
 	local _, current_board = util.get_cursor_content("boards")
 
+	local prev_buf = util.get_var("tags_buf")
+
 	local boards = data.load_items()
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
 		if board and board.tags and #board.tags > 0 then
 			for _, tag in ipairs(board.tags) do
-				table.insert(items, " 󰽢 " .. tag.title)
+				if prev_buf == "boards" then
+					table.insert(items, " 󰽢 " .. tag.title)
+				elseif prev_buf == "tasks" then
+					local is_in_task = ""
+					local _, current_list = util.get_cursor_content("lists")
+					if board and current_list then
+						local _, list = command.list.lists.get(board, current_list)
+						local _, current_task = util.get_cursor_content("tasks")
+						if list and current_task then
+							local _, task = command.list.tasks.get(list, current_task)
+							if task and task.tags then
+								for _, task_tag in ipairs(task.tags) do
+									if task_tag.title == tag.title then
+										is_in_task = " [ IN ]"
+									end
+								end
+							end
+						end
+					end
+					table.insert(items, " 󰽢 " .. tag.title .. is_in_task)
+				end
 				table.insert(raw_items, tag)
 			end
 		end
@@ -122,29 +144,49 @@ function M.delete_item()
 	local _, current_board = util.get_cursor_content("boards")
 	local _, current_tag = util.get_cursor_content("tags")
 	local id, tag = M.get(current_tag)
+	local prev_buf = util.get_var("tags_buf")
 
 	local boards = data.load_items()
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
-		if board and board.lists then
-			for _, list in ipairs(board.lists) do
-				if list and list.tasks then
-					for _, task in ipairs(list.tasks) do
-						if task and task.tags then
-							for task_id, task_tag in ipairs(task.tags) do
-								if task_tag.title == tag.title then
-									table.remove(task.tags, task_id)
+		if prev_buf == "boards" then
+			if board and board.lists then
+				for _, list in ipairs(board.lists) do
+					if list and list.tasks then
+						for _, task in ipairs(list.tasks) do
+							if task and task.tags then
+								for task_id, task_tag in ipairs(task.tags) do
+									if task_tag.title == tag.title then
+										table.remove(task.tags, task_id)
+									end
 								end
 							end
 						end
 					end
 				end
 			end
-		end
 
-		if board and current_tag and board.tags and id then
-			table.remove(board.tags, id)
-			return data.update_items(boards)
+			if board and current_tag and board.tags and id then
+				table.remove(board.tags, id)
+				return data.update_items(boards)
+			end
+		elseif prev_buf == "tasks" then
+			local _, current_list = util.get_cursor_content("lists")
+			if board and current_list then
+				local _, list = command.list.lists.get(board, current_list)
+				local _, current_task = util.get_cursor_content("tasks")
+				if list and current_task then
+					local _, task = command.list.tasks.get(list, current_task)
+					if task and task.tags then
+						for task_id, task_tag in ipairs(task.tags) do
+							if task_tag.title == tag.title then
+								table.remove(task.tags, task_id)
+								return data.update_items(boards)
+							end
+						end
+					end
+				end
+			end
 		end
 	end
 end
