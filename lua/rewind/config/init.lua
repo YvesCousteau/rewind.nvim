@@ -4,7 +4,7 @@ M.status = rewind.lazy_load("rewind.config.status")
 M.windows = rewind.lazy_load("rewind.config.windows")
 M.help = rewind.lazy_load("rewind.config.help")
 M.date_picker = rewind.lazy_load("rewind.config.date_picker")
-M.confirmation = rewind.lazy_load("rewind.config.keymaps")
+M.confirmation = rewind.lazy_load("rewind.config.confirmation")
 M.status = rewind.lazy_load("rewind.config.status")
 M.keymaps = rewind.lazy_load("rewind.config.keymaps")
 

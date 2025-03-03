@@ -30,19 +30,19 @@ function M.get_items()
 			local _, list = command.list.lists.get(board, current_list)
 			if list and list.tasks then
 				M.get(list, nil, function(title, state, date, tags, id)
-					local name = "  [" .. state .. "] - " .. title
+					local name = "  [" .. state .. "] - " .. title .. " "
 					local tag_text = ""
 					for _, tag in ipairs(tags) do
 						tag_text = tag_text .. "󰽢 "
 					end
 					if tag_text ~= "" then
-						name = name .. " 󰌕 " .. tag_text
+						name = name .. "󰌕 " .. tag_text
 					end
 
 					if date ~= "UNDEFINED" then
-						table.insert(titles, name .. " - " .. date)
+						table.insert(titles, name .. "󰸗 " .. date)
 					else
-						table.insert(titles, name)
+						table.insert(titles, name .. "󰃴")
 					end
 				end)
 				return titles, list.tasks

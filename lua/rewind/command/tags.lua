@@ -25,7 +25,7 @@ function M.get_tags(callback)
 	local buf = util.buf.get(key)
 
 	if buf and board and board.tags and #board.tags > 0 then
-		for id, tag in pairs(board.tags) do
+		for id, tag in ipairs(board.tags) do
 			if tag.title and tag.color then
 				callback(buf, board, id, tag)
 			end
@@ -38,7 +38,7 @@ function M.get_items()
 	local raw_items = {}
 	local _, current_board = util.get_cursor_content("boards")
 	if current_board and current_board.tags and #current_board.tags > 0 then
-		for _, tag in pairs(current_board.tags) do
+		for _, tag in ipairs(current_board.tags) do
 			table.insert(items, " 󰽢 " .. tag.title)
 			table.insert(raw_items, tag)
 		end

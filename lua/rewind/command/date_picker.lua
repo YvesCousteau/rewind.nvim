@@ -22,7 +22,7 @@ function M.get_items()
 end
 
 function M.update_item(value)
-	util.buf.set_var("date_picker")
+	util.buf.set_var("date_picker", value)
 end
 
 return M

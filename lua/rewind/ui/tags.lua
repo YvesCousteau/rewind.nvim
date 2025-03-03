@@ -7,6 +7,7 @@ local command = rewind.command
 function M.open_window(key)
 	util.win.set(key)
 	util.tags.init_tags_color()
+	util.tasks.init_tags_color()
 end
 
 function M.close_window(key, skip)
@@ -14,7 +15,7 @@ function M.close_window(key, skip)
 		local _, tag = util.get_cursor_content(key)
 		local _, task = util.get_cursor_content("tasks")
 		if tag and task and task.tags then
-			for _, task_tag in pairs(task.tags) do
+			for _, task_tag in ipairs(task.tags) do
 				if tag.title == task_tag.title then
 					util.switch_window("tasks")
 					util.win.close(key)
@@ -22,8 +23,11 @@ function M.close_window(key, skip)
 					return
 				end
 			end
+			print(tag.title)
 			table.insert(task.tags, tag)
 			command.update_item("tasks", { key = "tags", data = task.tags })
+			command.get_items("tasks")
+			util.tasks.init_tags_color()
 		end
 	end
 

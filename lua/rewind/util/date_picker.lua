@@ -95,7 +95,7 @@ end
 
 function M.increment()
 	local line_id, value = util.get_cursor_content("date_picker")
-	local date = M.get()
+	local date = util.buf.get_var("date_picker")
 	if date and line_id and value and type(value) == "number" and date[line_id] then
 		local new_value = value + 1
 		local success, year, month, day = format_checker(date, new_value, line_id)
@@ -114,7 +114,7 @@ end
 
 function M.decrement()
 	local line_id, value = util.get_cursor_content("date_picker")
-	local date = M.get()
+	local date = util.buf.get_var("date_picker")
 	if date and line_id and value and type(value) == "number" and date[line_id] then
 		local new_value = value - 1
 		local success, year, month, day = format_checker(date, new_value, line_id)
