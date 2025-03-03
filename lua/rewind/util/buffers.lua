@@ -66,6 +66,15 @@ function M.set_var(key, var)
 	end
 end
 
+function M.set_line(key, line_id, value)
+	local buf = M.get(key)
+	if buf and line_id and value then
+		vim.api.nvim_buf_set_lines(buf, line_id - 1, line_id, false, { value })
+		return true
+	end
+	return false
+end
+
 function M.set_content(key, content)
 	local buf = M.get(key)
 	if buf then

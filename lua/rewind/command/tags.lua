@@ -5,6 +5,20 @@ local util = rewind.util
 local data = rewind.data
 local command = rewind.command
 
+function generate_unique_color(index)
+	local function get_character(i)
+		local hex_chars = "0123456789ABCDEF"
+		return string.sub(hex_chars, i % 16 + 1, i % 16 + 1)
+	end
+
+	local color = "#"
+	for i = 0, 5 do
+		local bit_value = bit.band(bit.rshift(index, i * 4), 0x0F)
+		color = color .. get_character(bit_value)
+	end
+	return color
+end
+
 function M.get_tags(callback)
 	local key = "tags"
 	local _, board = util.get_cursor_content("boards")
@@ -36,17 +50,32 @@ function M.add_item(tag)
 	local _, current_board = util.get_cursor_content("boards")
 	local buf = util.buf.get("tags")
 	if current_board and current_board.tags and buf then
+		for _, existing_tag in ipairs(current_board.tags) do
+			if existing_tag.title == tag then
+				print("tag " .. tag .. " is already present")
+				return false
+			end
+		end
+
+		local new_color = generate_unique_color(#current_board.tags)
+
 		table.insert(current_board.tags, {
 			title = tag,
-			color = "#FFFFFF",
+			color = new_color,
 		})
-		command.update_item("boards", {
+
+		local updated = command.update_item("boards", {
 			key = "tags",
 			data = current_board.tags,
 		})
-		command.get_items("tags")
-		util.tags.init_tags_color()
+
+		if updated then
+			command.get_items("tags")
+			util.tags.init_tags_color()
+			return true
+		end
 	end
+	return false
 end
 
 function M.update_item(value)

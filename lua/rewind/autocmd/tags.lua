@@ -8,10 +8,7 @@ function M.setup()
 	local key = "tags"
 	autocmd.util.set(key, { "CursorMoved" }, function()
 		util.update_highlight(key)
-	end)
-
-	autocmd.util.set(key, { "WinClosed" }, function()
-		util.tags.reset_tags_color()
+		util.tags.init_tags_color()
 	end)
 end
 

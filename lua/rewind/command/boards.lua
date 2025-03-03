@@ -39,7 +39,17 @@ function M.add_item(title)
 
 	local boards = data.load_items()
 	if boards then
+		for _, board in ipairs(boards) do
+			if board.title == title then
+				print("board " .. title .. " is already present")
+				return false
+			end
+		end
+
 		table.insert(boards, new_item)
+		return data.update_items(boards)
+	else
+		boards = { new_item }
 		return data.update_items(boards)
 	end
 end

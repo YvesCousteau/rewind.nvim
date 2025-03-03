@@ -21,6 +21,7 @@ function M.setup()
 	keymap.util.set(key, "n", { config.keymaps.add }, function()
 		util.prompt.set(key, nil, function(prompt)
 			command.add_item(key, prompt)
+			util.tasks.init_tags_color()
 		end, true)
 	end)
 

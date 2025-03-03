@@ -8,6 +8,7 @@ M.prompt = rewind.lazy_load("rewind.util.prompt")
 M.confirmation = rewind.lazy_load("rewind.util.confirmation")
 M.date_picker = rewind.lazy_load("rewind.util.date_picker")
 M.tags = rewind.lazy_load("rewind.util.tags")
+M.tasks = rewind.lazy_load("rewind.util.tasks")
 
 function M.change_window_title(key, title)
 	if title then

@@ -44,10 +44,18 @@ function M.add_item(title)
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
 		if board and board.lists then
+			for _, list in ipairs(board.lists) do
+				if list.title == title then
+					print("list " .. title .. " is already present")
+					return false
+				end
+			end
+
 			table.insert(board.lists, new_item)
 			return data.update_items(boards)
 		end
 	end
+	return false
 end
 
 function M.delete_item()

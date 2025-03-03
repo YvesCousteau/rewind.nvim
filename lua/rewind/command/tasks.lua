@@ -12,7 +12,7 @@ function M.get(list, current_task, callback)
 					return id, task
 				end
 			else
-				callback(task.title, task.state, task.date, task.tags)
+				callback(task.title, task.state, task.date, task.tags, id)
 			end
 		end
 	end
@@ -29,18 +29,16 @@ function M.get_items()
 		if board and current_list then
 			local _, list = command.list.lists.get(board, current_list)
 			if list and list.tasks then
-				M.get(list, nil, function(title, state, date, tags)
-					local tag_chars = ""
-					for _, tag in pairs(tags) do
-						local r, g, b = tag.color:match("#(%x%x)(%x%x)(%x%x)")
-						r, g, b = tonumber(r, 16), tonumber(g, 16), tonumber(b, 16)
-						-- local color_code = string.format("\27[38;2;%d;%d;%dm", r, g, b)
-						-- tag_chars = tag_chars .. color_code .. "•\27[0m"
-						tag_chars = tag_chars .. string.format("\27[38;2;%d;%d;%dm%s\27[0m", r, g, b, tag.title .. " ")
+				M.get(list, nil, function(title, state, date, tags, id)
+					local name = "  [" .. state .. "] - " .. title
+					local tag_text = ""
+					for _, tag in ipairs(tags) do
+						tag_text = tag_text .. "󰽢 "
 					end
-					-- local name = "  [" .. state .. "] - " .. title .. " - " .. tag_chars
-					-- local name = "x\27[31m"
-					local name = tag_chars .. string.format("\27[38;2;0;0;0m%s\27[0m", title)
+					if tag_text ~= "" then
+						name = name .. " 󰌕 " .. tag_text
+					end
+
 					if date ~= "UNDEFINED" then
 						table.insert(titles, name .. " - " .. date)
 					else
@@ -71,11 +69,18 @@ function M.add_item(title)
 		if board and current_list then
 			local _, list = command.list.lists.get(board, current_list)
 			if list and list.tasks then
+				for _, task in ipairs(list.tasks) do
+					if task.title == title then
+						print("task " .. title .. " is already present")
+						return false
+					end
+				end
 				table.insert(list.tasks, new_item)
 				return data.update_items(boards)
 			end
 		end
 	end
+	return false
 end
 
 function M.delete_item()
