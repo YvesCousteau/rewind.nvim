@@ -23,10 +23,9 @@ function M.close_window(key, skip)
 					return
 				end
 			end
-			print(tag.title)
+			print(tag.title .. " | " .. tag.color)
 			table.insert(task.tags, tag)
 			command.update_item("tasks", { key = "tags", data = task.tags })
-			command.get_items("tasks")
 			util.tasks.init_tags_color()
 		end
 	end

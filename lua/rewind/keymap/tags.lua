@@ -20,18 +20,24 @@ function M.setup()
 		util.prompt.set(key, nil, function(prompt)
 			command.add_item(key, prompt)
 			command.get_items(key)
+			util.tags.init_tags_color()
 		end, true)
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.delete }, function()
 		util.confirmation.set(key, function()
-			-- command.delete_item(key)
+			command.delete_item(key)
+			command.get_items(key)
+			command.get_items("tasks")
+			util.tags.init_tags_color()
 		end)
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.update }, function()
 		util.prompt.set(key, "title", function(prompt)
-			-- command.update_item(key, { key = "", data = prompt })
+			local id, _ = util.get_cursor_content(key)
+			command.update_item(key, { id = id, key = "title", data = prompt })
+			-- update task with those tags
 		end)
 	end)
 
@@ -47,6 +53,8 @@ function M.setup()
 			else
 				print("Invalid color format. Please use RGB format like #FFFFFF.")
 			end
+
+			-- update task with those tags
 		end)
 	end)
 end

@@ -10,6 +10,7 @@ function M.init_tags_color()
 	local lenght_tag_icon = 4
 
 	if list and board and buf then
+		vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
 		command.list.tasks.get(list, nil, function(title, state, date, tags, id)
 			local name = util.buf.get_line("tasks", id)
 			if name then

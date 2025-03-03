@@ -4,7 +4,7 @@ local util = rewind.util
 local command = rewind.command
 
 function M.init_tags_color()
-	command.list.tags.get_tags(function(buf, board, id, tag)
+	command.list.tags.get(nil, function(buf, board, id, tag)
 		local name = board.title .. "_tag_" .. tostring(id)
 		local ns = vim.api.nvim_create_namespace(name)
 		if ns then
