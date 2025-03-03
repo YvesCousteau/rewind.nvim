@@ -39,6 +39,10 @@ function M.setup()
 			command.delete_item(key)
 		end)
 	end)
+
+	keymap.util.set(key, "n", { config.keymaps.tags }, function()
+		ui.util.toggle_window("tags")
+	end)
 end
 
 return M

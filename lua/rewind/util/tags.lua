@@ -3,6 +3,13 @@ local rewind = require("rewind")
 local util = rewind.util
 local command = rewind.command
 
+function generate_color()
+	local r = math.random(0, 255)
+	local g = math.random(0, 255)
+	local b = math.random(0, 255)
+	return string.format("#%02X%02X%02X", r, g, b)
+end
+
 function M.init_tags_color()
 	command.list.tags.get(nil, function(buf, board, id, tag)
 		local name = board.title .. "_tag_" .. tostring(id)

@@ -6,7 +6,6 @@ local command = rewind.command
 
 function M.open_window(key)
 	util.win.set(key)
-	util.tags.init_tags_color()
 end
 
 function M.close_window(key, skip)
@@ -22,10 +21,8 @@ function M.close_window(key, skip)
 					return
 				end
 			end
-			print(tag.title .. " | " .. tag.color)
 			table.insert(task.tags, tag)
 			command.update_item("tasks", { key = "tags", data = task.tags })
-			util.tasks.init_tags_color()
 		end
 	end
 

@@ -5,13 +5,6 @@ local util = rewind.util
 local data = rewind.data
 local command = rewind.command
 
-function generate_unique_color(index)
-	local r = math.random(0, 255)
-	local g = math.random(0, 255)
-	local b = math.random(0, 255)
-	return string.format("#%02X%02X%02X", r, g, b)
-end
-
 function M.get(current_tag, callback)
 	local key = "tags"
 	local _, current_board = util.get_cursor_content("boards")
@@ -70,7 +63,7 @@ function M.add_item(tag)
 				end
 			end
 
-			local new_color = generate_unique_color(#board.tags)
+			local new_color = generate_color()
 
 			table.insert(board.tags, {
 				title = tag,

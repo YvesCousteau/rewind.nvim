@@ -15,7 +15,6 @@ function M.init_tags_color()
 		if board and current_list then
 			local _, list = command.list.lists.get(board, current_list)
 			if buf then
-				vim.api.nvim_buf_clear_namespace(buf, -1, 0, -1)
 				command.list.tasks.get(list, nil, function(title, state, date, tags, id)
 					local name = util.buf.get_line("tasks", id)
 					if name then

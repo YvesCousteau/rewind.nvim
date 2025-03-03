@@ -29,9 +29,6 @@ function M.get_items(key)
 	end
 	util.buf.set_var(key, raw_content)
 	util.buf.set_content(key, content)
-	if key == "tasks" then
-		util.tasks.init_tags_color()
-	end
 end
 
 function M.add_item(key, value)
