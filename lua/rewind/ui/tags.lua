@@ -7,7 +7,6 @@ local command = rewind.command
 function M.open_window(key)
 	util.win.set(key)
 	util.tags.init_tags_color()
-	util.tasks.init_tags_color()
 end
 
 function M.close_window(key, skip)
