@@ -34,9 +34,7 @@ function M.setup()
 
 	keymap.util.set(key, "n", { config.keymaps.update }, function()
 		util.prompt.set(key, "title", function(prompt)
-			local id, _ = util.get_cursor_content(key)
-			command.update_item(key, { id = id, key = "title", data = prompt })
-			-- update task with those tags
+			command.update_item(key, { key = "title", data = prompt })
 		end)
 	end)
 
@@ -46,10 +44,8 @@ function M.setup()
 				return color:match("^#%x%x%x%x%x%x$") ~= nil
 			end
 
-			local id, _ = util.get_cursor_content(key)
-			if is_valid_rgb(prompt) and id then
-				command.update_item(key, { id = id, key = "color", data = prompt })
-				-- update task with those tags
+			if is_valid_rgb(prompt) then
+				command.update_item(key, { key = "color", data = prompt })
 				command.get_items(key)
 				command.get_items("tasks")
 				util.tasks.init_tags_color()

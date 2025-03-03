@@ -92,18 +92,34 @@ end
 
 function M.update_item(value)
 	local _, current_board = util.get_cursor_content("boards")
-	local _, current_list = util.get_cursor_content("lists")
-	local _, current_task = util.get_cursor_content("tasks")
+	local _, current_tag = util.get_cursor_content("tags")
+	local _, tag = M.get(current_tag)
 
 	local boards = data.load_items()
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
-		if board and board.tags then
-			board.tags[value.id][value.key] = value.data
-			command.update_item("boards", {
-				key = "tags",
-				data = board.tags,
-			})
+		if board and board.lists then
+			for _, list in ipairs(board.lists) do
+				if list and list.tasks then
+					for _, task in ipairs(list.tasks) do
+						if task and task.tags then
+							for task_id, task_tag in ipairs(task.tags) do
+								if task_tag.title == tag.title then
+									task_tag[value.key] = value.data
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+
+		if board and current_tag and board.tags then
+			for _, board_tag in pairs(board.tags) do
+				if board_tag.title == tag.title then
+					board_tag[value.key] = value.data
+				end
+			end
 			return data.update_items(boards)
 		end
 	end
@@ -117,7 +133,6 @@ function M.delete_item()
 	local boards = data.load_items()
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
-
 		if board and board.lists then
 			for _, list in ipairs(board.lists) do
 				if list and list.tasks then
@@ -134,11 +149,9 @@ function M.delete_item()
 			end
 		end
 
-		if board and current_tag then
-			if board.tags and id then
-				table.remove(board.tags, id)
-				return data.update_items(boards)
-			end
+		if board and current_tag and board.tags and id then
+			table.remove(board.tags, id)
+			return data.update_items(boards)
 		end
 	end
 end
