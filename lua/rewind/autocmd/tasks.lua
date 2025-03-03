@@ -8,6 +8,7 @@ function M.setup()
 	local key = "tasks"
 	autocmd.util.set(key, { "CursorMoved" }, function()
 		util.update_highlight(key)
+		util.tasks.init_tags_color()
 	end)
 end
 

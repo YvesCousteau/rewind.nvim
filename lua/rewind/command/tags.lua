@@ -14,17 +14,23 @@ end
 
 function M.get(current_tag, callback)
 	local key = "tags"
-	local _, board = util.get_cursor_content("boards")
+	local _, current_board = util.get_cursor_content("boards")
 	local buf = util.buf.get(key)
 
-	if buf and board and board.tags and #board.tags > 0 then
-		for id, tag in ipairs(board.tags) do
-			if current_tag then
-				if tag.title == current_tag.title then
-					return id, tag
+	local boards = data.load_items()
+	if boards and current_board then
+		local _, board = command.list.boards.get(boards, current_board)
+		if board and board.tags and #board.tags > 0 then
+			for id, tag in ipairs(board.tags) do
+				if current_tag then
+					if tag.title == current_tag.title then
+						return id, tag
+					end
+				else
+					if buf then
+						callback(buf, board, id, tag)
+					end
 				end
-			else
-				callback(buf, board, id, tag)
 			end
 		end
 	end
