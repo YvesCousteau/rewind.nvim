@@ -49,6 +49,10 @@ function M.setup()
 	keymap.util.set(key, "n", { config.keymaps.tags }, function()
 		ui.util.toggle_window("tags")
 	end)
+
+	keymap.util.set(key, "n", { "d" }, function()
+		util.toggle_window("desc")
+	end)
 end
 
 return M

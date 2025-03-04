@@ -87,6 +87,16 @@ local M = {
 			is_visible = "false",
 			is_focused = "true",
 		},
+		desc = {
+			title = " Description ",
+			width_mult = 0.14,
+			height_mult = 0.2,
+			col_mult = 0.6,
+			row_mult = 0.55,
+			zindex = 75,
+			is_visible = "false",
+			is_focused = "true",
+		},
 	},
 }
 

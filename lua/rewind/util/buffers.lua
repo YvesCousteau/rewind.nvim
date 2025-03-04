@@ -43,8 +43,12 @@ function M.get_line(key, line_id)
 	local buf = M.get(key)
 	if buf then
 		local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-		if #lines > line_id - 1 then
-			return lines[line_id]
+		if line_id then
+			if #lines > line_id - 1 then
+				return lines[line_id]
+			end
+		else
+			return lines
 		end
 	end
 end

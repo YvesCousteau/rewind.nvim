@@ -12,7 +12,7 @@ function M.get(list, current_task, callback)
 					return id, task
 				end
 			else
-				callback(task.title, task.state, task.date, task.tags, id)
+				callback(task.title, task.state, task.date, task.tags, id, task.desc)
 			end
 		end
 	end
@@ -29,7 +29,7 @@ function M.get_items()
 		if board and current_list then
 			local _, list = command.list.lists.get(board, current_list)
 			if list and list.tasks then
-				M.get(list, nil, function(title, state, date, tags, id)
+				M.get(list, nil, function(title, state, date, tags, id, desc)
 					local name = "  [" .. state .. "] - " .. title .. " "
 					local tag_text = ""
 					for _, tag in ipairs(tags) do
@@ -40,10 +40,16 @@ function M.get_items()
 					end
 
 					if date ~= "UNDEFINED" then
-						table.insert(titles, name .. "󰸗 " .. date)
+						name = name .. "󰸗 " .. date
 					else
-						table.insert(titles, name .. "󰃴")
+						name = name .. "󰃴"
 					end
+					if desc ~= "" then
+						name = name .. " - desc"
+					else
+						name = name .. " - no desc"
+					end
+					table.insert(titles, name)
 				end)
 				return titles, list.tasks
 			end
@@ -58,6 +64,7 @@ function M.add_item(title)
 		state = "TODO",
 		date = "UNDEFINED",
 		tags = {},
+		description = "",
 	}
 
 	local boards = data.load_items()

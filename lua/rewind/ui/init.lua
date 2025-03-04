@@ -15,6 +15,7 @@ M.list = {
 	date_picker = rewind.lazy_load("rewind.ui.date_picker"),
 	status = rewind.lazy_load("rewind.ui.status"),
 	tags = rewind.lazy_load("rewind.ui.tags"),
+	desc = rewind.lazy_load("rewind.ui.desc"),
 }
 
 function create_window(key)
