@@ -51,7 +51,7 @@ function M.setup()
 	end)
 
 	keymap.util.set(key, "n", { "d" }, function()
-		util.toggle_window("desc")
+		ui.util.toggle_window("desc")
 	end)
 end
 
