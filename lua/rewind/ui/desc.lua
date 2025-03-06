@@ -2,6 +2,7 @@ local M = {}
 local rewind = require("rewind")
 local ui = rewind.ui
 local util = rewind.util
+local command = rewind.command
 
 function M.open_window(key)
 	local _, task = util.get_cursor_content("tasks")
@@ -26,10 +27,10 @@ function M.close_window(key, skip)
 	vim.cmd("stopinsert")
 
 	if not skip then
-		-- local lines = table.concat(util.buf.get_line(key), "\n")
-		-- vim.schedule(function()
-		-- 	command.update_item("tasks", { key = "desc", data = lines })
-		-- end)
+		local lines = table.concat(util.buf.get_line(key), "\n")
+		vim.schedule(function()
+			command.update_item("tasks", { key = "desc", data = lines })
+		end)
 	end
 
 	util.switch_window("tasks")

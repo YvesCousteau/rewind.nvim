@@ -38,7 +38,7 @@ function M.setup()
 		ui.util.toggle_window("date_picker")
 	end)
 
-	keymap.util.set(key, "n", { "c" }, function()
+	keymap.util.set(key, "n", { "r" }, function()
 		util.date_picker.clear()
 	end)
 

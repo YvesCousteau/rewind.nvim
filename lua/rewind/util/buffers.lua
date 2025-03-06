@@ -85,6 +85,11 @@ function M.set_content(key, content)
 		vim.api.nvim_buf_set_option(buf, "modifiable", true)
 		vim.api.nvim_buf_set_lines(buf, 0, -1, false, content)
 		vim.api.nvim_buf_set_option(buf, "modifiable", false)
+		-- oula oula
+		local autocmds = vim.api.nvim_get_autocmds({ event = "BufWrite_" .. key })
+		if #autocmds > 0 then
+			vim.api.nvim_exec_autocmds("BufWrite_" .. key, { pattern = key })
+		end
 	end
 end
 
