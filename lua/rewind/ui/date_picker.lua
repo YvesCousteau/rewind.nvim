@@ -6,27 +6,27 @@ local command = rewind.command
 
 function M.open_window(key)
 	local _, task = util.get_cursor_content("tasks")
-	local var = nil
-
-	if task and task.date then
-		if task.date == "UNDEFINED" then
-			local current_date = os.date("*t", os.time())
-			var = {
-				current_date.year,
-				current_date.month,
-				current_date.day,
-			}
-		else
-			local date_unformated = util.date_picker.get_unformated(task.date)
-			if date_unformated then
-				var = date_unformated
-			end
-		end
-		if var then
-			command.update_item(key, var)
-		end
+	if not task or not task.date then
+		return nil
 	end
 
+	local var = nil
+	if task.date == "UNDEFINED" then
+		local current_date = os.date("*t", os.time())
+		var = {
+			current_date.year,
+			current_date.month,
+			current_date.day,
+		}
+	else
+		local date_unformated = util.date_picker.get_unformated(task.date)
+		if date_unformated then
+			var = date_unformated
+		end
+	end
+	if var then
+		command.update_item(key, var)
+	end
 	util.win.set(key)
 end
 

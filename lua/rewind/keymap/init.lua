@@ -16,6 +16,7 @@ M.list = {
 	date_picker = rewind.lazy_load("rewind.keymap.date_picker"),
 	status = rewind.lazy_load("rewind.keymap.status"),
 	tags = rewind.lazy_load("rewind.keymap.tags"),
+	desc = rewind.lazy_load("rewind.keymap.desc"),
 }
 
 local function common(key)
