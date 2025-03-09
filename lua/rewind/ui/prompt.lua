@@ -35,6 +35,8 @@ function M.close_window(key, skip)
 			if prompt_value and prompt_value ~= "" then
 				prompt.callback(prompt_value)
 			end
+			util.tasks.init_tags_color()
+			util.tags.init_tags_color()
 		end)
 	end
 

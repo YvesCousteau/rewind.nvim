@@ -15,7 +15,7 @@ function M.setup()
 		ui.list.desc.close_window(key, true)
 	end)
 
-	keymap.util.set(key, "i", { config.keymaps.select }, function()
+	keymap.util.set(key, "i", { config.keymaps.save }, function()
 		ui.util.toggle_window(key)
 	end)
 end

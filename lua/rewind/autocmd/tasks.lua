@@ -9,16 +9,6 @@ function M.setup()
 	autocmd.util.set(key, { "CursorMoved" }, function()
 		util.update_highlight(key)
 	end)
-
-	autocmd.util.set(nil, { "BufWrite_" .. key }, function()
-		print("shlsjfjdls")
-		util.tasks.init_tags_color()
-	end, "tasks")
-
-	-- autocmd.util.set(key, { "BufWrite", "BufWritePost" }, function()
-	-- 	print("shlsjfjdls")
-	-- 	util.tasks.init_tags_color()
-	-- end)
 end
 
 return M

@@ -9,6 +9,7 @@ function M.setup()
 	autocmd.util.set(key, { "CursorMoved" }, function()
 		util.update_highlight(key)
 		command.get_items("lists")
+		util.tasks.init_tags_color()
 	end)
 end
 
