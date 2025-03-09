@@ -34,9 +34,9 @@ function M.close_window(key, skip)
 		vim.schedule(function()
 			if prompt_value and prompt_value ~= "" then
 				prompt.callback(prompt_value)
+				util.tasks.init_tags_color()
+				util.tags.init_tags_color()
 			end
-			util.tasks.init_tags_color()
-			util.tags.init_tags_color()
 		end)
 	end
 

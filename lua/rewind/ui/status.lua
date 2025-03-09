@@ -13,6 +13,7 @@ function M.close_window(key, skip)
 		local _, status = util.get_cursor_content(key)
 		if status then
 			command.update_item("tasks", { key = "state", data = status })
+			util.tasks.init_tags_color()
 		end
 	end
 

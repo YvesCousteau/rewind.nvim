@@ -57,8 +57,6 @@ function M.close(key)
 	local win = M.get(key)
 	if win then
 		vim.api.nvim_win_close(win, true)
-	else
-		print("Window with key '" .. key .. "' is not valid or does not exist.")
 	end
 end
 

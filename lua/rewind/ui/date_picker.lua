@@ -37,6 +37,7 @@ function M.close_window(key, skip)
 			local date_formated = util.date_picker.get_formated(date)
 			if date_formated then
 				command.update_item("tasks", { key = "date", data = date_formated })
+				util.tasks.init_tags_color()
 			end
 		end
 	end
