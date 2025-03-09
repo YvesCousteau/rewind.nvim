@@ -8,6 +8,9 @@ M.util = rewind.lazy_load("rewind.ui.util")
 local help = rewind.lazy_load("rewind.ui.help")
 
 M.list = {
+	boards = M.util,
+	lists = rewind.lazy_load("rewind.ui.lists"),
+	tasks = rewind.lazy_load("rewind.ui.tasks"),
 	prompt = rewind.lazy_load("rewind.ui.prompt"),
 	help_min = M.util,
 	help_max = M.util,

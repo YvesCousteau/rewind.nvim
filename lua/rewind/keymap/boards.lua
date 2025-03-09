@@ -9,13 +9,9 @@ local command = rewind.command
 function M.setup()
 	local key = "boards"
 	keymap.util.set(key, "n", { config.keymaps.select }, function()
-		if util.buf.is_empty("lists") then
-			util.switch_window("lists")
-		else
-			util.prompt.set(key, nil, function(prompt)
-				command.add_item("lists", prompt)
-			end, true)
-		end
+		ui.util.toggle_window("boards")
+		ui.util.toggle_window("lists")
+		util.switch_window("lists")
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.back }, function()

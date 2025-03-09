@@ -20,11 +20,15 @@ local M = {
 			title = " 󰱑 LISTS ",
 			col_mult = 0.5,
 			row_mult = 0.35,
+			is_focused = "true",
+			is_visible = "false",
 		},
 		tasks = {
 			title = " 󰱒 TASKS ",
 			col_mult = 0.76,
 			row_mult = 0.35,
+			is_focused = "true",
+			is_visible = "false",
 		},
 		prompt = {
 			title = " |> PROMPT ",

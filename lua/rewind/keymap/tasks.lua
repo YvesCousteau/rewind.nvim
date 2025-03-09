@@ -31,7 +31,8 @@ function M.setup()
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.back }, function()
-		util.switch_window("lists")
+		ui.util.toggle_window("lists")
+		ui.util.toggle_window("tasks")
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.date_picker }, function()
