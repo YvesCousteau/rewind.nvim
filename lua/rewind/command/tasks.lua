@@ -17,7 +17,7 @@ function task_manager.find_task(list, current_task)
 end
 
 -- Retrieves a single task by its title from the current list.
-function task_manager.get_task_by_title(title)
+function task_manager.get_by_title(title)
 	local current_board = util.get_var("current_board")
 	local current_list = util.get_var("current_list")
 	local boards = data.load_items()
@@ -41,7 +41,7 @@ function task_manager.get_task_by_title(title)
 end
 
 -- Retrieves all task details for the current list.
-function task_manager.get_task_details()
+function task_manager.get_all()
 	local task_details = {}
 	local current_board = util.get_var("current_board")
 	local current_list = util.get_var("current_list")
@@ -82,7 +82,7 @@ function task_manager.get_task_details()
 end
 
 -- Adds a new task with the given title to the current list.
-function task_manager.add_task(title)
+function task_manager.add(title)
 	if not title or title == "" then
 		print("Title cannot be empty")
 		return false
@@ -122,7 +122,7 @@ function task_manager.add_task(title)
 end
 
 -- Deletes the current task from the current list.
-function task_manager.delete_current_task()
+function task_manager.delete()
 	local current_board = util.get_var("current_board")
 	local current_list = util.get_var("current_list")
 	local current_task = util.get_var("current_task")

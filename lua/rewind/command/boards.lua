@@ -16,7 +16,7 @@ function board_manager.find_board(boards, current_board)
 end
 
 -- Retrieves a single board by its title.
-function board_manager.get_board_by_title(title)
+function board_manager.get_by_title(title)
 	local boards = data.load_items()
 	if boards then
 		for _, board in ipairs(boards) do
@@ -30,7 +30,7 @@ function board_manager.get_board_by_title(title)
 end
 
 -- Retrieves all board titles.
-function board_manager.get_board_titles()
+function board_manager.get_all()
 	local titles = {}
 	local boards = data.load_items()
 
@@ -44,7 +44,7 @@ function board_manager.get_board_titles()
 end
 
 -- Adds a new board with the given title.
-function board_manager.add_board(title)
+function board_manager.add(title)
 	if not title or title == "" then
 		print("Title cannot be empty")
 		return false
@@ -73,7 +73,7 @@ function board_manager.add_board(title)
 end
 
 -- Deletes the current board.
-function board_manager.delete_current_board()
+function board_manager.delete()
 	local current_board = util.get_var("current_board")
 	local boards = data.load_items()
 
@@ -90,7 +90,7 @@ function board_manager.delete_current_board()
 end
 
 -- Updates the current board with the provided key-value pair.
-function board_manager.update_current_board(key, value)
+function board_manager.update(key, value)
 	local current_board = util.get_var("current_board")
 	local boards = data.load_items()
 

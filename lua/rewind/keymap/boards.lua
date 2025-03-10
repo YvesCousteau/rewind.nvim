@@ -9,12 +9,18 @@ local command = rewind.command
 function M.setup()
 	local key = "boards"
 	keymap.util.set(key, "n", { config.keymaps.select }, function()
-		ui.util.toggle_window("boards")
-		ui.util.toggle_window("lists")
-		util.switch_window("lists")
+		local _, current_board = util.get_cursor_content("boards")
+		if current_board then
+			ui.set_var("current_board", current_board)
+			ui.util.toggle_window("boards")
+			ui.util.toggle_window("lists")
+
+			util.switch_window("lists")
+		end
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.back }, function()
+		ui.set_var("current_board", nil)
 		ui.util.close_all_window()
 	end)
 

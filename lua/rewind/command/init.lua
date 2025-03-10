@@ -19,7 +19,7 @@ function M.get_items(key)
 	local content = {}
 	local raw_content = {}
 	if M.list[key] ~= nil then
-		local items, raw_items = M.list[key].get_items()
+		local items, raw_items = M.list[key].get_all()
 		if items and #items > 0 then
 			content = items
 		end

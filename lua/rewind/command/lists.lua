@@ -17,7 +17,7 @@ function list_manager.find_list(board, current_list)
 end
 
 -- Retrieves a single list by its title from the current board.
-function list_manager.get_list_by_title(title)
+function list_manager.get_by_title(title)
 	local current_board = util.get_var("current_board")
 	local boards = data.load_items()
 
@@ -37,7 +37,7 @@ function list_manager.get_list_by_title(title)
 end
 
 -- Retrieves all list titles for the current board.
-function list_manager.get_list_titles()
+function list_manager.get_all()
 	local titles = {}
 	local current_board = util.get_var("current_board")
 	local boards = data.load_items()
@@ -56,7 +56,7 @@ function list_manager.get_list_titles()
 end
 
 -- Adds a new list with the given title to the current board.
-function list_manager.add_list(title)
+function list_manager.add(title)
 	if not title or title == "" then
 		print("Title cannot be empty")
 		return false
@@ -90,7 +90,7 @@ function list_manager.add_list(title)
 end
 
 -- Deletes the current list from the current board.
-function list_manager.delete_current_list()
+function list_manager.delete()
 	local current_board = util.get_var("current_board")
 	local current_list = util.get_var("current_list")
 	local boards = data.load_items()
@@ -111,7 +111,7 @@ function list_manager.delete_current_list()
 end
 
 -- Updates the current list with the provided key-value pair.
-function list_manager.update_current_list(key, value)
+function list_manager.update(key, value)
 	local current_board = util.get_var("current_board")
 	local current_list = util.get_var("current_list")
 	local boards = data.load_items()

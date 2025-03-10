@@ -8,6 +8,11 @@ function M.setup()
 	local key = "tasks"
 	autocmd.util.set(key, { "CursorMoved" }, function()
 		util.update_highlight(key)
+
+		local _, current_task = util.get_cursor_content("tasks")
+		if current_task then
+			util.set_var("current_task", current_task)
+		end
 	end)
 end
 

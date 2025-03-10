@@ -9,8 +9,12 @@ local command = rewind.command
 function M.setup()
 	local key = "lists"
 	keymap.util.set(key, "n", { config.keymaps.select }, function()
-		ui.util.toggle_window("lists")
-		ui.util.toggle_window("tasks")
+		local _, current_list = util.get_cursor_content("lists")
+		if current_list then
+			ui.set_var("current_list", current_list)
+			ui.util.toggle_window("lists")
+			ui.util.toggle_window("tasks")
+		end
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.update }, function()
@@ -32,6 +36,7 @@ function M.setup()
 	end)
 
 	keymap.util.set(key, "n", { config.keymaps.back }, function()
+		ui.set_var("current_list", nil)
 		ui.util.toggle_window("boards")
 		ui.util.toggle_window("lists")
 	end)
