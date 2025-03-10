@@ -1,95 +1,134 @@
-local M = {}
+local list_manager = {}
 local rewind = require("rewind")
 local data = rewind.data
 local util = rewind.util
 local command = rewind.command
 
-function M.get(board, current_list, callback)
+-- Retrieves the index and list object based on the current list title.
+function list_manager.find_list(board, current_list)
 	if board then
-		for id, list in ipairs(board.lists) do
-			if current_list then
-				if list.title == current_list.title then
-					return id, list
-				end
-			else
-				callback(list.title)
+		for index, list in ipairs(board.lists) do
+			if current_list and list.title == current_list.title then
+				return index, list
 			end
 		end
 	end
+	return nil, nil
 end
 
-function M.get_items()
-	local titles = {}
-	local _, current_board = util.get_cursor_content("boards")
+-- Retrieves a single list by its title from the current board.
+function list_manager.get_list_by_title(title)
+	local current_board = util.get_var("current_board")
 	local boards = data.load_items()
-	if boards and current_board then
-		local _, board = command.list.boards.get(boards, current_board)
-		if board and board.lists then
-			M.get(board, nil, function(title)
-				table.insert(titles, title)
-			end)
-			return titles, board.lists
-		end
-	end
-	return titles, {}
-end
 
-function M.add_item(title)
-	local new_item = {
-		title = title,
-		tasks = {},
-	}
-	local _, current_board = util.get_cursor_content("boards")
-	local boards = data.load_items()
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
 		if board and board.lists then
 			for _, list in ipairs(board.lists) do
 				if list.title == title then
-					print("list " .. title .. " is already present")
+					return list
+				end
+			end
+		end
+	end
+
+	print("List with title '" .. title .. "' not found.")
+	return nil
+end
+
+-- Retrieves all list titles for the current board.
+function list_manager.get_list_titles()
+	local titles = {}
+	local current_board = util.get_var("current_board")
+	local boards = data.load_items()
+
+	if boards and current_board then
+		local _, board = command.list.boards.get(boards, current_board)
+		if board and board.lists then
+			for _, list in ipairs(board.lists) do
+				table.insert(titles, list.title)
+			end
+			return titles, board.lists
+		end
+	end
+
+	return titles, {}
+end
+
+-- Adds a new list with the given title to the current board.
+function list_manager.add_list(title)
+	if not title or title == "" then
+		print("Title cannot be empty")
+		return false
+	end
+
+	local new_list = {
+		title = title,
+		tasks = {},
+	}
+
+	local current_board = util.get_var("current_board")
+	local boards = data.load_items()
+
+	if boards and current_board then
+		local _, board = command.list.boards.get(boards, current_board)
+		if board and board.lists then
+			for _, list in ipairs(board.lists) do
+				if list.title == title then
+					print("List with title '" .. title .. "' already exists.")
 					return false
 				end
 			end
 
-			table.insert(board.lists, new_item)
+			table.insert(board.lists, new_list)
 			return data.update_items(boards)
 		end
 	end
+
+	print("Board not found.")
 	return false
 end
 
-function M.delete_item()
-	local _, current_board = util.get_cursor_content("boards")
-	local _, current_list = util.get_cursor_content("lists")
-
+-- Deletes the current list from the current board.
+function list_manager.delete_current_list()
+	local current_board = util.get_var("current_board")
+	local current_list = util.get_var("current_list")
 	local boards = data.load_items()
+
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
 		if board and current_list then
-			local id, _ = M.get(board, current_list)
-			if board.lists and id then
-				table.remove(board.lists, id)
+			local index, _ = list_manager.find_list(board, current_list)
+			if board.lists and index then
+				table.remove(board.lists, index)
 				return data.update_items(boards)
 			end
 		end
 	end
+
+	print("List or board not found.")
+	return false
 end
 
-function M.update_item(value)
-	local _, current_board = util.get_cursor_content("boards")
-	local _, current_list = util.get_cursor_content("lists")
-
+-- Updates the current list with the provided key-value pair.
+function list_manager.update_current_list(key, value)
+	local current_board = util.get_var("current_board")
+	local current_list = util.get_var("current_list")
 	local boards = data.load_items()
+
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
 		if board and current_list then
-			local _, list = M.get(board, current_list)
-			if list and list[value.key] then
-				list[value.key] = value.data
+			local _, list = list_manager.find_list(board, current_list)
+			if list and list[key] ~= nil then
+				list[key] = value
 				return data.update_items(boards)
 			end
 		end
 	end
+
+	print("List or key not found.")
+	return false
 end
 
-return M
+return list_manager

@@ -1,27 +1,50 @@
-local M = {}
+local task_manager = {}
 local rewind = require("rewind")
 local data = rewind.data
 local util = rewind.util
 local command = rewind.command
 
-function M.get(list, current_task, callback)
+-- Retrieves the index and task object based on the current task title.
+function task_manager.find_task(list, current_task)
 	if list then
-		for id, task in ipairs(list.tasks) do
-			if current_task then
-				if task.title == current_task.title then
-					return id, task
-				end
-			else
-				callback(task.title, task.state, task.date, task.tags, id, task.desc)
+		for index, task in ipairs(list.tasks) do
+			if current_task and task.title == current_task.title then
+				return index, task
 			end
 		end
 	end
+	return nil, nil
 end
 
-function M.get_items()
-	local titles = {}
-	local _, current_board = util.get_cursor_content("boards")
-	local _, current_list = util.get_cursor_content("lists")
+-- Retrieves a single task by its title from the current list.
+function task_manager.get_task_by_title(title)
+	local current_board = util.get_var("current_board")
+	local current_list = util.get_var("current_list")
+	local boards = data.load_items()
+
+	if boards and current_board then
+		local _, board = command.list.boards.get(boards, current_board)
+		if board and current_list then
+			local _, list = command.list.lists.get(board, current_list)
+			if list and list.tasks then
+				for _, task in ipairs(list.tasks) do
+					if task.title == title then
+						return task
+					end
+				end
+			end
+		end
+	end
+
+	print("Task with title '" .. title .. "' not found.")
+	return nil
+end
+
+-- Retrieves all task details for the current list.
+function task_manager.get_task_details()
+	local task_details = {}
+	local current_board = util.get_var("current_board")
+	local current_list = util.get_var("current_list")
 
 	local boards = data.load_items()
 	if boards and current_board then
@@ -29,7 +52,7 @@ function M.get_items()
 		if board and current_list then
 			local _, list = command.list.lists.get(board, current_list)
 			if list and list.tasks then
-				M.get(list, nil, function(title, state, date, tags, id, desc)
+				task_manager.get(list, nil, function(title, state, date, tags, id, desc)
 					local name = "  [" .. state .. "] - " .. title .. " "
 					local tag_text = ""
 					for _, tag in ipairs(tags) do
@@ -49,17 +72,23 @@ function M.get_items()
 					else
 						name = name .. " - no desc"
 					end
-					table.insert(titles, name)
+					table.insert(task_details, name)
 				end)
-				return titles, list.tasks
+				return task_details, list.tasks
 			end
 		end
 	end
-	return titles, {}
+	return task_details, {}
 end
 
-function M.add_item(title)
-	local new_item = {
+-- Adds a new task with the given title to the current list.
+function task_manager.add_task(title)
+	if not title or title == "" then
+		print("Title cannot be empty")
+		return false
+	end
+
+	local new_task = {
 		title = title,
 		state = "TODO",
 		date = "UNDEFINED",
@@ -68,8 +97,8 @@ function M.add_item(title)
 	}
 
 	local boards = data.load_items()
-	local _, current_board = util.get_cursor_content("boards")
-	local _, current_list = util.get_cursor_content("lists")
+	local current_board = util.get_var("current_board")
+	local current_list = util.get_var("current_list")
 
 	if boards and current_board then
 		local _, board = command.list.boards.get(boards, current_board)
@@ -78,22 +107,25 @@ function M.add_item(title)
 			if list and list.tasks then
 				for _, task in ipairs(list.tasks) do
 					if task.title == title then
-						print("task " .. title .. " is already present")
+						print("Task with title '" .. title .. "' already exists.")
 						return false
 					end
 				end
-				table.insert(list.tasks, new_item)
+				table.insert(list.tasks, new_task)
 				return data.update_items(boards)
 			end
 		end
 	end
+
+	print("Board or list not found.")
 	return false
 end
 
-function M.delete_item()
-	local _, current_board = util.get_cursor_content("boards")
-	local _, current_list = util.get_cursor_content("lists")
-	local _, current_task = util.get_cursor_content("tasks")
+-- Deletes the current task from the current list.
+function task_manager.delete_current_task()
+	local current_board = util.get_var("current_board")
+	local current_list = util.get_var("current_list")
+	local current_task = util.get_var("current_task")
 
 	local boards = data.load_items()
 	if boards and current_board then
@@ -101,20 +133,24 @@ function M.delete_item()
 		if board and current_list then
 			local _, list = command.list.lists.get(board, current_list)
 			if list and current_task then
-				local id, _ = M.get(list, current_task)
-				if list.tasks and id then
-					table.remove(list.tasks, id)
+				local index, _ = task_manager.find_task(list, current_task)
+				if list.tasks and index then
+					table.remove(list.tasks, index)
 					return data.update_items(boards)
 				end
 			end
 		end
 	end
+
+	print("Task, list, or board not found.")
+	return false
 end
 
-function M.update_item(value)
-	local _, current_board = util.get_cursor_content("boards")
-	local _, current_list = util.get_cursor_content("lists")
-	local _, current_task = util.get_cursor_content("tasks")
+-- Updates the current task with the provided key-value pair.
+function task_manager.update_current_task(key, value)
+	local current_board = util.get_var("current_board")
+	local current_list = util.get_var("current_list")
+	local current_task = util.get_var("current_task")
 
 	local boards = data.load_items()
 	if boards and current_board then
@@ -122,14 +158,17 @@ function M.update_item(value)
 		if board and current_list then
 			local _, list = command.list.lists.get(board, current_list)
 			if list and current_task then
-				local _, task = M.get(list, current_task)
-				if task and task[value.key] then
-					task[value.key] = value.data
+				local _, task = task_manager.find_task(list, current_task)
+				if task and task[key] ~= nil then
+					task[key] = value
 					return data.update_items(boards)
 				end
 			end
 		end
 	end
+
+	print("Task or key not found.")
+	return false
 end
 
-return M
+return task_manager
